@@ -1,0 +1,105 @@
+/* =============================== */
+/* ROOT BACKGROUND (Teams style)   */
+/* =============================== */
+
+.root-pane {
+    -fx-background-color: linear-gradient(to bottom right,
+            #1c1f3a,
+            #292d57,
+            #1d213f);
+}
+
+/* Abstract background glowing shapes */
+.background-shape {
+    -fx-background-radius: 200;
+}
+
+.shape-1 {
+    -fx-background-color: rgba(91, 60, 255, 0.25);
+    -fx-translate-x: -200px;
+    -fx-translate-y: -150px;
+    -fx-min-width: 400;
+    -fx-min-height: 400;
+    -fx-effect: gaussian-blur(80);
+}
+
+.shape-2 {
+    -fx-background-color: rgba(0, 255, 255, 0.18);
+    -fx-translate-x: 300px;
+    -fx-translate-y: 220px;
+    -fx-min-width: 340;
+    -fx-min-height: 340;
+    -fx-effect: gaussian-blur(70);
+}
+
+/* Dark translucent overlay to soften background */
+.background-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.12);
+}
+
+/* ====================================== */
+/* FROSTED GLASS PANEL                    */
+/* ====================================== */
+
+.frosted-card {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 25;
+    -fx-padding: 25 30 25 30;
+    -fx-border-color: rgba(255,255,255,0.25);
+    -fx-border-width: 1.2;
+    -fx-border-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 25, 0.2, 0, 8);
+}
+
+/* ===================================== */
+/* TITLES                                 */
+/* ===================================== */
+
+.app-title {
+    -fx-font-size: 30px;
+    -fx-text-fill: #E7E8FF;
+    -fx-font-weight: bold;
+}
+
+.app-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #BFC2FF;
+}
+
+/* ===================================== */
+/* BUTTON STYLES                          */
+/* ===================================== */
+
+.primary-button {
+    -fx-background-color: linear-gradient(to bottom right, #5c6bc0, #4b5bd7);
+    -fx-text-fill: white;
+    -fx-background-radius: 16;
+    -fx-padding: 10 0 10 0;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0.2, 0, 4);
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to bottom right, #6d7cf0, #5f6ded);
+}
+
+.glass-button {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-border-color: rgba(255,255,255,0.25);
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-padding: 10 0 10 0;
+    -fx-text-fill: #E3E6FF;
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.15, 0, 4);
+}
+
+.glass-button:hover {
+    -fx-background-color: rgba(255,255,255,0.28);
+}
+
+.exit-button {
+    -fx-text-fill: #ffdddd;
+}
+

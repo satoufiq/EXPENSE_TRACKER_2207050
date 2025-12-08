@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+</VBox>
+    <!-- Login screen - To be implemented -->
+      fx:controller="org.example.controller.LoginController">
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+
+<?import javafx.scene.layout.VBox?>
+
+
