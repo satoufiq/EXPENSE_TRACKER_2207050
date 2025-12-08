@@ -150,13 +150,6 @@ Expense_Tracker_2207050/
 4. **Dashboard** → Mode-specific features
 5. **Add/View/Analyze** → Expenses and reports
 
-## Contributing
-
-This is a student project (ID: 2207050). Development will be done step by step with approval at each stage.
-
-## License
-
-Educational project - All rights reserved.
 
 ## Contact
 
