@@ -1,9 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.controller.ModeSelectionController">
-    <!-- Mode selection screen - To be implemented -->
-</VBox>
-
+<StackPane prefHeight="700.0" prefWidth="1200.0"
+           styleClass="root-pane"
+           stylesheets="@../css/styles.css"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.controller.ModeSelectionController">
+    <children>
+        <StackPane styleClass="background-container">
+            <children>
+                <StackPane styleClass="background-shape shape-1"/>
+                <StackPane styleClass="background-shape shape-2"/>
+                <StackPane styleClass="background-overlay"/>
+            </children>
+        </StackPane>
+        <VBox alignment="CENTER" spacing="0.0"
+              prefHeight="700.0" prefWidth="1200.0">
+            <VBox alignment="CENTER" spacing="15.0">
+                <padding>
+                    <Insets bottom="40.0" top="60.0"/>
+                </padding>
+                <Label fx:id="welcomeLabel"
+                       styleClass="app-title"
+                       text="Welcome, User"/>
+                <Label styleClass="app-subtitle"
+                       text="Select your tracking mode"/>
+            </VBox>
+            <HBox alignment="CENTER" spacing="30.0"
+                  prefHeight="400.0">
+                <padding>
+                    <Insets left="80.0" right="80.0"/>
+                </padding>
+                <VBox alignment="CENTER" spacing="25.0"
+                      styleClass="mode-card"
+                      prefWidth="320.0" prefHeight="380.0">
+                    <padding>
+                        <Insets top="40.0" left="30.0" right="30.0" bottom="40.0"/>
+                    </padding>
+                    <StackPane styleClass="mode-icon-container">
+                        <Label text="👤" style="-fx-font-size: 70px;"/>
+                    </StackPane>
+                    <VBox alignment="CENTER" spacing="12.0">
+                        <Label text="Personal Mode" styleClass="mode-title"/>
+                        <Label text="Track your personal expenses independently"
+                               styleClass="mode-description"
+                               wrapText="true"
+                               textAlignment="CENTER"
+                               maxWidth="260.0"/>
+                    </VBox>
+                    <Button fx:id="personalModeButton"
+                            onAction="#handlePersonalMode"
+                            styleClass="mode-button primary-button glossy-button"
+                            text="Start Personal Tracking"
+                            prefWidth="260.0" prefHeight="50.0"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="25.0"
+                      styleClass="mode-card"
+                      prefWidth="320.0" prefHeight="380.0">
+                    <padding>
+                        <Insets top="40.0" left="30.0" right="30.0" bottom="40.0"/>
+                    </padding>
+                    <StackPane styleClass="mode-icon-container">
+                        <Label text="👥" style="-fx-font-size: 70px;"/>
+                    </StackPane>
+                    <VBox alignment="CENTER" spacing="12.0">
+                        <Label text="Group Mode" styleClass="mode-title"/>
+                        <Label text="Collaborate and share expenses with groups"
+                               styleClass="mode-description"
+                               wrapText="true"
+                               textAlignment="CENTER"
+                               maxWidth="260.0"/>
+                    </VBox>
+                    <Button fx:id="groupModeButton"
+                            onAction="#handleGroupMode"
+                            styleClass="mode-button primary-button glossy-button"
+                            text="Manage Group Expenses"
+                            prefWidth="260.0" prefHeight="50.0"/>
+                </VBox>
+                <VBox fx:id="parentModeCard"
+                      alignment="CENTER" spacing="25.0"
+                      styleClass="mode-card"
+                      prefWidth="320.0" prefHeight="380.0"
+                      visible="false" managed="false">
+                    <padding>
+                        <Insets top="40.0" left="30.0" right="30.0" bottom="40.0"/>
+                    </padding>
+                    <StackPane styleClass="mode-icon-container">
+                        <Label text="👨‍👩‍👧‍👦" style="-fx-font-size: 70px;"/>
+                    </StackPane>
+                    <VBox alignment="CENTER" spacing="12.0">
+                        <Label text="Parent Mode" styleClass="mode-title"/>
+                        <Label text="Monitor and manage your children's expenses"
+                               styleClass="mode-description"
+                               wrapText="true"
+                               textAlignment="CENTER"
+                               maxWidth="260.0"/>
+                    </VBox>
+                    <Button fx:id="parentModeButton"
+                            onAction="#handleParentMode"
+                            styleClass="mode-button primary-button glossy-button"
+                            text="View Children's Activity"
+                            prefWidth="260.0" prefHeight="50.0"/>
+                </VBox>
+            </HBox>
+            <VBox alignment="CENTER" spacing="10.0">
+                <padding>
+                    <Insets top="20.0" bottom="40.0"/>
+                </padding>
+                <Button fx:id="logoutButton"
+                        onAction="#handleLogout"
+                        styleClass="secondary-button glass-button"
+                        text="Logout"
+                        prefWidth="180.0" prefHeight="44.0"/>
+            </VBox>
+        </VBox>
+    </children>
+</StackPane>
