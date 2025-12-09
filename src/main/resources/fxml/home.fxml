@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <StackPane prefHeight="700.0" prefWidth="1200.0"
            styleClass="root-pane"
            stylesheets="@../css/styles.css"
            xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.example.controller.HomeController">
-
     <children>
-
-        <!-- 🔵 Background gradient + abstract blur shapes -->
         <StackPane styleClass="background-container">
             <children>
                 <StackPane styleClass="background-shape shape-1"/>
@@ -24,73 +19,58 @@
                 <StackPane styleClass="background-overlay"/>
             </children>
         </StackPane>
-
-
-        <HBox alignment="CENTER_LEFT" spacing="0.0"
+        <VBox alignment="CENTER" spacing="0.0"
               prefHeight="700.0" prefWidth="1200.0">
-
-            <!-- 🧊 Left frosted glass section -->
-            <VBox alignment="CENTER"
-                  prefWidth="500.0" prefHeight="700.0"
-                  styleClass="glass-panel-container">
-
+            <VBox alignment="CENTER" spacing="35.0"
+                  styleClass="glass-pane frosted-card home-card"
+                  maxWidth="480.0" minWidth="450.0">
                 <padding>
-                    <Insets left="80.0" right="40.0" top="60.0" bottom="60.0"/>
+                    <Insets top="60.0" left="60.0" right="60.0" bottom="60.0"/>
                 </padding>
-
-                <!-- Main frosted card -->
-                <VBox alignment="CENTER" spacing="30.0"
-                      styleClass="glass-pane frosted-card"
-                      maxWidth="340.0">
-
-                    <padding>
-                        <Insets top="50.0" left="40.0" right="40.0" bottom="50.0"/>
-                    </padding>
-
-                    <!-- Title block -->
-                    <VBox alignment="CENTER" spacing="12.0" styleClass="title-block">
-                        <Label styleClass="app-title" text="Expense Tracker"/>
-                        <Label styleClass="app-subtitle"
-                               text="Personal Finance Manager"/>
-                    </VBox>
-
-                    <!-- Buttons -->
-                    <VBox alignment="CENTER" spacing="14.0">
+                <StackPane styleClass="app-icon-container">
+                    <Label text="💰" style="-fx-font-size: 80px;"/>
+                </StackPane>
+                <VBox alignment="CENTER" spacing="12.0" styleClass="title-block">
+                    <Label styleClass="app-title home-title" text="Expense Tracker"/>
+                    <Label styleClass="app-subtitle home-subtitle"
+                           text="Personal Finance Manager"/>
+                    <Label styleClass="home-tagline"
+                           text="Track • Analyze • Save"
+                           wrapText="true"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="16.0">
+                    <VBox.margin>
+                        <Insets top="15.0"/>
+                    </VBox.margin>
+                    <Button fx:id="loginButton"
+                            onAction="#handleLogin"
+                            styleClass="primary-button glossy-button home-button"
+                            text="🔐  Login"
+                            prefWidth="320.0" prefHeight="52.0"/>
+                    <Button fx:id="registerButton"
+                            onAction="#handleRegister"
+                            styleClass="secondary-button glass-button home-button"
+                            text="📝  Register"
+                            prefWidth="320.0" prefHeight="52.0"/>
+                    <VBox alignment="CENTER" spacing="5.0">
                         <VBox.margin>
-                            <Insets top="20.0"/>
+                            <Insets top="5.0" bottom="5.0"/>
                         </VBox.margin>
-
-                        <Button fx:id="loginButton"
-                                onAction="#handleLogin"
-                                styleClass="primary-button glossy-button"
-                                text="Login"
-                                prefWidth="260.0" prefHeight="48.0"/>
-
-                        <Button fx:id="registerButton"
-                                onAction="#handleRegister"
-                                styleClass="secondary-button glass-button"
-                                text="Register"
-                                prefWidth="260.0" prefHeight="48.0"/>
-
-                        <Button fx:id="exitButton"
-                                onAction="#handleExit"
-                                styleClass="exit-button glass-button"
-                                text="Exit"
-                                prefWidth="260.0" prefHeight="48.0"/>
+                        <StackPane styleClass="divider-line" prefWidth="200.0" prefHeight="1.0"/>
                     </VBox>
-
+                    <Button fx:id="exitButton"
+                            onAction="#handleExit"
+                            styleClass="exit-button glass-button home-button"
+                            text="🚪  Exit"
+                            prefWidth="320.0" prefHeight="48.0"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="8.0">
+                    <VBox.margin>
+                        <Insets top="10.0"/>
+                    </VBox.margin>
+                    <Label text="Secure • Simple • Smart" styleClass="home-footer"/>
                 </VBox>
             </VBox>
-
-            <!-- 🖼️ Right-side modern image/visual block -->
-            <VBox alignment="CENTER_RIGHT"
-                  prefWidth="700.0" prefHeight="700.0"
-                  styleClass="right-panel">
-                <children>
-                    <StackPane styleClass="hero-graphic"/>
-                </children>
-            </VBox>
-
-        </HBox>
+        </VBox>
     </children>
 </StackPane>
