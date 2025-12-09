@@ -150,13 +150,3 @@ Expense_Tracker_2207050/
 4. **Dashboard** → Mode-specific features
 5. **Add/View/Analyze** → Expenses and reports
 
-
-## Contact
-
-Project ID: 2207050
-Year: 2024
-
----
-
-**Note:** The application automatically creates `expense_tracker.db` in the project root on first run. This file stores all application data.
-
