@@ -43,7 +43,7 @@
                         <Insets top="40.0" left="30.0" right="30.0" bottom="40.0"/>
                     </padding>
                     <StackPane styleClass="mode-icon-container">
-                        <Label text="👤" style="-fx-font-size: 70px;"/>
+                        <Label text="👤" style="-fx-font-size: 70px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.5, 0, 0);"/>
                     </StackPane>
                     <VBox alignment="CENTER" spacing="12.0">
                         <Label text="Personal Mode" styleClass="mode-title"/>
@@ -66,7 +66,7 @@
                         <Insets top="40.0" left="30.0" right="30.0" bottom="40.0"/>
                     </padding>
                     <StackPane styleClass="mode-icon-container">
-                        <Label text="👥" style="-fx-font-size: 70px;"/>
+                        <Label text="👥" style="-fx-font-size: 70px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.5, 0, 0);"/>
                     </StackPane>
                     <VBox alignment="CENTER" spacing="12.0">
                         <Label text="Group Mode" styleClass="mode-title"/>
@@ -91,7 +91,7 @@
                         <Insets top="40.0" left="30.0" right="30.0" bottom="40.0"/>
                     </padding>
                     <StackPane styleClass="mode-icon-container">
-                        <Label text="👨‍👩‍👧‍👦" style="-fx-font-size: 70px;"/>
+                        <Label text="👨‍👩‍👧‍👦" style="-fx-font-size: 70px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.5, 0, 0);"/>
                     </StackPane>
                     <VBox alignment="CENTER" spacing="12.0">
                         <Label text="Parent Mode" styleClass="mode-title"/>

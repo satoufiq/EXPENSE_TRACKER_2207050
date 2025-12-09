@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+
 <BorderPane prefHeight="700.0" prefWidth="1200.0"
             styleClass="root-pane"
             stylesheets="@../css/styles.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.controller.PersonalDashboardController">
+
     <center>
         <StackPane>
             <children>
@@ -25,15 +27,17 @@
                         <StackPane styleClass="background-overlay"/>
                     </children>
                 </StackPane>
+
                 <VBox spacing="20.0" alignment="TOP_CENTER">
                     <padding>
                         <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                     </padding>
-                    <HBox alignment="CENTER_LEFT" spacing="20.0"
-                          styleClass="dashboard-header">
+
+                    <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                         <padding>
-                            <Insets top="10.0" bottom="10.0" left="20.0" right="20.0"/>
+                            <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
                         </padding>
+
                         <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                             <Label fx:id="userNameLabel"
                                    styleClass="dashboard-title"
@@ -42,89 +46,109 @@
                                    styleClass="dashboard-subtitle"
                                    text="Personal Mode"/>
                         </VBox>
+
                         <HBox spacing="15.0" alignment="CENTER_RIGHT">
                             <Button fx:id="addExpenseButton"
-                                    onAction="#handleAddExpense"
-                                    styleClass="primary-button glossy-button"
-                                    text="+ Add Expense"
-                                    prefHeight="40.0" prefWidth="150.0"/>
+                                    styleClass="primary-button"
+                                    text="➕ Add Expense"
+                                    prefHeight="40.0"
+                                    prefWidth="150.0"/>
                             <Button fx:id="viewAnalyticsButton"
-                                    onAction="#handleViewAnalytics"
-                                    styleClass="secondary-button glass-button"
+                                    styleClass="glass-button"
                                     text="📊 Analytics"
-                                    prefHeight="40.0" prefWidth="130.0"/>
+                                    prefHeight="40.0"
+                                    prefWidth="130.0"/>
                             <Button fx:id="backButton"
-                                    onAction="#handleBack"
-                                    styleClass="secondary-button glass-button"
+                                    styleClass="secondary-button"
                                     text="← Back"
-                                    prefHeight="40.0" prefWidth="100.0"/>
+                                    prefHeight="40.0"
+                                    prefWidth="100.0"/>
                         </HBox>
                     </HBox>
+
                     <HBox spacing="20.0" alignment="CENTER" prefHeight="140.0">
                         <padding>
                             <Insets top="10.0"/>
                         </padding>
+
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0" prefHeight="120.0">
+                              prefWidth="280.0"
+                              prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
                             </padding>
-                            <Label text="💰" style="-fx-font-size: 32px;"/>
-                            <Label text="Total Expenses" styleClass="stat-label"/>
+                            <Label text="💰"
+                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.4), 15, 0.6, 0, 0);"/>
+                            <Label text="Total Expenses"
+                                   styleClass="stat-label"/>
                             <Label fx:id="totalExpensesLabel"
-                                   text="$0.00"
+                                   text="\$0.00"
                                    styleClass="stat-value"/>
                         </VBox>
+
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0" prefHeight="120.0">
+                              prefWidth="280.0"
+                              prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
                             </padding>
-                            <Label text="📅" style="-fx-font-size: 32px;"/>
-                            <Label text="This Month" styleClass="stat-label"/>
+                            <Label text="📅"
+                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(123,136,255,0.4), 15, 0.6, 0, 0);"/>
+                            <Label text="This Month"
+                                   styleClass="stat-label"/>
                             <Label fx:id="monthExpensesLabel"
-                                   text="$0.00"
+                                   text="\$0.00"
                                    styleClass="stat-value"/>
                         </VBox>
+
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0" prefHeight="120.0">
+                              prefWidth="280.0"
+                              prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
                             </padding>
-                            <Label text="📆" style="-fx-font-size: 32px;"/>
-                            <Label text="This Week" styleClass="stat-label"/>
+                            <Label text="📆"
+                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(0,255,200,0.4), 15, 0.6, 0, 0);"/>
+                            <Label text="This Week"
+                                   styleClass="stat-label"/>
                             <Label fx:id="weekExpensesLabel"
-                                   text="$0.00"
+                                   text="\$0.00"
                                    styleClass="stat-value"/>
                         </VBox>
+
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0" prefHeight="120.0">
+                              prefWidth="280.0"
+                              prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
                             </padding>
-                            <Label text="🧾" style="-fx-font-size: 32px;"/>
-                            <Label text="Transactions" styleClass="stat-label"/>
+                            <Label text="🧾"
+                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(255,150,255,0.4), 15, 0.6, 0, 0);"/>
+                            <Label text="Transactions"
+                                   styleClass="stat-label"/>
                             <Label fx:id="transactionCountLabel"
                                    text="0"
                                    styleClass="stat-value"/>
                         </VBox>
                     </HBox>
+
                     <VBox spacing="15.0" VBox.vgrow="ALWAYS">
                         <padding>
                             <Insets top="10.0"/>
                         </padding>
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                            <Label text="Recent Expenses" styleClass="section-title"/>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <Label text="Recent Expenses"
+                                   styleClass="section-title"/>
                             <Button fx:id="viewAllButton"
-                                    onAction="#handleViewAllExpenses"
                                     styleClass="link-button"
-                                    text="View All →"
-                                    style="-fx-background-color: transparent; -fx-text-fill: #7B88FF; -fx-cursor: hand;"/>
+                                    text="View All →"/>
                         </HBox>
+
                         <StackPane styleClass="table-container" VBox.vgrow="ALWAYS">
                             <TableView fx:id="expensesTable"
                                       styleClass="modern-table"
@@ -135,21 +159,26 @@
                                                prefWidth="120.0"/>
                                     <TableColumn fx:id="categoryColumn"
                                                text="Category"
-                                               prefWidth="150.0"/>
+                                               prefWidth="180.0"/>
                                     <TableColumn fx:id="amountColumn"
                                                text="Amount"
-                                               prefWidth="120.0"/>
+                                               prefWidth="130.0"/>
                                     <TableColumn fx:id="noteColumn"
                                                text="Note"
-                                               prefWidth="300.0"/>
+                                               prefWidth="380.0"/>
                                     <TableColumn fx:id="actionsColumn"
                                                text="Actions"
-                                               prefWidth="180.0"/>
+                                               prefWidth="200.0"/>
                                 </columns>
                                 <placeholder>
-                                    <VBox alignment="CENTER" spacing="10.0">
-                                        <Label text="📝" style="-fx-font-size: 40px;"/>
-                                        <Label text="No expenses yet" styleClass="placeholder-text"/>
+                                    <VBox alignment="CENTER" spacing="15.0">
+                                        <padding>
+                                            <Insets top="40.0" bottom="40.0"/>
+                                        </padding>
+                                        <Label text="📝"
+                                               style="-fx-font-size: 48px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 20, 0.5, 0, 0);"/>
+                                        <Label text="No expenses yet"
+                                               styleClass="placeholder-text"/>
                                         <Label text="Click 'Add Expense' to create your first entry"
                                                styleClass="placeholder-subtext"/>
                                     </VBox>
