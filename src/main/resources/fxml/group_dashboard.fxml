@@ -44,28 +44,23 @@
                                    text="Group Dashboard"/>
                             <Label fx:id="memberCountLabel"
                                    styleClass="dashboard-subtitle"
-                                   text="0 members"/>
+                                   text="Members: 0"/>
                         </VBox>
 
                         <HBox spacing="15.0" alignment="CENTER_RIGHT">
-                            <Button fx:id="addExpenseButton"
+                            <Button text="➕ Add Member"
+                                    onAction="#handleAddMember"
                                     styleClass="primary-button"
-                                    text="➕ Add Expense"
                                     prefHeight="40.0"
                                     prefWidth="150.0"/>
-                            <Button fx:id="addMemberButton"
+                            <Button text="👥 View Members"
+                                    onAction="#handleViewMembers"
                                     styleClass="glass-button"
-                                    text="👥 Add Member"
                                     prefHeight="40.0"
                                     prefWidth="150.0"/>
-                            <Button fx:id="viewMembersButton"
-                                    styleClass="glass-button"
-                                    text="📋 Members"
-                                    prefHeight="40.0"
-                                    prefWidth="130.0"/>
-                            <Button fx:id="backButton"
+                            <Button text="← Back"
+                                    onAction="#handleBack"
                                     styleClass="secondary-button"
-                                    text="← Back"
                                     prefHeight="40.0"
                                     prefWidth="100.0"/>
                         </HBox>
@@ -78,14 +73,14 @@
 
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0"
+                              prefWidth="350.0"
                               prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
                             </padding>
                             <Label text="💰"
                                    style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="Total Expenses"
+                            <Label text="Total Group Expenses"
                                    styleClass="stat-label"/>
                             <Label fx:id="totalExpensesLabel"
                                    text="\$0.00"
@@ -94,7 +89,7 @@
 
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0"
+                              prefWidth="350.0"
                               prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
@@ -110,32 +105,16 @@
 
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
-                              prefWidth="280.0"
+                              prefWidth="350.0"
                               prefHeight="120.0">
                             <padding>
                                 <Insets top="20.0" bottom="20.0"/>
                             </padding>
                             <Label text="👥"
                                    style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(0,255,200,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="Active Members"
+                            <Label text="Group Members"
                                    styleClass="stat-label"/>
-                            <Label fx:id="activeMembersLabel"
-                                   text="0"
-                                   styleClass="stat-value"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="10.0"
-                              styleClass="stat-card"
-                              prefWidth="280.0"
-                              prefHeight="120.0">
-                            <padding>
-                                <Insets top="20.0" bottom="20.0"/>
-                            </padding>
-                            <Label text="🧾"
-                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(255,150,255,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="Transactions"
-                                   styleClass="stat-label"/>
-                            <Label fx:id="transactionCountLabel"
+                            <Label fx:id="memberCountStatLabel"
                                    text="0"
                                    styleClass="stat-value"/>
                         </VBox>
@@ -147,44 +126,46 @@
                         </padding>
 
                         <HBox alignment="CENTER_LEFT" spacing="15.0">
-                            <Label text="Recent Group Expenses"
+                            <Label text="Group Expenses"
                                    styleClass="section-title"/>
+                            <Button text="➕ Add Expense"
+                                    onAction="#handleAddExpense"
+                                    styleClass="link-button"/>
                         </HBox>
 
-                        <StackPane styleClass="table-container" VBox.vgrow="ALWAYS">
-                            <TableView fx:id="expensesTable"
-                                      styleClass="modern-table"
-                                      prefHeight="300.0">
+                        <StackPane styleClass="glass-container-elevated" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                            </padding>
+
+                            <TableView fx:id="expensesTable" styleClass="modern-table">
                                 <columns>
                                     <TableColumn fx:id="dateColumn"
-                                               text="Date"
-                                               prefWidth="120.0"/>
+                                                 text="Date"
+                                                 prefWidth="120.0"/>
                                     <TableColumn fx:id="memberColumn"
-                                               text="Member"
-                                               prefWidth="150.0"/>
+                                                 text="Member"
+                                                 prefWidth="150.0"/>
                                     <TableColumn fx:id="categoryColumn"
-                                               text="Category"
-                                               prefWidth="150.0"/>
+                                                 text="Category"
+                                                 prefWidth="140.0"/>
                                     <TableColumn fx:id="amountColumn"
-                                               text="Amount"
-                                               prefWidth="120.0"/>
+                                                 text="Amount"
+                                                 prefWidth="120.0"/>
                                     <TableColumn fx:id="noteColumn"
-                                               text="Note"
-                                               prefWidth="300.0"/>
-                                    <TableColumn fx:id="actionsColumn"
-                                               text="Actions"
-                                               prefWidth="150.0"/>
+                                                 text="Note"
+                                                 prefWidth="350.0"/>
                                 </columns>
                                 <placeholder>
                                     <VBox alignment="CENTER" spacing="15.0">
                                         <padding>
-                                            <Insets top="40.0" bottom="40.0"/>
+                                            <Insets top="60.0" bottom="60.0"/>
                                         </padding>
-                                        <Label text="📝"
-                                               style="-fx-font-size: 48px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 20, 0.5, 0, 0);"/>
-                                        <Label text="No group expenses yet"
+                                        <Label text="📊"
+                                               style="-fx-font-size: 48px; opacity: 0.4;"/>
+                                        <Label text="No expenses yet"
                                                styleClass="placeholder-text"/>
-                                        <Label text="Click 'Add Expense' to create the first group entry"
+                                        <Label text="Add expenses to track group spending"
                                                styleClass="placeholder-subtext"/>
                                     </VBox>
                                 </placeholder>

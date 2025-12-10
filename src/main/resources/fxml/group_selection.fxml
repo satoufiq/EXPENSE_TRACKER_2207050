@@ -34,7 +34,7 @@
                        style="-fx-font-size: 12px; -fx-font-style: italic;"/>
             </VBox>
             <VBox spacing="30.0"
-                  styleClass="frosted-card"
+                  styleClass="glass-container-elevated frosted-card"
                   prefWidth="900.0"
                   VBox.vgrow="ALWAYS">
                 <padding>

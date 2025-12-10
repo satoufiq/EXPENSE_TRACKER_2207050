@@ -16,17 +16,13 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# ===================================
-# IntelliJ IDEA
-# ===================================
-# Ignore the entire .idea directory
+
 .idea/
 
-# But allow specific folders to be tracked (optional)
+
 !.idea/codeStyles/
 !.idea/runConfigurations/
 
-# Explicitly re-exclude unwanted items after whitelisting
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/usage.statistics.xml

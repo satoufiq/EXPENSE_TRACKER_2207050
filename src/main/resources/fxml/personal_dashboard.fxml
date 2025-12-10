@@ -62,7 +62,8 @@
                                     styleClass="secondary-button"
                                     text="← Back"
                                     prefHeight="40.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0"
+                                    onAction="#handleBack"/>
                         </HBox>
                     </HBox>
 

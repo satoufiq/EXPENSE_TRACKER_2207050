@@ -35,6 +35,12 @@
     -fx-border-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 25, 0.2, 0, 8);
 }
+
+.frosted-card:hover {
+    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-border-color: rgba(255,255,255,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 35, 0.25, 0, 12);
+}
 .app-title {
     -fx-font-size: 30px;
     -fx-text-fill: #E7E8FF;
@@ -52,9 +58,14 @@
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0.2, 0, 4);
+    -fx-cursor: hand;
 }
 .primary-button:hover {
     -fx-background-color: linear-gradient(to bottom right, #6d7cf0, #5f6ded);
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.4), 20, 0.3, 0, 8);
+}
+.primary-button:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.5), 15, 0.3, 0, 4);
 }
 .glass-button {
     -fx-background-color: rgba(255, 255, 255, 0.18);
@@ -65,9 +76,13 @@
     -fx-text-fill: #E3E6FF;
     -fx-font-size: 15px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.15, 0, 4);
+    -fx-cursor: hand;
 }
+
 .glass-button:hover {
     -fx-background-color: rgba(255,255,255,0.28);
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.3), 16, 0.2, 0, 6);
 }
 .secondary-button {
     -fx-background-color: rgba(255, 255, 255, 0.15);
@@ -78,9 +93,12 @@
     -fx-border-color: rgba(255,255,255,0.2);
     -fx-border-radius: 16;
     -fx-border-width: 1;
+    -fx-cursor: hand;
 }
 .secondary-button:hover {
     -fx-background-color: rgba(255,255,255,0.25);
+    -fx-border-color: rgba(255,255,255,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.25), 14, 0.2, 0, 5);
 }
 .exit-button {
     -fx-text-fill: #ffdddd;
@@ -108,6 +126,12 @@
 }
 .error-label {
     -fx-text-fill: #ff4444;
+    -fx-font-size: 13px;
+    -fx-padding: 8 0 0 0;
+    -fx-wrap-text: true;
+}
+.success-label {
+    -fx-text-fill: #44ff88;
     -fx-font-size: 13px;
     -fx-padding: 8 0 0 0;
     -fx-wrap-text: true;
@@ -145,12 +169,19 @@
     -fx-padding: 40;
 }
 .hero-graphic {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-color: rgba(255, 255, 255, 0.08);
     -fx-background-radius: 20;
-    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.18);
     -fx-border-radius: 20;
-    -fx-border-width: 1;
+    -fx-border-width: 1.5;
     -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.2, 0, 6);
+}
+
+.hero-graphic:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.2), 35, 0.25, 0, 10);
 }
 .hero-title {
     -fx-font-size: 28px;
@@ -163,11 +194,18 @@
     -fx-text-alignment: center;
 }
 .login-icon-container {
-    -fx-background-color: rgba(92, 107, 192, 0.15);
+    -fx-background-color: rgba(92, 107, 192, 0.2);
     -fx-background-radius: 100;
-    -fx-border-color: rgba(92, 107, 192, 0.3);
+    -fx-border-color: rgba(92, 107, 192, 0.4);
     -fx-border-radius: 100;
     -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.25), 18, 0.3, 0, 6);
+}
+
+.login-icon-container:hover {
+    -fx-background-color: rgba(92, 107, 192, 0.28);
+    -fx-border-color: rgba(92, 107, 192, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.35), 25, 0.35, 0, 8);
 }
 .glass-panel-container {
     -fx-background-color: transparent;
@@ -184,19 +222,21 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0.15, 0, 5);
 }
 .mode-card:hover {
-    -fx-background-color: rgba(255,255,255,0.14);
-    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-background-color: rgba(255,255,255,0.16);
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.35), 35, 0.25, 0, 12);
 }
 .mode-icon-container {
-    -fx-background-color: rgba(92, 107, 192, 0.2);
+    -fx-background-color: rgba(92, 107, 192, 0.25);
     -fx-background-radius: 60;
     -fx-min-width: 120;
     -fx-min-height: 120;
     -fx-max-width: 120;
     -fx-max-height: 120;
-    -fx-border-color: rgba(92, 107, 192, 0.4);
+    -fx-border-color: rgba(92, 107, 192, 0.5);
     -fx-border-radius: 60;
     -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 20, 0.3, 0, 6);
 }
 .mode-title {
     -fx-font-size: 22px;
@@ -212,11 +252,18 @@
     -fx-font-size: 14px;
 }
 .dashboard-header {
-    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-color: rgba(255,255,255,0.10);
     -fx-background-radius: 15;
-    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-color: rgba(255,255,255,0.2);
     -fx-border-radius: 15;
     -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0.15, 0, 4);
+}
+
+.dashboard-header:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.25), 20, 0.2, 0, 6);
 }
 .dashboard-title {
     -fx-font-size: 26px;
@@ -227,13 +274,19 @@
     -fx-font-size: 13px;
     -fx-text-fill: #D5D8FF;
 }
-.stat-card {
+.mode-card {
     -fx-background-color: rgba(255,255,255,0.10);
-    -fx-background-radius: 18;
+    -fx-background-radius: 20;
     -fx-border-color: rgba(255,255,255,0.2);
-    -fx-border-width: 1.2;
-    -fx-border-radius: 18;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0.15, 0, 4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0.15, 0, 5);
+}
+
+.mode-card:hover {
+    -fx-background-color: rgba(255,255,255,0.16);
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.35), 35, 0.25, 0, 12);
 }
 .stat-label {
     -fx-font-size: 13px;
@@ -251,12 +304,13 @@
     -fx-font-weight: bold;
 }
 .table-container {
-    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-color: rgba(255,255,255,0.10);
     -fx-background-radius: 15;
-    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-color: rgba(255,255,255,0.2);
     -fx-border-radius: 15;
     -fx-border-width: 1;
     -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.2, 0, 5);
 }
 .modern-table {
     -fx-background-color: transparent;
@@ -306,12 +360,13 @@
     -fx-text-fill: #C5CAF0;
 }
 .list-container {
-    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-color: rgba(255,255,255,0.10);
     -fx-background-radius: 15;
-    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-color: rgba(255,255,255,0.2);
     -fx-border-radius: 15;
     -fx-border-width: 1;
     -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.2, 0, 5);
 }
 .modern-list {
     -fx-background-color: transparent;
@@ -393,18 +448,27 @@
 .home-card {
     -fx-min-height: 600;
     -fx-max-width: 480;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 40, 0.25, 0, 15);
+}
+
+.home-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 50, 0.3, 0, 20);
 }
 .app-icon-container {
-    -fx-background-color: rgba(92, 107, 192, 0.15);
+    -fx-background-color: rgba(92, 107, 192, 0.18);
     -fx-background-radius: 70;
     -fx-min-width: 140;
     -fx-min-height: 140;
     -fx-max-width: 140;
     -fx-max-height: 140;
-    -fx-border-color: rgba(92, 107, 192, 0.4);
+    -fx-border-color: rgba(92, 107, 192, 0.5);
     -fx-border-radius: 70;
     -fx-border-width: 3;
-    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 15, 0.3, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.4), 25, 0.35, 0, 8);
+}
+
+.app-icon-container:hover {
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.6), 35, 0.4, 0, 12);
 }
 .home-title {
     -fx-font-size: 36px;
@@ -434,3 +498,60 @@
     -fx-background-color: rgba(255, 255, 255, 0.15);
     -fx-background-radius: 2;
 }
+
+/* Enhanced Glossy Button Styling */
+.glossy-button {
+    -fx-background-radius: 16;
+    -fx-padding: 12 20 12 20;
+    -fx-font-weight: bold;
+}
+
+.glossy-button:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.glossy-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Enhanced Background Overlay with stronger blur effect */
+.background-container {
+    -fx-background-color: rgba(28, 31, 58, 0.95);
+}
+
+/* Content Area Blur Effect */
+.content-blur {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 30, 0.2, 0, 8);
+}
+
+/* Enhanced Hero Graphic with stronger blur */
+.hero-graphic {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(255, 255, 255, 0.18);
+    -fx-border-radius: 20;
+    -fx-border-width: 1.5;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.2, 0, 6);
+}
+
+.hero-graphic:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.2), 35, 0.25, 0, 10);
+}
+
+/* Glass Pane Enhancement */
+.glass-pane {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 25;
+    -fx-border-width: 1.2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 30, 0.2, 0, 10);
+}
+
+
