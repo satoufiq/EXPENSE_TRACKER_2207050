@@ -42,7 +42,7 @@
 }
 .app-subtitle {
     -fx-font-size: 14px;
-    -fx-text-fill: #BFC2FF;
+    -fx-text-fill: #D8DBFF;
 }
 .primary-button {
     -fx-background-color: linear-gradient(to bottom right, #5c6bc0, #4b5bd7);
@@ -159,7 +159,7 @@
 }
 .hero-subtitle {
     -fx-font-size: 15px;
-    -fx-text-fill: #BFC2FF;
+    -fx-text-fill: #D8DBFF;
     -fx-text-alignment: center;
 }
 .login-icon-container {
@@ -225,7 +225,7 @@
 }
 .dashboard-subtitle {
     -fx-font-size: 13px;
-    -fx-text-fill: #BFC2FF;
+    -fx-text-fill: #D5D8FF;
 }
 .stat-card {
     -fx-background-color: rgba(255,255,255,0.10);
@@ -298,12 +298,12 @@
 }
 .placeholder-text {
     -fx-font-size: 16px;
-    -fx-text-fill: #BFC2FF;
+    -fx-text-fill: #E0E3FF;
     -fx-font-weight: 600;
 }
 .placeholder-subtext {
     -fx-font-size: 13px;
-    -fx-text-fill: #9BA3D0;
+    -fx-text-fill: #C5CAF0;
 }
 .list-container {
     -fx-background-color: rgba(255,255,255,0.08);
@@ -413,11 +413,11 @@
 }
 .home-subtitle {
     -fx-font-size: 15px;
-    -fx-text-fill: #BFC2FF;
+    -fx-text-fill: #E0E3FF;
 }
 .home-tagline {
     -fx-font-size: 13px;
-    -fx-text-fill: #9BA7D0;
+    -fx-text-fill: #D0D5FF;
     -fx-font-style: italic;
     -fx-padding: 5 0 0 0;
 }
@@ -427,7 +427,7 @@
 }
 .home-footer {
     -fx-font-size: 12px;
-    -fx-text-fill: #8B91C7;
+    -fx-text-fill: #C0C5E8;
     -fx-font-style: italic;
 }
 .divider-line {

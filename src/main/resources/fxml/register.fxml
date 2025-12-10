@@ -135,7 +135,7 @@
                                 <Insets left="60.0" right="60.0"/>
                             </padding>
                             <StackPane prefWidth="200.0" prefHeight="200.0" styleClass="login-icon-container">
-                                <Label text="📝" style="-fx-font-size: 100px;"/>
+                                <Label text="📝" style="-fx-font-size: 100px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.5, 0, 0);"/>
                             </StackPane>
                             <Label text="Join Us Today" styleClass="hero-title"/>
                             <Label text="Create your account and start managing your expenses with ease"
