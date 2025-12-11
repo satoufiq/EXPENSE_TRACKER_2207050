@@ -58,7 +58,7 @@
                             styleClass="mode-button primary-button glossy-button"
                             text="Start Personal Tracking"
                             prefWidth="260.0" prefHeight="50.0"/>
-                </VBox>
+                    </VBox>
                 <VBox alignment="CENTER" spacing="25.0"
                       styleClass="mode-card"
                       prefWidth="320.0" prefHeight="380.0">
@@ -81,7 +81,7 @@
                             styleClass="mode-button primary-button glossy-button"
                             text="Manage Group Expenses"
                             prefWidth="260.0" prefHeight="50.0"/>
-                </VBox>
+                    </VBox>
                 <VBox fx:id="parentModeCard"
                       alignment="CENTER" spacing="25.0"
                       styleClass="mode-card"
@@ -106,7 +106,7 @@
                             styleClass="mode-button primary-button glossy-button"
                             text="View Children's Activity"
                             prefWidth="260.0" prefHeight="50.0"/>
-                </VBox>
+                    </VBox>
             </HBox>
             <VBox alignment="CENTER" spacing="10.0">
                 <padding>

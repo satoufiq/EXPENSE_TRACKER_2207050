@@ -248,18 +248,42 @@ public class GroupSelectionController {
     private void loadGroupDashboard() {
         try {
             System.out.println("Loading Group Dashboard...");
-            System.out.println("Current Group ID: " + SessionManager.getInstance().getCurrentGroupId());
+
+            Group selectedGroup = groupsListView.getSelectionModel().getSelectedItem();
+            if (selectedGroup == null) {
+                showErrorAlert("Please select a group first!");
+                return;
+            }
+
+            String groupId = selectedGroup.getGroupId();
+            String groupName = selectedGroup.getGroupName();
+            String userId = SessionManager.getInstance().getCurrentUser().getUserId();
+
+            System.out.println("Opening group: " + groupName + " (ID: " + groupId + ")");
 
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/group_dashboard.fxml"));
 
             if (loader.getLocation() == null) {
                 showErrorAlert("Error: group_dashboard.fxml not found!");
-                System.err.println("FXML file not found: /fxml/group_dashboard.fxml");
                 return;
             }
 
             javafx.scene.Parent root = loader.load();
+
+            // Initialize controller using reflection to avoid cast issues
+            Object controllerObj = loader.getController();
+            if (controllerObj != null) {
+                try {
+                    var method = controllerObj.getClass().getMethod("initWithGroup", String.class, String.class, String.class);
+                    method.invoke(controllerObj, groupId, userId, groupName);
+                    System.out.println("Initialized GroupDashboardController with groupId: " + groupId);
+                } catch (Exception ex) {
+                    System.err.println("Error initializing GroupDashboardController: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+
             javafx.scene.Scene scene = new javafx.scene.Scene(root);
 
             java.net.URL cssResource = getClass().getResource("/css/styles.css");
@@ -282,10 +306,33 @@ public class GroupSelectionController {
      */
     private void loadGroupMemberList() {
         try {
+            Group selectedGroup = groupsListView.getSelectionModel().getSelectedItem();
+            if (selectedGroup == null) {
+                showErrorAlert("Please select a group first!");
+                return;
+            }
+
+            String groupId = selectedGroup.getGroupId();
+            String groupName = selectedGroup.getGroupName();
+            String userId = SessionManager.getInstance().getCurrentUser().getUserId();
+
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/group_member_list.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/view_members.fxml"));
 
             javafx.scene.Parent root = loader.load();
+
+            // Initialize the controller with group context using reflection to avoid IDE issues
+            Object controllerObj = loader.getController();
+            if (controllerObj != null) {
+                try {
+                    var method = controllerObj.getClass().getMethod("initWithGroup", String.class, String.class, String.class);
+                    method.invoke(controllerObj, groupId, userId, groupName);
+                    System.out.println("Initializing ViewMembersController with groupId: " + groupId + ", userId: " + userId);
+                } catch (Exception ex) {
+                    System.err.println("Error initializing ViewMembersController: " + ex.getMessage());
+                }
+            }
+
             javafx.scene.Scene scene = new javafx.scene.Scene(root);
 
             java.net.URL cssResource = getClass().getResource("/css/styles.css");
@@ -296,7 +343,7 @@ public class GroupSelectionController {
             MainApp.getPrimaryStage().setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
-            showErrorAlert("Failed to load Group Member List: " + e.getMessage());
+            showErrorAlert("Failed to load Members view: " + e.getMessage());
         }
     }
 

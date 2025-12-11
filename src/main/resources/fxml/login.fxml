@@ -89,7 +89,7 @@
                                 text="Back to Home"
                                 prefWidth="340.0" prefHeight="44.0"/>
                     </VBox>
-                </VBox>
+            </VBox>
             </VBox>
             <VBox alignment="CENTER"
                   prefWidth="600.0" prefHeight="700.0"

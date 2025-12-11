@@ -1,5 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.controller.AddExpenseController">
-</VBox>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.AddExpenseController"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css"
+            prefWidth="500"
+            prefHeight="600">
+
+    <center>
+        <StackPane>
+            <children>
+                <!-- Background -->
+                <StackPane styleClass="background-container">
+                    <children>
+                        <StackPane styleClass="background-shape shape-1"/>
+                        <StackPane styleClass="background-shape shape-2"/>
+                        <StackPane styleClass="background-overlay"/>
+                    </children>
+                </StackPane>
+
+                <!-- Content -->
+                <VBox spacing="20" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="30" right="40" bottom="30" left="40"/>
+                    </padding>
+
+                    <!-- Title -->
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="💰" style="-fx-font-size: 48px;"/>
+                        <Label text="Add New Expense" styleClass="dashboard-title"/>
+                        <Label text="Track your spending" styleClass="dashboard-subtitle"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Form -->
+                    <VBox spacing="20" styleClass="form-container">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Category -->
+                        <VBox spacing="8">
+                            <Label text="Category *" styleClass="form-label">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+                            <ComboBox fx:id="categoryComboBox"
+                                     promptText="Select a category"
+                                     maxWidth="Infinity"
+                                     styleClass="modern-combo"/>
+                        </VBox>
+
+                        <!-- Amount -->
+                        <VBox spacing="8">
+                            <Label text="Amount *" styleClass="form-label">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+                            <TextField fx:id="amountField"
+                                      promptText="Enter amount (e.g., 25.50)"
+                                      styleClass="modern-text-field"/>
+                        </VBox>
+
+                        <!-- Date -->
+                        <VBox spacing="8">
+                            <Label text="Date *" styleClass="form-label">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+                            <DatePicker fx:id="datePicker"
+                                       maxWidth="Infinity"
+                                       promptText="Select date"
+                                       styleClass="modern-date-picker"/>
+                        </VBox>
+
+                        <!-- Note -->
+                        <VBox spacing="8">
+                            <Label text="Note (Optional)" styleClass="form-label">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+                            <TextArea fx:id="noteArea"
+                                     promptText="Add a note about this expense..."
+                                     prefHeight="100"
+                                     wrapText="true"
+                                     styleClass="modern-text-area"/>
+                        </VBox>
+
+                        <!-- Buttons -->
+                        <HBox spacing="15" alignment="CENTER">
+                            <padding>
+                                <Insets top="20"/>
+                            </padding>
+                            <Button fx:id="saveButton"
+                                   text="💾 Save Expense"
+                                   onAction="#handleSave"
+                                   styleClass="primary-button"
+                                   prefWidth="180"
+                                   prefHeight="45"/>
+                            <Button fx:id="cancelButton"
+                                   text="✖ Cancel"
+                                   onAction="#handleCancel"
+                                   styleClass="secondary-button"
+                                   prefWidth="140"
+                                   prefHeight="45"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>

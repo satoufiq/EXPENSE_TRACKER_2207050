@@ -1,75 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<StackPane prefHeight="700.0" prefWidth="1200.0"
-           styleClass="root-pane"
-           stylesheets="@../css/styles.css"
-           xmlns="http://javafx.com/javafx/21"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.example.controller.HomeController">
+
+<StackPane prefHeight="700.0" prefWidth="1200.0" styleClass="root-pane" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.HomeController">
     <children>
         <StackPane styleClass="background-container">
             <children>
-                <StackPane styleClass="background-shape shape-1"/>
-                <StackPane styleClass="background-shape shape-2"/>
-                <StackPane styleClass="background-overlay"/>
+                <StackPane styleClass="background-shape shape-1" />
+                <StackPane styleClass="background-shape shape-2" />
+                <StackPane styleClass="background-overlay" />
             </children>
         </StackPane>
-        <VBox alignment="CENTER" spacing="0.0"
-              prefHeight="700.0" prefWidth="1200.0">
-            <VBox alignment="CENTER" spacing="35.0"
-                  styleClass="glass-pane frosted-card home-card"
-                  maxWidth="480.0" minWidth="450.0">
+        <VBox alignment="CENTER" prefHeight="700.0" prefWidth="1200.0" spacing="0.0">
+            <VBox alignment="CENTER" maxWidth="480.0" minWidth="450.0" spacing="35.0" styleClass="glass-pane frosted-card home-card">
                 <padding>
-                    <Insets top="60.0" left="60.0" right="60.0" bottom="60.0"/>
+                    <Insets bottom="60.0" left="60.0" right="60.0" top="60.0" />
                 </padding>
                 <StackPane styleClass="app-icon-container">
-                    <Label text="💰" style="-fx-font-size: 80px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.5, 0, 0);"/>
+                    <Label style="-fx-font-size: 80px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.5, 0, 0);" text="💰" />
                 </StackPane>
                 <VBox alignment="CENTER" spacing="12.0" styleClass="title-block">
-                    <Label styleClass="app-title home-title" text="Expense Tracker"/>
-                    <Label styleClass="app-subtitle home-subtitle"
-                           text="Personal Finance Manager"/>
-                    <Label styleClass="home-tagline"
-                           text="Track • Analyze • Save"
-                           wrapText="true"/>
+                    <Label styleClass="app-title home-title" text="Expense Tracker" textFill="#eae3e3" />
+                    <Label styleClass="app-subtitle home-subtitle" text="Personal Finance Manager" textFill="#ece7e7" />
+                    <Label styleClass="home-tagline" text="Track • Analyze • Save" wrapText="true" />
                 </VBox>
                 <VBox alignment="CENTER" spacing="16.0">
                     <VBox.margin>
-                        <Insets top="15.0"/>
+                        <Insets top="15.0" />
                     </VBox.margin>
-                    <Button fx:id="loginButton"
-                            onAction="#handleLogin"
-                            styleClass="primary-button glossy-button home-button"
-                            text="🔐  Login"
-                            prefWidth="320.0" prefHeight="52.0"/>
-                    <Button fx:id="registerButton"
-                            onAction="#handleRegister"
-                            styleClass="secondary-button glass-button home-button"
-                            text="📝  Register"
-                            prefWidth="320.0" prefHeight="52.0"/>
+                    <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="52.0" prefWidth="320.0" styleClass="primary-button glossy-button home-button" text="🔐  Login" />
+                    <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="52.0" prefWidth="320.0" styleClass="secondary-button glass-button home-button" text="📝  Register" />
                     <VBox alignment="CENTER" spacing="5.0">
                         <VBox.margin>
-                            <Insets top="5.0" bottom="5.0"/>
+                            <Insets bottom="5.0" top="5.0" />
                         </VBox.margin>
-                        <StackPane styleClass="divider-line" prefWidth="200.0" prefHeight="1.0"/>
+                        <StackPane prefHeight="1.0" prefWidth="200.0" styleClass="divider-line" />
                     </VBox>
-                    <Button fx:id="exitButton"
-                            onAction="#handleExit"
-                            styleClass="exit-button glass-button home-button"
-                            text="🚪  Exit"
-                            prefWidth="320.0" prefHeight="48.0"/>
+                    <Button fx:id="exitButton" onAction="#handleExit" prefHeight="48.0" prefWidth="320.0" styleClass="exit-button glass-button home-button" text="🚪  Exit" />
                 </VBox>
                 <VBox alignment="CENTER" spacing="8.0">
                     <VBox.margin>
-                        <Insets top="10.0"/>
+                        <Insets top="10.0" />
                     </VBox.margin>
-                    <Label text="Secure • Simple • Smart" styleClass="home-footer"/>
+                    <Label styleClass="home-footer" text="Secure • Simple • Smart" />
                 </VBox>
+            <effect>
+               <Blend />
+            </effect>
             </VBox>
         </VBox>
     </children>
