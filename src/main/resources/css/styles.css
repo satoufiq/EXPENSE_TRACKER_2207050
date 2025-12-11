@@ -298,6 +298,21 @@
     -fx-text-fill: #E7E8FF;
     -fx-font-weight: bold;
 }
+
+.stat-card {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(255,255,255,0.25);
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.2, 0, 5);
+}
+
+.stat-card:hover {
+    -fx-background-color: rgba(255,255,255,0.16);
+    -fx-border-color: rgba(255,255,255,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.3), 25, 0.25, 0, 8);
+}
 .section-title {
     -fx-font-size: 18px;
     -fx-text-fill: #E7E8FF;
@@ -499,6 +514,184 @@
     -fx-background-radius: 2;
 }
 
+/* Form Elements */
+.form-container {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+}
+
+.form-label {
+    -fx-text-fill: #D0D3FF;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.modern-text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 10;
+    -fx-text-fill: #E7E8FF;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.45);
+    -fx-font-size: 14px;
+    -fx-padding: 12 16 12 16;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.modern-text-field:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(92, 107, 192, 0.8);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 10, 0.3, 0, 2);
+}
+
+.modern-text-area {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 10;
+    -fx-text-fill: #E7E8FF;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.45);
+    -fx-font-size: 14px;
+    -fx-padding: 12 16 12 16;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.modern-text-area:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(92, 107, 192, 0.8);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 10, 0.3, 0, 2);
+}
+
+.modern-text-area .content {
+    -fx-background-color: transparent;
+}
+
+.modern-combo {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.modern-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E7E8FF;
+    -fx-padding: 10;
+}
+
+.modern-combo:focused {
+    -fx-border-color: rgba(92, 107, 192, 0.8);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 10, 0.3, 0, 2);
+}
+
+.modern-combo .arrow-button {
+    -fx-background-color: rgba(92, 107, 192, 0.3);
+    -fx-background-radius: 0 10 10 0;
+}
+
+.modern-combo .arrow {
+    -fx-background-color: #E7E8FF;
+}
+
+.modern-date-picker {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.modern-date-picker:focused {
+    -fx-border-color: rgba(92, 107, 192, 0.8);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 10, 0.3, 0, 2);
+}
+
+.modern-date-picker .arrow-button {
+    -fx-background-color: rgba(92, 107, 192, 0.3);
+    -fx-background-radius: 0 10 10 0;
+}
+
+.modern-date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E7E8FF;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.45);
+}
+
+.modern-date-picker .arrow {
+    -fx-background-color: #E7E8FF;
+}
+
+/* Combo Box Popup */
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(28, 31, 58, 0.95);
+    -fx-border-color: rgba(92, 107, 192, 0.5);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 20, 0.3, 0, 8);
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E7E8FF;
+    -fx-padding: 12;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(92, 107, 192, 0.3);
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: rgba(92, 107, 192, 0.6);
+}
+
+/* Date Picker Popup */
+.date-picker-popup {
+    -fx-background-color: rgba(28, 31, 58, 0.95);
+    -fx-border-color: rgba(92, 107, 192, 0.5);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 20, 0.3, 0, 8);
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: rgba(92, 107, 192, 0.3);
+}
+
+.date-picker-popup .spinner {
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E7E8FF;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: #E7E8FF;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: rgba(92, 107, 192, 0.3);
+}
+
+.date-picker-popup .selected {
+    -fx-background-color: rgba(92, 107, 192, 0.6);
+}
+
+.date-picker-popup .today {
+    -fx-background-color: rgba(123, 136, 255, 0.3);
+}
 /* Enhanced Glossy Button Styling */
 .glossy-button {
     -fx-background-radius: 16;

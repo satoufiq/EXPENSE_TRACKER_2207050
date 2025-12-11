@@ -52,7 +52,8 @@
                                     styleClass="primary-button"
                                     text="➕ Add Expense"
                                     prefHeight="40.0"
-                                    prefWidth="150.0"/>
+                                    prefWidth="150.0"
+                                    onAction="#handleAddExpense"/>
                             <Button fx:id="viewAnalyticsButton"
                                     styleClass="glass-button"
                                     text="📊 Analytics"
@@ -84,7 +85,7 @@
                             <Label text="Total Expenses"
                                    styleClass="stat-label"/>
                             <Label fx:id="totalExpensesLabel"
-                                   text="\$0.00"
+                                   text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
 
@@ -100,7 +101,7 @@
                             <Label text="This Month"
                                    styleClass="stat-label"/>
                             <Label fx:id="monthExpensesLabel"
-                                   text="\$0.00"
+                                   text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
 
@@ -116,7 +117,7 @@
                             <Label text="This Week"
                                    styleClass="stat-label"/>
                             <Label fx:id="weekExpensesLabel"
-                                   text="\$0.00"
+                                   text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
 

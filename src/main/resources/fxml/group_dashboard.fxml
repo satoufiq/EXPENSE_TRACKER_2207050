@@ -48,9 +48,14 @@
                         </VBox>
 
                         <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                            <Button text="💰 Add Expense"
+                                    onAction="#handleAddExpense"
+                                    styleClass="primary-button"
+                                    prefHeight="40.0"
+                                    prefWidth="150.0"/>
                             <Button text="➕ Add Member"
                                     onAction="#handleAddMember"
-                                    styleClass="primary-button"
+                                    styleClass="glass-button"
                                     prefHeight="40.0"
                                     prefWidth="150.0"/>
                             <Button text="👥 View Members"
@@ -83,7 +88,7 @@
                             <Label text="Total Group Expenses"
                                    styleClass="stat-label"/>
                             <Label fx:id="totalExpensesLabel"
-                                   text="\$0.00"
+                                   text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
 
@@ -99,7 +104,7 @@
                             <Label text="This Month"
                                    styleClass="stat-label"/>
                             <Label fx:id="monthExpensesLabel"
-                                   text="\$0.00"
+                                   text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
 

@@ -109,6 +109,19 @@ public class GroupDashboardController {
         amountColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getAmount()).asObject());
 
+        // Format amount column to show Taka currency
+        amountColumn.setCellFactory(column -> new javafx.scene.control.TableCell<Expense, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("৳%.2f", amount));
+                }
+            }
+        });
+
         noteColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNote()));
     }
@@ -180,8 +193,8 @@ public class GroupDashboardController {
      * Update expenses summary labels
      */
     private void updateExpensesSummary(double total, double monthTotal) {
-        totalExpensesLabel.setText(String.format("$%.2f", total));
-        monthExpensesLabel.setText(String.format("$%.2f", monthTotal));
+        totalExpensesLabel.setText(String.format("৳%.2f", total));
+        monthExpensesLabel.setText(String.format("৳%.2f", monthTotal));
     }
 
     /**
@@ -274,7 +287,37 @@ public class GroupDashboardController {
      */
     @FXML
     private void handleAddExpense() {
-        showError("Add expense feature coming soon");
+        if (currentGroupId == null) {
+            showError("No group selected!");
+            return;
+        }
+
+        try {
+            System.out.println("Opening Add Expense dialog for group: " + currentGroupName);
+
+            // Set the current group in session so AddExpenseController knows it's group mode
+            org.example.util.SessionManager.getInstance().setCurrentGroupId(currentGroupId);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/add_expense.fxml"));
+            javafx.scene.Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Add Expense - " + currentGroupName);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // Refresh after dialog closes
+            System.out.println("Refreshing dashboard after add expense dialog");
+            loadExpenses();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Failed to open add expense dialog: " + e.getMessage());
+        }
     }
 
     /**

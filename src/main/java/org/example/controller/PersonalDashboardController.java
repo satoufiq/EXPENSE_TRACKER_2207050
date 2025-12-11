@@ -65,8 +65,15 @@ public class PersonalDashboardController {
 
     @FXML
     public void initialize() {
-        // This will be called when the FXML is loaded
-        // Real initialization happens when user data is available
+        // Get current user from session
+        org.example.util.SessionManager session = org.example.util.SessionManager.getInstance();
+        if (session.getCurrentUser() != null) {
+            this.currentUserId = session.getCurrentUser().getUserId();
+
+            // Setup table and load data
+            setupTableColumns();
+            loadExpenses();
+        }
     }
 
     /**
@@ -76,13 +83,17 @@ public class PersonalDashboardController {
         this.currentUserId = userId;
         setupTableColumns();
         loadExpenses();
-        setupAddExpenseListener();
     }
 
     /**
      * Setup table columns with proper cell value factories
      */
     private void setupTableColumns() {
+        if (dateColumn == null || categoryColumn == null || amountColumn == null ||
+            noteColumn == null || actionsColumn == null) {
+            return;
+        }
+
         dateColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDate()));
 
@@ -91,6 +102,19 @@ public class PersonalDashboardController {
 
         amountColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getAmount()).asObject());
+
+        // Format amount column to show Taka currency
+        amountColumn.setCellFactory(column -> new javafx.scene.control.TableCell<Expense, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("৳%.2f", amount));
+                }
+            }
+        });
 
         noteColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNote()));
@@ -124,24 +148,33 @@ public class PersonalDashboardController {
      * Update dashboard statistics
      */
     private void updateStatistics() {
-        if (currentUserId == null) return;
+        if (currentUserId == null || expensesList == null) return;
 
         double total = ExpenseService.getTotalExpenses(currentUserId);
-        totalExpensesLabel.setText(String.format("$%.2f", total));
+        if (totalExpensesLabel != null) {
+            totalExpensesLabel.setText(String.format("৳%.2f", total));
+        }
 
         double monthTotal = calculateMonthTotal();
-        monthExpensesLabel.setText(String.format("$%.2f", monthTotal));
+        if (monthExpensesLabel != null) {
+            monthExpensesLabel.setText(String.format("৳%.2f", monthTotal));
+        }
 
         double weekTotal = calculateWeekTotal();
-        weekExpensesLabel.setText(String.format("$%.2f", weekTotal));
+        if (weekExpensesLabel != null) {
+            weekExpensesLabel.setText(String.format("৳%.2f", weekTotal));
+        }
 
-        transactionCountLabel.setText(String.valueOf(expensesList.size()));
+        if (transactionCountLabel != null) {
+            transactionCountLabel.setText(String.valueOf(expensesList.size()));
+        }
     }
 
     /**
      * Calculate total expenses for current month
      */
     private double calculateMonthTotal() {
+        if (expensesList == null) return 0.0;
         return expensesList.stream()
             .filter(e -> isCurrentMonth(e.getDate()))
             .mapToDouble(Expense::getAmount)
@@ -152,6 +185,7 @@ public class PersonalDashboardController {
      * Calculate total expenses for current week
      */
     private double calculateWeekTotal() {
+        if (expensesList == null) return 0.0;
         return expensesList.stream()
             .filter(e -> isCurrentWeek(e.getDate()))
             .mapToDouble(Expense::getAmount)
@@ -187,13 +221,40 @@ public class PersonalDashboardController {
     }
 
     /**
-     * Setup listener to refresh when expenses are added
+     * Handle add expense button click - open add expense dialog
      */
-    private void setupAddExpenseListener() {
-        addExpenseButton.setOnAction(event -> {
-            // When add expense dialog closes, the observable list will auto-update
-            // No manual refresh needed!
-        });
+    @FXML
+    private void handleAddExpense() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/add_expense.fxml"));
+            javafx.scene.Parent root = loader.load();
+
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Add Expense");
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            stage.setScene(scene);
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // ObservableList will automatically update the UI when dialog closes
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Error",
+                "Failed to open add expense dialog: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Show alert dialog
+     */
+    private void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
@@ -251,14 +312,15 @@ public class PersonalDashboardController {
     }
 
     /**
-     * Handle back button click
+     * Handle back button click - navigate back to mode selection
      */
     @FXML
     private void handleBack() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/group_selection.fxml"));
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/mode_selection.fxml"));
             javafx.scene.Parent root = loader.load();
             javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
             javafx.stage.Stage stage = (javafx.stage.Stage) backButton.getScene().getWindow();
             stage.setScene(scene);
