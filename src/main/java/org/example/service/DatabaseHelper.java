@@ -88,6 +88,36 @@ public class DatabaseHelper {
             """;
             stmt.execute(createParentRelationTable);
 
+            // Create PARENT_INVITES table
+            String createParentInvitesTable = """
+                CREATE TABLE IF NOT EXISTS PARENT_INVITES (
+                    invite_id TEXT PRIMARY KEY,
+                    parent_id TEXT NOT NULL,
+                    child_id TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'pending', -- 'pending','accepted','declined'
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (parent_id) REFERENCES USERS(user_id),
+                    FOREIGN KEY (child_id) REFERENCES USERS(user_id)
+                )
+            """;
+            stmt.execute(createParentInvitesTable);
+
+            // Create GROUP_INVITES table
+            String createGroupInvitesTable = """
+                CREATE TABLE IF NOT EXISTS GROUP_INVITES (
+                    invite_id TEXT PRIMARY KEY,
+                    group_id TEXT NOT NULL,
+                    inviter_id TEXT NOT NULL,
+                    invitee_id TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'pending', -- 'pending','accepted','declined'
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (group_id) REFERENCES GROUPS(group_id),
+                    FOREIGN KEY (inviter_id) REFERENCES USERS(user_id),
+                    FOREIGN KEY (invitee_id) REFERENCES USERS(user_id)
+                )
+            """;
+            stmt.execute(createGroupInvitesTable);
+
             System.out.println("Database initialized successfully");
 
         } catch (Exception e) {
@@ -96,4 +126,3 @@ public class DatabaseHelper {
         }
     }
 }
-

@@ -33,6 +33,9 @@ public class ModeSelectionController {
     private Button logoutButton;
 
     @FXML
+    private Button alertsButton;
+
+    @FXML
     public void initialize() {
         loadUserInfo();
     }
@@ -147,5 +150,21 @@ public class ModeSelectionController {
             e.printStackTrace();
         }
     }
-}
 
+    /**
+     * Handle Alerts navigation
+     */
+    @FXML
+    private void handleAlerts() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/alerts.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            MainApp.getPrimaryStage().setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

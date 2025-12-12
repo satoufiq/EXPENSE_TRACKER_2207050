@@ -162,19 +162,28 @@ public class AddMemberDialogController {
             return;
         }
 
-        // Add member to group
-        System.out.println("Adding member to group...");
-        boolean success = GroupService.addMemberToGroup(currentGroupId, userToAdd.getUserId());
+        // Send invite instead of direct add
+        System.out.println("Sending group invite...");
+        String inviterId = org.example.util.SessionManager.getInstance().getCurrentUser() != null
+                ? org.example.util.SessionManager.getInstance().getCurrentUser().getUserId() : null;
 
-        if (success) {
-            showSuccess(userToAdd.getName() + " has been added to the group!");
-            System.out.println("✓ Member added successfully!");
+        if (inviterId == null) {
+            showError("You must be logged in to send invites.");
+            System.err.println("No logged-in user found");
+            return;
+        }
+
+        String inviteId = org.example.service.InviteService.sendGroupInvite(currentGroupId, inviterId, userToAdd.getUserId());
+
+        if (inviteId != null) {
+            showSuccess("Invite sent to " + userToAdd.getName() + "!\nThey must accept it from Alerts to join the group.");
+            System.out.println("✓ Group invite sent successfully! Invite ID: " + inviteId);
             clearInputs();
 
             // Close dialog after short delay
             javafx.application.Platform.runLater(() -> {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(2000);
                     Stage stage = (Stage) emailField.getScene().getWindow();
                     stage.close();
                 } catch (InterruptedException e) {
@@ -182,8 +191,8 @@ public class AddMemberDialogController {
                 }
             });
         } else {
-            showError("Failed to add member. Please try again.");
-            System.err.println("Database operation failed");
+            showError("Failed to send invite. Please try again.");
+            System.err.println("Failed to create invite in database");
         }
 
         System.out.println("========================");

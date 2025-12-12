@@ -11,6 +11,7 @@ public class SessionManager {
     private User currentUser;
     private String currentMode; // "personal", "group", or "parent"
     private String currentGroupId; // For group mode
+    private String selectedChildId; // For parent mode - selected child
 
     private SessionManager() {
     }
@@ -46,11 +47,20 @@ public class SessionManager {
         return currentGroupId;
     }
 
+    public void setSelectedChildId(String childId) {
+        this.selectedChildId = childId;
+    }
+
+    public String getSelectedChildId() {
+        return selectedChildId;
+    }
+
     public static void clearSession() {
         if (instance != null) {
             instance.currentUser = null;
             instance.currentMode = null;
             instance.currentGroupId = null;
+            instance.selectedChildId = null;
         }
     }
 
@@ -58,4 +68,3 @@ public class SessionManager {
         return currentUser != null;
     }
 }
-
