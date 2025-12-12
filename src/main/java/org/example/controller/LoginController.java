@@ -74,21 +74,38 @@ public class LoginController {
             return;
         }
 
-        // Attempt login
-        User user = UserService.login(email, password);
+        // Disable button and show loading state
+        loginButton.setDisable(true);
+        loginButton.setText("Logging in...");
+        hideError();
 
-        if (user != null) {
-            // Login successful
-            SessionManager.getInstance().setCurrentUser(user);
-            hideError();
+        // Attempt login asynchronously
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> UserService.login(email, password),
+            user -> {
+                // Re-enable button
+                loginButton.setDisable(false);
+                loginButton.setText("Login");
 
-            // Navigate to mode selection screen
-            MainApp.loadModeSelection();
-        } else {
-            // Login failed
-            showError("Invalid email or password. Please try again.");
-            passwordField.clear();
-        }
+                if (user != null) {
+                    // Login successful
+                    SessionManager.getInstance().setCurrentUser(user);
+                    // Navigate to mode selection screen
+                    MainApp.loadModeSelection();
+                } else {
+                    // Login failed
+                    showError("Invalid email or password. Please try again.");
+                    passwordField.clear();
+                }
+            },
+            error -> {
+                // Re-enable button on error
+                loginButton.setDisable(false);
+                loginButton.setText("Login");
+                showError("Login error: " + error.getMessage());
+                error.printStackTrace();
+            }
+        );
     }
 
     /**

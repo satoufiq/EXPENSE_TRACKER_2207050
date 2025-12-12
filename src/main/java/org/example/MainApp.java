@@ -24,8 +24,16 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
 
-        // Initialize database
-        DatabaseHelper.initialize();
+        // Initialize thread pools
+        org.example.util.ThreadPoolManager.getInstance();
+
+        // Initialize database asynchronously
+        org.example.util.ThreadPoolManager.getInstance().executeDatabase(() -> {
+            DatabaseHelper.initialize();
+            return null;
+        }).thenRun(() -> {
+            System.out.println("Database initialization complete");
+        });
 
         // Load home screen
         loadHome();
@@ -110,6 +118,7 @@ public class MainApp extends Application {
     public void stop() {
         // Cleanup when application closes
         SessionManager.clearSession();
+        org.example.util.ThreadPoolManager.getInstance().shutdown();
         System.out.println("Application closed");
     }
 }

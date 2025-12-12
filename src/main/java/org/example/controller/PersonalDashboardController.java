@@ -329,5 +329,21 @@ public class PersonalDashboardController {
             System.err.println("Failed to navigate back: " + e.getMessage());
         }
     }
-}
 
+    /**
+     * Handle view analytics button click - navigate to analytics view
+     */
+    @FXML
+    private void handleViewAnalytics() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/personal_analytics.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            javafx.stage.Stage stage = (javafx.stage.Stage) viewAnalyticsButton.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

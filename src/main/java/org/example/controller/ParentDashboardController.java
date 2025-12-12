@@ -74,20 +74,29 @@ public class ParentDashboardController {
 
     private void refreshChildren() {
         User parent = SessionManager.getInstance().getCurrentUser();
-        List<User> childUsers = ParentService.getChildrenForParent(parent.getUserId());
-        children.setAll(childUsers);
-        childrenListView.setItems(children);
-        childrenListView.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
-            @Override
-            protected void updateItem(User item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName() + " (" + item.getEmail() + ")");
-                }
+
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> ParentService.getChildrenForParent(parent.getUserId()),
+            childUsers -> {
+                children.setAll(childUsers);
+                childrenListView.setItems(children);
+                childrenListView.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
+                    @Override
+                    protected void updateItem(User item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getName() + " (" + item.getEmail() + ")");
+                        }
+                    }
+                });
+            },
+            error -> {
+                System.err.println("Error loading children: " + error.getMessage());
+                error.printStackTrace();
             }
-        });
+        );
     }
 
     private void openChildAnalytics() {
@@ -142,19 +151,38 @@ public class ParentDashboardController {
             showInfo("Please enter the child's email.");
             return;
         }
-        var childUser = UserService.getUserByEmail(email.trim());
-        if (childUser == null) {
-            showInfo("No user found with this email.");
-            return;
-        }
+
+        sendChildInviteButton.setDisable(true);
+        sendChildInviteButton.setText("Sending...");
+
         var parent = SessionManager.getInstance().getCurrentUser();
-        String inviteId = InviteService.sendParentInvite(parent.getUserId(), childUser.getUserId());
-        if (inviteId != null) {
-            showInfo("Invite sent. The child must accept it from Alerts.");
-            childEmailField.clear();
-        } else {
-            showInfo("Failed to send invite. Try again.");
-        }
+
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> {
+                var childUser = UserService.getUserByEmail(email.trim());
+                if (childUser == null) {
+                    throw new IllegalArgumentException("No user found with this email.");
+                }
+
+                String inviteId = InviteService.sendParentInvite(parent.getUserId(), childUser.getUserId());
+                if (inviteId == null) {
+                    throw new IllegalStateException("Failed to send invite. Try again.");
+                }
+
+                return "Invite sent. The child must accept it from Alerts.";
+            },
+            message -> {
+                sendChildInviteButton.setDisable(false);
+                sendChildInviteButton.setText("Send Invite");
+                showInfo(message);
+                childEmailField.clear();
+            },
+            error -> {
+                sendChildInviteButton.setDisable(false);
+                sendChildInviteButton.setText("Send Invite");
+                showInfo(error.getMessage());
+            }
+        );
     }
 
     private void showInfo(String msg) {
