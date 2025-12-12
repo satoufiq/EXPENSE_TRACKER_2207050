@@ -155,45 +155,58 @@ public class AddMemberDialogController {
             System.out.println("Found user: " + userToAdd.getName() + " (ID: " + userToAdd.getUserId() + ")");
         }
 
-        // Check if already a member
-        if (GroupService.isMemberOfGroup(currentGroupId, userToAdd.getUserId())) {
-            showError(userToAdd.getName() + " is already a member of this group");
-            System.err.println("User already member of group");
-            return;
-        }
+        // Check if already a member and send invite - all async
+        final User finalUserToAdd = userToAdd;
 
-        // Send invite instead of direct add
-        System.out.println("Sending group invite...");
-        String inviterId = org.example.util.SessionManager.getInstance().getCurrentUser() != null
-                ? org.example.util.SessionManager.getInstance().getCurrentUser().getUserId() : null;
-
-        if (inviterId == null) {
-            showError("You must be logged in to send invites.");
-            System.err.println("No logged-in user found");
-            return;
-        }
-
-        String inviteId = org.example.service.InviteService.sendGroupInvite(currentGroupId, inviterId, userToAdd.getUserId());
-
-        if (inviteId != null) {
-            showSuccess("Invite sent to " + userToAdd.getName() + "!\nThey must accept it from Alerts to join the group.");
-            System.out.println("✓ Group invite sent successfully! Invite ID: " + inviteId);
-            clearInputs();
-
-            // Close dialog after short delay
-            javafx.application.Platform.runLater(() -> {
-                try {
-                    Thread.sleep(2000);
-                    Stage stage = (Stage) emailField.getScene().getWindow();
-                    stage.close();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> {
+                // Check if already a member
+                if (GroupService.isMemberOfGroup(currentGroupId, finalUserToAdd.getUserId())) {
+                    throw new IllegalStateException(finalUserToAdd.getName() + " is already a member of this group");
                 }
-            });
-        } else {
-            showError("Failed to send invite. Please try again.");
-            System.err.println("Failed to create invite in database");
-        }
+
+                // Get inviter
+                String inviterId = org.example.util.SessionManager.getInstance().getCurrentUser() != null
+                        ? org.example.util.SessionManager.getInstance().getCurrentUser().getUserId() : null;
+
+                if (inviterId == null) {
+                    throw new IllegalStateException("You must be logged in to send invites.");
+                }
+
+                // Send invite
+                System.out.println("Sending group invite...");
+                String inviteId = org.example.service.InviteService.sendGroupInvite(currentGroupId, inviterId, finalUserToAdd.getUserId());
+
+                if (inviteId == null) {
+                    throw new IllegalStateException("Failed to create invite in database");
+                }
+
+                return inviteId;
+            },
+            inviteId -> {
+                // Success
+                showSuccess("Invite sent to " + finalUserToAdd.getName() + "!\nThey must accept it from Alerts to join the group.");
+                System.out.println("✓ Group invite sent successfully! Invite ID: " + inviteId);
+                clearInputs();
+
+                // Close dialog after short delay
+                org.example.util.ThreadPoolManager.getInstance().executeBackground(() -> {
+                    Thread.sleep(2000);
+                    return null;
+                }).thenRun(() -> {
+                    org.example.util.ThreadPoolManager.runOnUIThread(() -> {
+                        Stage stage = (Stage) emailField.getScene().getWindow();
+                        stage.close();
+                    });
+                });
+            },
+            error -> {
+                // Error
+                showError(error.getMessage());
+                System.err.println("Error: " + error.getMessage());
+                error.printStackTrace();
+            }
+        );
 
         System.out.println("========================");
     }

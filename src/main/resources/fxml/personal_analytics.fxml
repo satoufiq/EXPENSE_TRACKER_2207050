@@ -1,5 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.controller.PersonalAnalyticsController">
-</VBox>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<BorderPane prefHeight="700.0" prefWidth="1200.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.PersonalAnalyticsController">
+
+    <center>
+        <StackPane>
+            <children>
+                <StackPane styleClass="background-container">
+                    <children>
+                        <StackPane styleClass="background-shape shape-1"/>
+                        <StackPane styleClass="background-shape shape-2"/>
+                        <StackPane styleClass="background-overlay"/>
+                    </children>
+                </StackPane>
+
+                <VBox spacing="20.0" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                    </padding>
+
+                    <!-- Header -->
+                    <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
+                        <padding>
+                            <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                        </padding>
+
+                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                            <Label text="📊 Personal Analytics"
+                                   styleClass="dashboard-title"/>
+                            <Label text="Insights &amp; Budget Management"
+                                   styleClass="dashboard-subtitle"/>
+                        </VBox>
+
+                        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                            <Button fx:id="visualButton"
+                                    styleClass="glass-button"
+                                    text="📊 Visual Charts"
+                                    prefHeight="40.0"
+                                    prefWidth="150.0"
+                                    onAction="#handleVisualAnalytics"/>
+                            <Button fx:id="setBudgetButton"
+                                    styleClass="primary-button"
+                                    text="💰 Set Budget"
+                                    prefHeight="40.0"
+                                    prefWidth="140.0"
+                                    onAction="#handleSetBudget"/>
+                            <Button fx:id="backButton"
+                                    styleClass="secondary-button"
+                                    text="← Back"
+                                    prefHeight="40.0"
+                                    prefWidth="100.0"
+                                    onAction="#handleBack"/>
+                        </HBox>
+                    </HBox>
+
+                    <!-- Stats Cards Row -->
+                    <HBox spacing="20.0" alignment="CENTER">
+                        <VBox alignment="CENTER" spacing="10.0"
+                              styleClass="stat-card"
+                              prefWidth="220.0"
+                              prefHeight="110.0">
+                            <padding>
+                                <Insets top="15.0" bottom="15.0"/>
+                            </padding>
+                            <Label text="💵"
+                                   style="-fx-font-size: 32px;"/>
+                            <Label text="Monthly Total"
+                                   styleClass="stat-label"/>
+                            <Label fx:id="monthlyTotalLabel"
+                                   text="৳0.00"
+                                   styleClass="stat-value"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10.0"
+                              styleClass="stat-card"
+                              prefWidth="220.0"
+                              prefHeight="110.0">
+                            <padding>
+                                <Insets top="15.0" bottom="15.0"/>
+                            </padding>
+                            <Label text="📅"
+                                   style="-fx-font-size: 32px;"/>
+                            <Label text="Weekly Total"
+                                   styleClass="stat-label"/>
+                            <Label fx:id="weeklyTotalLabel"
+                                   text="৳0.00"
+                                   styleClass="stat-value"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10.0"
+                              styleClass="stat-card"
+                              prefWidth="220.0"
+                              prefHeight="110.0">
+                            <padding>
+                                <Insets top="15.0" bottom="15.0"/>
+                            </padding>
+                            <Label text="🎯"
+                                   style="-fx-font-size: 32px;"/>
+                            <Label text="Monthly Budget"
+                                   styleClass="stat-label"/>
+                            <Label fx:id="budgetLabel"
+                                   text="৳0.00"
+                                   styleClass="stat-value"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10.0"
+                              styleClass="stat-card"
+                              prefWidth="220.0"
+                              prefHeight="110.0">
+                            <padding>
+                                <Insets top="15.0" bottom="15.0"/>
+                            </padding>
+                            <Label text="📈"
+                                   style="-fx-font-size: 32px;"/>
+                            <Label text="Budget Status"
+                                   styleClass="stat-label"/>
+                            <Label fx:id="budgetStatusLabel"
+                                   text="On Track"
+                                   styleClass="stat-value"
+                                   style="-fx-font-size: 18px;"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10.0"
+                              styleClass="stat-card"
+                              prefWidth="220.0"
+                              prefHeight="110.0">
+                            <padding>
+                                <Insets top="15.0" bottom="15.0"/>
+                            </padding>
+                            <Label text="🔥"
+                                   style="-fx-font-size: 32px;"/>
+                            <Label text="Highest Day"
+                                   styleClass="stat-label"/>
+                            <Label fx:id="highestDayLabel"
+                                   text="-"
+                                   styleClass="stat-value"
+                                   style="-fx-font-size: 14px;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Main Content Area -->
+                    <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                        <!-- Left Column: Charts -->
+                        <VBox spacing="15.0" HBox.hgrow="ALWAYS">
+                            <!-- Pie Chart -->
+                            <VBox spacing="10.0" styleClass="chart-container">
+                                <padding>
+                                    <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                                </padding>
+                                <Label text="Category Distribution"
+                                       styleClass="section-title"/>
+                                <PieChart fx:id="categoryPieChart"
+                                         prefHeight="250.0"
+                                         legendVisible="true"
+                                         labelsVisible="true"
+                                         styleClass="modern-chart"/>
+                            </VBox>
+
+                            <!-- Line Chart -->
+                            <VBox spacing="10.0" styleClass="chart-container" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                                </padding>
+                                <Label text="Spending Trend (Last 30 Days)"
+                                       styleClass="section-title"/>
+                                <LineChart fx:id="trendLineChart"
+                                          prefHeight="200.0"
+                                          styleClass="modern-chart"
+                                          legendVisible="false">
+                                    <xAxis>
+                                        <CategoryAxis label="Date" side="BOTTOM"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Amount (৳)" side="LEFT"/>
+                                    </yAxis>
+                                </LineChart>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Right Column: Lists -->
+                        <VBox spacing="15.0" prefWidth="350.0">
+                            <!-- Category Breakdown -->
+                            <VBox spacing="10.0" styleClass="list-container">
+                                <padding>
+                                    <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                                </padding>
+                                <Label text="📊 Category Breakdown"
+                                       styleClass="section-title"/>
+                                <ListView fx:id="categoryList"
+                                         prefHeight="200.0"
+                                         styleClass="modern-list"/>
+                            </VBox>
+
+                            <!-- AI Suggestions -->
+                            <VBox spacing="10.0" styleClass="list-container" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                                </padding>
+                                <Label text="💡 Smart Suggestions"
+                                       styleClass="section-title"/>
+                                <ListView fx:id="suggestionsList"
+                                         prefHeight="250.0"
+                                         styleClass="modern-list"/>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>

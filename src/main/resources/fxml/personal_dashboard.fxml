@@ -58,7 +58,8 @@
                                     styleClass="glass-button"
                                     text="📊 Analytics"
                                     prefHeight="40.0"
-                                    prefWidth="130.0"/>
+                                    prefWidth="130.0"
+                                    onAction="#handleViewAnalytics"/>
                             <Button fx:id="backButton"
                                     styleClass="secondary-button"
                                     text="← Back"

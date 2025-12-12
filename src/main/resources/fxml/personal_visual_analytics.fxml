@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<BorderPane prefHeight="800.0" prefWidth="1400.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.PersonalVisualAnalyticsController">
+
+    <center>
+        <StackPane>
+            <children>
+                <!-- Animated Background -->
+                <StackPane styleClass="background-container">
+                    <children>
+                        <StackPane styleClass="background-shape shape-1"/>
+                        <StackPane styleClass="background-shape shape-2"/>
+                        <StackPane styleClass="background-shape shape-3"/>
+                        <StackPane styleClass="background-overlay"/>
+                    </children>
+                </StackPane>
+
+                <ScrollPane fitToWidth="true" fitToHeight="true"
+                           styleClass="scroll-pane"
+                           hbarPolicy="NEVER"
+                           vbarPolicy="AS_NEEDED">
+                    <VBox spacing="25.0">
+                        <padding>
+                            <Insets top="35.0" left="45.0" right="45.0" bottom="35.0"/>
+                        </padding>
+
+                    <!-- Stunning Header with Gradient -->
+                    <HBox alignment="CENTER_LEFT" spacing="25.0" styleClass="visual-header">
+                        <padding>
+                            <Insets top="20.0" bottom="20.0" left="30.0" right="30.0"/>
+                        </padding>
+
+                        <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                            <Label text="📊 Visual Analytics Dashboard"
+                                   styleClass="visual-title"/>
+                            <Label text="Interactive Data Visualization &amp; Insights"
+                                   styleClass="visual-subtitle"/>
+                        </VBox>
+
+                        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                            <Button fx:id="toggleViewButton"
+                                    styleClass="glass-button"
+                                    text="🔄 Switch View"
+                                    prefHeight="45.0"
+                                    prefWidth="150.0"
+                                    onAction="#handleToggleView"/>
+                            <Button fx:id="backButton"
+                                    styleClass="secondary-button"
+                                    text="← Back"
+                                    prefHeight="45.0"
+                                    prefWidth="110.0"
+                                    onAction="#handleBack"/>
+                        </HBox>
+                    </HBox>
+
+                    <!-- Animated Stats Bar -->
+                    <HBox spacing="18.0" alignment="CENTER" styleClass="stats-bar">
+                        <padding>
+                            <Insets top="20.0" bottom="20.0" left="25.0" right="25.0"/>
+                        </padding>
+
+                        <VBox alignment="CENTER" spacing="8.0" styleClass="animated-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="💰" style="-fx-font-size: 40px;"/>
+                            <Label text="Total Spending" styleClass="stat-mini-label"/>
+                            <Label fx:id="totalSpendingLabel" text="৳0.00" styleClass="stat-big-value"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="8.0" styleClass="animated-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="📈" style="-fx-font-size: 40px;"/>
+                            <Label text="Avg Per Day" styleClass="stat-mini-label"/>
+                            <Label fx:id="avgPerDayLabel" text="৳0.00" styleClass="stat-big-value"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="8.0" styleClass="animated-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="🎯" style="-fx-font-size: 40px;"/>
+                            <Label text="Budget Used" styleClass="stat-mini-label"/>
+                            <Label fx:id="budgetUsedLabel" text="0%" styleClass="stat-big-value"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="8.0" styleClass="animated-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="🔥" style="-fx-font-size: 40px;"/>
+                            <Label text="Top Category" styleClass="stat-mini-label"/>
+                            <Label fx:id="topCategoryLabel" text="-" styleClass="stat-big-value" style="-fx-font-size: 18px;"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="8.0" styleClass="animated-stat-card" HBox.hgrow="ALWAYS">
+                            <Label text="📅" style="-fx-font-size: 40px;"/>
+                            <Label text="Transactions" styleClass="stat-mini-label"/>
+                            <Label fx:id="transactionsLabel" text="0" styleClass="stat-big-value"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Main Visualization Area -->
+                    <HBox spacing="25.0" VBox.vgrow="ALWAYS">
+
+                        <!-- Left Column: Large Charts -->
+                        <VBox spacing="20.0" HBox.hgrow="ALWAYS" prefWidth="800.0">
+
+                            <!-- Large Pie Chart with 3D Effect -->
+                            <VBox spacing="12.0" styleClass="mega-chart-container" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                                </padding>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <Label text="🥧" style="-fx-font-size: 24px;"/>
+                                    <Label text="Spending Distribution by Category"
+                                           styleClass="chart-title-large"/>
+                                </HBox>
+                                <PieChart fx:id="megaPieChart"
+                                         prefHeight="280.0"
+                                         legendSide="BOTTOM"
+                                         legendVisible="true"
+                                         labelsVisible="true"
+                                         startAngle="90"
+                                         styleClass="mega-chart"
+                                         VBox.vgrow="ALWAYS"/>
+                            </VBox>
+
+                            <!-- Stacked Bar Chart -->
+                            <VBox spacing="12.0" styleClass="mega-chart-container" prefHeight="250.0">
+                                <padding>
+                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                                </padding>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <Label text="📊" style="-fx-font-size: 24px;"/>
+                                    <Label text="Weekly Spending Comparison"
+                                           styleClass="chart-title-large"/>
+                                </HBox>
+                                <BarChart fx:id="weeklyBarChart"
+                                         prefHeight="200.0"
+                                         legendVisible="true"
+                                         styleClass="mega-chart">
+                                    <xAxis>
+                                        <CategoryAxis label="Week" side="BOTTOM"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Amount (৳)" side="LEFT"/>
+                                    </yAxis>
+                                </BarChart>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Right Column: Multiple Charts -->
+                        <VBox spacing="20.0" prefWidth="520.0">
+
+                            <!-- Area Chart - Trend -->
+                            <VBox spacing="12.0" styleClass="chart-container-right">
+                                <padding>
+                                    <Insets top="18.0" left="18.0" right="18.0" bottom="18.0"/>
+                                </padding>
+                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                    <Label text="📈" style="-fx-font-size: 20px;"/>
+                                    <Label text="30-Day Spending Trend"
+                                           styleClass="chart-title-medium"/>
+                                </HBox>
+                                <AreaChart fx:id="trendAreaChart"
+                                          prefHeight="200.0"
+                                          legendVisible="false"
+                                          styleClass="modern-chart"
+                                          animated="true">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT"/>
+                                    </yAxis>
+                                </AreaChart>
+                            </VBox>
+
+                            <!-- Horizontal Bar Chart - Top Categories -->
+                            <VBox spacing="12.0" styleClass="chart-container-right" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets top="18.0" left="18.0" right="18.0" bottom="18.0"/>
+                                </padding>
+                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                    <Label text="🏆" style="-fx-font-size: 20px;"/>
+                                    <Label text="Top 5 Spending Categories"
+                                           styleClass="chart-title-medium"/>
+                                </HBox>
+                                <BarChart fx:id="topCategoriesBarChart"
+                                         prefHeight="200.0"
+                                         legendVisible="false"
+                                         styleClass="modern-chart"
+                                         animated="true">
+                                    <xAxis>
+                                        <NumberAxis side="BOTTOM"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <CategoryAxis side="LEFT"/>
+                                    </yAxis>
+                                </BarChart>
+                            </VBox>
+
+                            <!-- Line Chart - Budget Progress -->
+                            <VBox spacing="12.0" styleClass="chart-container-right">
+                                <padding>
+                                    <Insets top="18.0" left="18.0" right="18.0" bottom="18.0"/>
+                                </padding>
+                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                    <Label text="🎯" style="-fx-font-size: 20px;"/>
+                                    <Label text="Budget Progress"
+                                           styleClass="chart-title-medium"/>
+                                </HBox>
+                                <LineChart fx:id="budgetProgressChart"
+                                          prefHeight="180.0"
+                                          legendVisible="true"
+                                          styleClass="modern-chart"
+                                          animated="true">
+                                    <xAxis>
+                                        <CategoryAxis label="Day of Month" side="BOTTOM"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Spending (৳)" side="LEFT"/>
+                                    </yAxis>
+                                </LineChart>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+                </ScrollPane>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>
+

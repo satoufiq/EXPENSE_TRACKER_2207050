@@ -154,14 +154,22 @@ public class GroupDashboardController {
             return;
         }
 
-        ObservableList<GroupMember> members = GroupService.getGroupMembersObservable(currentGroupId);
-        int count = members.size();
-        memberCountLabel.setText("Members: " + count);
-        if (memberCountStatLabel != null) {
-            memberCountStatLabel.setText(String.valueOf(count));
-        }
-
-        System.out.println("Loaded " + count + " members for group: " + currentGroupName);
+        // Load members asynchronously
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> GroupService.getGroupMembersObservable(currentGroupId),
+            members -> {
+                int count = members.size();
+                memberCountLabel.setText("Members: " + count);
+                if (memberCountStatLabel != null) {
+                    memberCountStatLabel.setText(String.valueOf(count));
+                }
+                System.out.println("Loaded " + count + " members for group: " + currentGroupName);
+            },
+            error -> {
+                System.err.println("Error loading members: " + error.getMessage());
+                error.printStackTrace();
+            }
+        );
     }
 
     /**
@@ -174,22 +182,41 @@ public class GroupDashboardController {
             return;
         }
 
-        ObservableList<Expense> expenses = ExpenseService.getGroupExpensesObservable(currentGroupId);
-        expensesTable.setItems(expenses);
+        // Load expenses asynchronously
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> {
+                ObservableList<Expense> expenses = ExpenseService.getGroupExpensesObservable(currentGroupId);
 
-        // Calculate totals
-        double total = 0;
-        double monthTotal = 0;
-        for (Expense exp : expenses) {
-            total += exp.getAmount();
-            if (isCurrentMonth(exp.getDate())) {
-                monthTotal += exp.getAmount();
+                // Calculate totals in background thread
+                double total = 0;
+                double monthTotal = 0;
+                for (Expense exp : expenses) {
+                    total += exp.getAmount();
+                    if (isCurrentMonth(exp.getDate())) {
+                        monthTotal += exp.getAmount();
+                    }
+                }
+
+                return new Object[]{expenses, total, monthTotal};
+            },
+            result -> {
+                Object[] data = (Object[]) result;
+                @SuppressWarnings("unchecked")
+                ObservableList<Expense> expenses = (ObservableList<Expense>) data[0];
+                double total = (double) data[1];
+                double monthTotal = (double) data[2];
+
+                expensesTable.setItems(expenses);
+                updateExpensesSummary(total, monthTotal);
+                System.out.println("Loaded " + expenses.size() + " expenses for group: " + currentGroupName);
+            },
+            error -> {
+                System.err.println("Error loading expenses: " + error.getMessage());
+                error.printStackTrace();
+                expensesTable.setItems(null);
+                updateExpensesSummary(0, 0);
             }
-        }
-
-        updateExpensesSummary(total, monthTotal);
-
-        System.out.println("Loaded " + expenses.size() + " expenses for group: " + currentGroupName);
+        );
     }
 
     /**

@@ -111,17 +111,53 @@ public class RegisterController {
         // Get selected role
         String role = normalUserRadio.isSelected() ? "normal" : "parent";
 
-        // Attempt registration
-        boolean success = UserService.register(name, email, password, role);
+        // Disable button and show loading state
+        registerButton.setDisable(true);
+        registerButton.setText("Creating Account...");
+        hideError();
 
-        if (success) {
-            // Registration successful
-            hideError();
-            showSuccessAndRedirect();
-        } else {
-            // Registration failed
-            showError("Registration failed. Please try again.");
-        }
+        // Check email exists asynchronously first
+        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+            () -> UserService.emailExists(email),
+            emailExists -> {
+                if (emailExists) {
+                    registerButton.setDisable(false);
+                    registerButton.setText("Register");
+                    showError("This email is already registered. Please login or use a different email.");
+                    return;
+                }
+
+                // Email is available, proceed with registration
+                org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
+                    () -> UserService.register(name, email, password, role),
+                    success -> {
+                        registerButton.setDisable(false);
+                        registerButton.setText("Register");
+
+                        if (success) {
+                            // Registration successful
+                            hideError();
+                            showSuccessAndRedirect();
+                        } else {
+                            // Registration failed
+                            showError("Registration failed. Please try again.");
+                        }
+                    },
+                    error -> {
+                        registerButton.setDisable(false);
+                        registerButton.setText("Register");
+                        showError("Registration error: " + error.getMessage());
+                        error.printStackTrace();
+                    }
+                );
+            },
+            error -> {
+                registerButton.setDisable(false);
+                registerButton.setText("Register");
+                showError("Error checking email: " + error.getMessage());
+                error.printStackTrace();
+            }
+        );
     }
 
     /**
@@ -170,15 +206,13 @@ public class RegisterController {
         // Disable the register button to prevent double submission
         registerButton.setDisable(true);
 
-        // Redirect to login after a short delay
-        new Thread(() -> {
-            try {
-                Thread.sleep(1500); // 1.5 seconds delay
-                javafx.application.Platform.runLater(() -> MainApp.loadLogin());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        // Redirect to login after a short delay using thread pool
+        org.example.util.ThreadPoolManager.getInstance().executeBackground(() -> {
+            Thread.sleep(1500); // 1.5 seconds delay
+            return null;
+        }).thenRun(() -> {
+            org.example.util.ThreadPoolManager.runOnUIThread(() -> MainApp.loadLogin());
+        });
     }
 
     /**

@@ -23,6 +23,15 @@
     -fx-min-height: 340;
     -fx-effect: gaussian-blur(70);
 }
+.shape-3 {
+    -fx-background-color: rgba(255, 0, 150, 0.12);
+    -fx-translate-x: -100px;
+    -fx-translate-y: 400px;
+    -fx-min-width: 300;
+    -fx-min-height: 300;
+    -fx-effect: gaussian-blur(60);
+    -fx-background-radius: 150;
+}
 .background-overlay {
     -fx-background-color: rgba(0, 0, 0, 0.12);
 }
@@ -461,44 +470,83 @@
     -fx-underline: true;
 }
 .home-card {
-    -fx-min-height: 600;
-    -fx-max-width: 480;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 40, 0.25, 0, 15);
+    -fx-min-height: 620;
+    -fx-max-width: 500;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 30, 0.2, 0, 10);
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-border-color: rgba(255,255,255,0.18);
 }
 
 .home-card:hover {
-    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 50, 0.3, 0, 20);
-}
-.app-icon-container {
-    -fx-background-color: rgba(92, 107, 192, 0.18);
-    -fx-background-radius: 70;
-    -fx-min-width: 140;
-    -fx-min-height: 140;
-    -fx-max-width: 140;
-    -fx-max-height: 140;
-    -fx-border-color: rgba(92, 107, 192, 0.5);
-    -fx-border-radius: 70;
-    -fx-border-width: 3;
-    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.4), 25, 0.35, 0, 8);
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.25), 35, 0.25, 0, 12);
+    -fx-background-color: rgba(255,255,255,0.14);
+    -fx-border-color: rgba(255,255,255,0.25);
 }
 
-.app-icon-container:hover {
-    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.6), 35, 0.4, 0, 12);
+.app-icon-container {
+    -fx-background-color: rgba(92, 107, 192, 0.15);
+    -fx-background-radius: 65;
+    -fx-min-width: 130;
+    -fx-min-height: 130;
+    -fx-max-width: 130;
+    -fx-max-height: 130;
+    -fx-border-color: rgba(92, 107, 192, 0.35);
+    -fx-border-radius: 65;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.2), 15, 0.2, 0, 4);
 }
+
 .home-title {
-    -fx-font-size: 36px;
-    -fx-text-fill: #E7E8FF;
+    -fx-font-size: 34px;
+    -fx-text-fill: #ECEEFF;
     -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5px;
 }
+
 .home-subtitle {
-    -fx-font-size: 15px;
-    -fx-text-fill: #E0E3FF;
+    -fx-font-size: 14px;
+    -fx-text-fill: #D8DBFF;
+    -fx-font-weight: 500;
 }
+
 .home-tagline {
-    -fx-font-size: 13px;
-    -fx-text-fill: #D0D5FF;
-    -fx-font-style: italic;
-    -fx-padding: 5 0 0 0;
+    -fx-font-size: 12px;
+    -fx-text-fill: #C8CCFF;
+    -fx-font-weight: 500;
+    -fx-letter-spacing: 1px;
+}
+
+.home-button {
+    -fx-cursor: hand;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+}
+
+
+.home-footer {
+    -fx-font-size: 12px;
+    -fx-text-fill: #C8CCFF;
+    -fx-font-weight: 500;
+    -fx-letter-spacing: 0.5px;
+}
+
+.glossy-button {
+    -fx-background-color: linear-gradient(to bottom, #5c6bc0, #4b5bd7);
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-padding: 12 20 12 20;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}
+
+.glossy-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #6574d3, #5565e3);
+}
+
+.glossy-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #4b5bd7, #3f4ac5);
+}
 }
 .home-button {
     -fx-font-size: 16px;
@@ -747,4 +795,426 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 30, 0.2, 0, 10);
 }
 
+/* Charts Styling */
+.chart-container {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 18, 0.2, 0, 5);
+}
 
+.modern-chart {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.modern-chart .chart-plot-background {
+    -fx-background-color: rgba(255,255,255,0.05);
+    -fx-background-radius: 10;
+}
+
+.modern-chart .chart-content {
+    -fx-padding: 10;
+}
+
+.modern-chart .chart-legend {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+
+.modern-chart .chart-legend-item {
+    -fx-text-fill: #E7E8FF;
+}
+
+.modern-chart .chart-title {
+    -fx-text-fill: #E7E8FF;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.modern-chart .axis-label {
+    -fx-text-fill: #D0D3FF;
+    -fx-font-size: 12px;
+}
+
+.modern-chart .axis-tick-mark {
+    -fx-stroke: rgba(255,255,255,0.3);
+}
+
+.modern-chart .chart-vertical-grid-lines,
+.modern-chart .chart-horizontal-grid-lines {
+    -fx-stroke: rgba(255,255,255,0.1);
+    -fx-stroke-dash-array: 5 5;
+}
+
+.modern-chart .chart-vertical-zero-line,
+.modern-chart .chart-horizontal-zero-line {
+    -fx-stroke: rgba(255,255,255,0.2);
+}
+
+/* Pie Chart specific */
+.modern-chart .chart-pie-label {
+    -fx-text-fill: #E7E8FF;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.modern-chart .chart-pie-label-line {
+    -fx-stroke: rgba(255,255,255,0.5);
+    -fx-stroke-width: 1;
+}
+
+/* Line Chart specific */
+.modern-chart .chart-series-line {
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.4), 5, 0.5, 0, 0);
+}
+
+.modern-chart .chart-line-symbol {
+    -fx-background-color: #5c6bc0;
+    -fx-background-radius: 5;
+    -fx-padding: 4;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.6), 3, 0.7, 0, 0);
+}
+
+.modern-chart .default-color0.chart-series-line {
+    -fx-stroke: #5c6bc0;
+}
+
+.modern-chart .default-color0.chart-line-symbol {
+    -fx-background-color: #5c6bc0;
+}
+
+/* Pie chart colors */
+.modern-chart .default-color0.chart-pie { -fx-pie-color: #5c6bc0; }
+.modern-chart .default-color1.chart-pie { -fx-pie-color: #7b88ff; }
+.modern-chart .default-color2.chart-pie { -fx-pie-color: #42a5f5; }
+.modern-chart .default-color3.chart-pie { -fx-pie-color: #26c6da; }
+.modern-chart .default-color4.chart-pie { -fx-pie-color: #66bb6a; }
+.modern-chart .default-color5.chart-pie { -fx-pie-color: #ffca28; }
+.modern-chart .default-color6.chart-pie { -fx-pie-color: #ff7043; }
+.modern-chart .default-color7.chart-pie { -fx-pie-color: #ab47bc; }
+
+/* ==================== VISUAL ANALYTICS DASHBOARD ==================== */
+
+/* Third animated background shape */
+.shape-3 {
+    -fx-background-color: rgba(255, 0, 150, 0.12);
+    -fx-translate-x: -100px;
+    -fx-translate-y: 400px;
+    -fx-min-width: 300;
+    -fx-min-height: 300;
+    -fx-effect: gaussian-blur(60);
+    -fx-background-radius: 150;
+}
+
+/* Stunning Visual Header */
+.visual-header {
+    -fx-background-color: linear-gradient(to right,
+        rgba(92, 107, 192, 0.25),
+        rgba(123, 136, 255, 0.18),
+        rgba(92, 107, 192, 0.25));
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-border-radius: 20;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.4), 25, 0.3, 0, 8);
+}
+
+.visual-header:hover {
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.6), 35, 0.4, 0, 12);
+}
+
+.visual-title {
+    -fx-font-size: 32px;
+    -fx-text-fill: linear-gradient(to right, #E7E8FF, #B8BBFF);
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.6), 10, 0.5, 0, 2);
+}
+
+.visual-subtitle {
+    -fx-font-size: 15px;
+    -fx-text-fill: #D5D8FF;
+    -fx-font-weight: 500;
+}
+
+/* Animated Stats Bar */
+.stats-bar {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 18;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0.2, 0, 6);
+}
+
+.animated-stat-card {
+    -fx-background-color: linear-gradient(135deg,
+        rgba(92, 107, 192, 0.15),
+        rgba(123, 136, 255, 0.08));
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(255,255,255,0.25);
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.3), 15, 0.3, 0, 4);
+}
+
+.animated-stat-card:hover {
+    -fx-background-color: linear-gradient(135deg,
+        rgba(92, 107, 192, 0.25),
+        rgba(123, 136, 255, 0.15));
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.5), 25, 0.4, 0, 8);
+}
+
+.stat-mini-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #BFC2FF;
+    -fx-font-weight: 600;
+}
+
+.stat-big-value {
+    -fx-font-size: 26px;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 5, 0.5, 0, 0);
+}
+
+/* Mega Chart Container - Large stunning containers */
+.mega-chart-container {
+    -fx-background-color: linear-gradient(145deg,
+        rgba(255,255,255,0.12),
+        rgba(255,255,255,0.08));
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-border-radius: 20;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 25, 0.25, 0, 8);
+}
+
+.mega-chart-container:hover {
+    -fx-background-color: linear-gradient(145deg,
+        rgba(255,255,255,0.16),
+        rgba(255,255,255,0.12));
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.4), 35, 0.3, 0, 12);
+}
+
+.chart-container-right {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(255,255,255,0.25);
+    -fx-border-radius: 18;
+    -fx-border-width: 1.2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0.2, 0, 6);
+}
+
+.chart-container-right:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+    -fx-border-color: rgba(255,255,255,0.35);
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.35), 28, 0.25, 0, 10);
+}
+
+.chart-title-large {
+    -fx-font-size: 20px;
+    -fx-text-fill: #E7E8FF;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0.3, 0, 1);
+}
+
+.chart-title-medium {
+    -fx-font-size: 16px;
+    -fx-text-fill: #E7E8FF;
+    -fx-font-weight: bold;
+}
+
+/* Enhanced Mega Chart Styling */
+.mega-chart {
+    -fx-background-color: transparent;
+}
+
+.mega-chart .chart-plot-background {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-background-radius: 15;
+}
+
+.mega-chart .chart-content {
+    -fx-padding: 15;
+}
+
+/* Mega Pie Chart - 3D-like effect */
+.mega-chart .chart-pie {
+    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.6, 2, 2);
+}
+
+.mega-chart .chart-pie:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.7), 15, 0.7, 0, 0);
+}
+
+/* Enhanced Pie Chart Colors with gradients */
+.mega-chart .default-color0.chart-pie {
+    -fx-pie-color: #5c6bc0;
+    -fx-border-color: #7B88FF;
+}
+.mega-chart .default-color1.chart-pie {
+    -fx-pie-color: #7b88ff;
+    -fx-border-color: #9BA7FF;
+}
+.mega-chart .default-color2.chart-pie {
+    -fx-pie-color: #42a5f5;
+    -fx-border-color: #64B5F6;
+}
+.mega-chart .default-color3.chart-pie {
+    -fx-pie-color: #26c6da;
+    -fx-border-color: #4DD0E1;
+}
+.mega-chart .default-color4.chart-pie {
+    -fx-pie-color: #66bb6a;
+    -fx-border-color: #81C784;
+}
+.mega-chart .default-color5.chart-pie {
+    -fx-pie-color: #ffca28;
+    -fx-border-color: #FFD54F;
+}
+.mega-chart .default-color6.chart-pie {
+    -fx-pie-color: #ff7043;
+    -fx-border-color: #FF8A65;
+}
+.mega-chart .default-color7.chart-pie {
+    -fx-pie-color: #ab47bc;
+    -fx-border-color: #BA68C8;
+}
+
+/* Pie Chart Labels - larger and more visible */
+.mega-chart .chart-pie-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 3, 0.8, 0, 0);
+}
+
+.mega-chart .chart-pie-label-line {
+    -fx-stroke: rgba(255,255,255,0.7);
+    -fx-stroke-width: 2;
+}
+
+/* Enhanced Legend */
+.mega-chart .chart-legend {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+}
+
+.mega-chart .chart-legend-item {
+    -fx-text-fill: #E7E8FF;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+
+/* Bar Chart Styling - Glossy bars */
+.mega-chart .chart-bar {
+    -fx-background-color: linear-gradient(to bottom, #7B88FF, #5c6bc0);
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.5), 8, 0.5, 0, 2);
+}
+
+.mega-chart .default-color0.chart-bar {
+    -fx-background-color: linear-gradient(to bottom, #7B88FF, #5c6bc0);
+}
+
+.mega-chart .default-color1.chart-bar {
+    -fx-background-color: linear-gradient(to bottom, #64B5F6, #42a5f5);
+}
+
+.mega-chart .default-color2.chart-bar {
+    -fx-background-color: linear-gradient(to bottom, #81C784, #66bb6a);
+}
+
+/* Area Chart - Glowing fill */
+.modern-chart .chart-series-area-fill {
+    -fx-fill: linear-gradient(to bottom,
+        rgba(92, 107, 192, 0.5),
+        rgba(92, 107, 192, 0.1));
+}
+
+.modern-chart .chart-series-area-line {
+    -fx-stroke: #5c6bc0;
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.6), 8, 0.6, 0, 0);
+}
+
+/* Line Chart - Glowing lines */
+.modern-chart .default-color0.chart-series-line {
+    -fx-stroke: #5c6bc0;
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.8), 10, 0.7, 0, 0);
+}
+
+.modern-chart .default-color1.chart-series-line {
+    -fx-stroke: #FF9800;
+    -fx-stroke-width: 3;
+    -fx-stroke-dash-array: 8 4;
+    -fx-effect: dropshadow(gaussian, rgba(255, 152, 0, 0.8), 10, 0.7, 0, 0);
+}
+
+/* Line symbols - Glowing dots */
+.modern-chart .default-color0.chart-line-symbol {
+    -fx-background-color: #5c6bc0;
+    -fx-background-radius: 6;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(gaussian, rgba(92, 107, 192, 0.9), 8, 0.8, 0, 0);
+}
+
+.modern-chart .default-color1.chart-line-symbol {
+    -fx-background-color: #FF9800;
+    -fx-background-radius: 6;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(gaussian, rgba(255, 152, 0, 0.9), 8, 0.8, 0, 0);
+}
+
+/* Axis styling for visual charts */
+.mega-chart .axis-label,
+.modern-chart .axis-label {
+    -fx-text-fill: #D0D3FF;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.mega-chart .axis-tick-mark,
+.modern-chart .axis-tick-mark {
+    -fx-stroke: rgba(255,255,255,0.3);
+    -fx-stroke-width: 1.5;
+}
+
+/* Grid lines - subtle and elegant */
+.mega-chart .chart-vertical-grid-lines,
+.mega-chart .chart-horizontal-grid-lines {
+    -fx-stroke: rgba(255,255,255,0.08);
+    -fx-stroke-dash-array: 6 4;
+    -fx-stroke-width: 1;
+}
+
+/* Hover animations */
+@keyframes pulse {
+    0% { -fx-scale-x: 1.0; -fx-scale-y: 1.0; }
+    50% { -fx-scale-x: 1.02; -fx-scale-y: 1.02; }
+    100% { -fx-scale-x: 1.0; -fx-scale-y: 1.0; }
+}
+
+/* Glow effect for interactive elements */
+.chart-glow {
+    -fx-effect: dropshadow(gaussian, rgba(123, 136, 255, 0.8), 20, 0.6, 0, 0);
+}
