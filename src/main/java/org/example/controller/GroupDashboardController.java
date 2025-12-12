@@ -11,8 +11,11 @@ import org.example.model.Expense;
 import org.example.model.GroupMember;
 import org.example.service.ExpenseService;
 import org.example.service.GroupService;
+import org.example.service.UserService;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Group Dashboard Controller
@@ -52,6 +55,9 @@ public class GroupDashboardController {
 
     @FXML
     private TableColumn<Expense, String> noteColumn;
+
+    // Cache userId -> name to avoid repeated DB lookups
+    private final Map<String, String> userNameCache = new HashMap<>();
 
     private String currentGroupId;
     private String currentUserId;
@@ -100,8 +106,18 @@ public class GroupDashboardController {
         dateColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDate()));
 
-        memberColumn.setCellValueFactory(cellData ->
-            new javafx.beans.property.SimpleStringProperty(cellData.getValue().getUserId()));
+        // Resolve member name from userId with a small cache
+        memberColumn.setCellValueFactory(cellData -> {
+            String userId = cellData.getValue().getUserId();
+            if (userId == null) {
+                return new javafx.beans.property.SimpleStringProperty("");
+            }
+            String name = userNameCache.computeIfAbsent(userId, id -> {
+                var user = UserService.getUserById(id);
+                return user != null ? user.getName() : id;
+            });
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
 
         categoryColumn.setCellValueFactory(cellData ->
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCategory()));

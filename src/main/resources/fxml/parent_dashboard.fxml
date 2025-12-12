@@ -1,5 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.controller.ParentDashboardController">
-</VBox>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane prefHeight="700.0" prefWidth="1200.0"
+           styleClass="root-pane"
+           stylesheets="@../css/styles.css"
+           xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.controller.ParentDashboardController">
+    <children>
+        <StackPane styleClass="background-container">
+            <children>
+                <StackPane styleClass="background-shape shape-1"/>
+                <StackPane styleClass="background-shape shape-2"/>
+                <StackPane styleClass="background-overlay"/>
+            </children>
+        </StackPane>
+        <VBox alignment="TOP_LEFT" spacing="12.0"
+              prefHeight="700.0" prefWidth="1200.0">
+            <padding>
+                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+            </padding>
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Button fx:id="backButton" text="← Back" styleClass="secondary-button glass-button"/>
+                <Label fx:id="parentNameLabel" styleClass="app-title" text="Parent:"/>
+            </HBox>
+            <Separator />
+            <HBox spacing="20.0">
+                <VBox spacing="8.0" prefWidth="700.0">
+                    <Label text="Children" styleClass="section-title"/>
+                    <ListView fx:id="childrenListView" prefHeight="450.0"/>
+                    <HBox spacing="10.0">
+                        <Button fx:id="viewChildAnalyticsButton" text="View Child Analytics" disable="true" styleClass="primary-button glossy-button"/>
+                        <Button fx:id="viewChildExpensesButton" text="View Child Expenses" disable="true" styleClass="primary-button glossy-button"/>
+                    </HBox>
+                </VBox>
+                <VBox spacing="8.0" prefWidth="420.0">
+                    <Label text="Add Child" styleClass="section-title"/>
+                    <TextField fx:id="childEmailField" promptText="Enter child's email"/>
+                    <Button fx:id="sendChildInviteButton" text="Send Invite" styleClass="primary-button glossy-button"/>
+                    <Label wrapText="true" text="The child will receive an invite in Alerts and must accept to become your child."/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </children>
+</StackPane>

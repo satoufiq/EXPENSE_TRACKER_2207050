@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.service.GroupService;
+import org.example.service.InviteService;
+import org.example.service.UserService;
+import org.example.util.SessionManager;
 
 /**
  * Add Member Controller with ObservableList integration
- * Adds members to groups with real-time updates
+ * Sends group invites instead of direct add
  */
 public class AddMemberController {
 
@@ -27,6 +30,7 @@ public class AddMemberController {
     private Button cancelButton;
 
     private String groupId;
+    private String groupName;
     private Stage dialogStage;
 
     @FXML
@@ -42,44 +46,49 @@ public class AddMemberController {
     }
 
     /**
-     * Set group context
+     * For backward compatibility with GroupDashboardController reflection
+     */
+    public void setGroupContext(String groupId, String groupName) {
+        this.groupId = groupId;
+        this.groupName = groupName;
+    }
+
+    /**
+     * Set group ID only (older code path)
      */
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
     /**
-     * Handle add member action
+     * Handle add member action: send invite
      */
     @FXML
     private void handleAddMember() {
         hideMessages();
 
-        // Validate groupId first
         if (groupId == null || groupId.isEmpty()) {
             showError("ERROR: Group ID is not set. Please ensure you selected a group before adding members.");
             System.err.println("CRITICAL: groupId is null or empty!");
             return;
         }
 
-        String email = emailField.getText().trim().toLowerCase(); // Trim and lowercase for consistency
-
+        String email = emailField.getText().trim().toLowerCase();
         if (email.isEmpty()) {
             showError("Please enter an email address");
             return;
         }
-
         if (!isValidEmail(email)) {
             showError("Please enter a valid email address");
             return;
         }
 
-        System.out.println("=== Add Member Request ===");
+        System.out.println("=== Group Invite Request ===");
         System.out.println("Group ID: " + groupId);
         System.out.println("Email: " + email);
 
         // Check if user exists first
-        org.example.model.User user = org.example.service.UserService.getUserByEmail(email);
+        org.example.model.User user = UserService.getUserByEmail(email);
         if (user == null) {
             showError("No user found with email: " + email + "\nPlease make sure the user has registered first.");
             return;
@@ -88,20 +97,24 @@ public class AddMemberController {
         System.out.println("Found user: " + user.getName() + " (ID: " + user.getUserId() + ")");
 
         // Check if already a member
-        if (org.example.service.GroupService.isMemberOfGroup(groupId, user.getUserId())) {
+        if (GroupService.isMemberOfGroup(groupId, user.getUserId())) {
             showError("This user is already a member of the group.");
             return;
         }
 
-        // Add member - this will automatically update ObservableList
-        boolean success = org.example.service.GroupService.addMemberToGroupByEmail(groupId, email);
+        // Send invite instead of direct add
+        String inviterId = SessionManager.getInstance().getCurrentUser() != null
+                ? SessionManager.getInstance().getCurrentUser().getUserId() : null;
+        if (inviterId == null) {
+            showError("You must be logged in to send invites.");
+            return;
+        }
 
-        if (success) {
-            showSuccess("Member added successfully!");
-            // Clear field for adding another member
+        String inviteId = InviteService.sendGroupInvite(groupId, inviterId, user.getUserId());
+        if (inviteId != null) {
+            showSuccess("Invite sent to " + user.getName() + ". They must accept it from Alerts.");
             emailField.clear();
-
-            // Close dialog after a short delay to show success message
+            // Optionally close after short delay
             javafx.application.Platform.runLater(() -> {
                 try {
                     Thread.sleep(1000);
@@ -113,7 +126,7 @@ public class AddMemberController {
                 }
             });
         } else {
-            showError("Failed to add member. Please try again.");
+            showError("Failed to send invite. Please try again.");
         }
     }
 
@@ -161,4 +174,3 @@ public class AddMemberController {
         successLabel.setVisible(false);
     }
 }
-
