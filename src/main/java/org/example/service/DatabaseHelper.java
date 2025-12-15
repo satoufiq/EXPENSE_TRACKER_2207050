@@ -130,6 +130,18 @@ public class DatabaseHelper {
             """;
             stmt.execute(createBudgetsTable);
 
+            // Create GROUP_BUDGETS table (per-group monthly budget)
+            String createGroupBudgetsTable = """
+                CREATE TABLE IF NOT EXISTS GROUP_BUDGETS (
+                    group_id TEXT PRIMARY KEY,
+                    monthly_budget REAL NOT NULL DEFAULT 0,
+                    currency TEXT NOT NULL DEFAULT 'BDT',
+                    updated_at TEXT NOT NULL,
+                    FOREIGN KEY (group_id) REFERENCES GROUPS(group_id)
+                )
+            """;
+            stmt.execute(createGroupBudgetsTable);
+
             System.out.println("Database initialized successfully");
 
         } catch (Exception e) {

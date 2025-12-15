@@ -38,12 +38,26 @@ public class PersonalAnalyticsController {
     @FXML private VBox root;
 
     private String userId;
+    private String overrideUserId; // optional override when viewing other member
+    private String currentGroupId; // when invoked from group mode
+
+    /**
+     * Allow external controllers to set which user's analytics to display.
+     */
+    public void setUserIdForAnalytics(String userId) {
+        this.overrideUserId = userId;
+    }
 
     @FXML
     public void initialize() {
         SessionManager sm = SessionManager.getInstance();
-        if (sm.getCurrentUser() == null) return;
-        userId = sm.getCurrentUser().getUserId();
+        currentGroupId = sm.getCurrentGroupId();
+        if (overrideUserId != null && !overrideUserId.isEmpty()) {
+            userId = overrideUserId;
+        } else {
+            if (sm.getCurrentUser() == null) return;
+            userId = sm.getCurrentUser().getUserId();
+        }
         refresh();
     }
 
@@ -146,12 +160,16 @@ public class PersonalAnalyticsController {
 
         trendLineChart.getData().clear();
 
-        // Get expenses for last 30 days
-        List<Expense> expenses = ExpenseService.getPersonalExpensesObservable(userId);
+        // Get expenses for last 30 days, group-scoped when in group mode
+        List<org.example.model.Expense> expenses;
+        if (currentGroupId != null && !currentGroupId.isEmpty()) {
+            expenses = ExpenseService.getGroupExpensesByUser(currentGroupId, userId);
+        } else {
+            expenses = ExpenseService.getPersonalExpensesObservable(userId);
+        }
         LocalDate today = LocalDate.now();
         LocalDate thirtyDaysAgo = today.minusDays(29);
 
-        // Group expenses by date
         Map<LocalDate, Double> dailyTotals = new TreeMap<>();
 
         // Initialize all days with 0

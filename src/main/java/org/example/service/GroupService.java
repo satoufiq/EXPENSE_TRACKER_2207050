@@ -510,5 +510,37 @@ public class GroupService {
     public static void refreshGroupMembers(String groupId) {
         getGroupMembersObservable(groupId);
     }
-}
 
+    // ==================== JSON EXPORT/IMPORT OPERATIONS ====================
+
+    /**
+     * Export group members to JSON file
+     */
+    public static boolean exportGroupMembersToJson(String groupId, String filePath) {
+        ObservableList<GroupMember> members = getGroupMembersObservable(groupId);
+        return JsonService.exportGroupMembersToJson(members, filePath);
+    }
+
+    /**
+     * Export user groups to JSON file
+     */
+    public static boolean exportUserGroupsToJson(String userId, String filePath) {
+        List<Group> groups = getUserGroups(userId);
+        return JsonService.exportGroupsToJson(groups, filePath);
+    }
+
+    /**
+     * Import groups from JSON file
+     */
+    public static int importGroupsFromJson(String filePath, String defaultUserId) {
+        List<Group> groups = JsonService.importGroupsFromJson(filePath);
+        if (groups == null) return 0;
+
+        int count = 0;
+        for (Group group : groups) {
+            boolean created = createGroup(group.getGroupName(), defaultUserId);
+            if (created) count++;
+        }
+        return count;
+    }
+}
