@@ -47,7 +47,20 @@
                                    text="Members: 0"/>
                         </VBox>
 
-                        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                        <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                            <!-- Analytics navigation -->
+                            <Button text="📊 Group Analytics"
+                                    onAction="#handleOpenGroupAnalytics"
+                                    styleClass="glass-button"
+                                    prefHeight="40.0"
+                                    prefWidth="160.0"/>
+                            <!-- Group budget actions -->
+                            <Button text="💵 Set Group Budget"
+                                    onAction="#handleSetGroupBudget"
+                                    styleClass="glass-button"
+                                    prefHeight="40.0"
+                                    prefWidth="170.0"/>
+                            <!-- Main actions -->
                             <Button text="💰 Add Expense"
                                     onAction="#handleAddExpense"
                                     styleClass="primary-button"
@@ -123,6 +136,22 @@
                                    text="0"
                                    styleClass="stat-value"/>
                         </VBox>
+
+                        <VBox alignment="CENTER" spacing="10.0"
+                              styleClass="stat-card"
+                              prefWidth="350.0"
+                              prefHeight="120.0">
+                            <padding>
+                                <Insets top="20.0" bottom="20.0"/>
+                            </padding>
+                            <Label text="🏦"
+                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(0,200,255,0.4), 15, 0.6, 0, 0);"/>
+                            <Label text="Group Budget"
+                                   styleClass="stat-label"/>
+                            <Label fx:id="groupBudgetLabel"
+                                   text="৳0.00"
+                                   styleClass="stat-value"/>
+                        </VBox>
                     </HBox>
 
                     <VBox spacing="15.0" VBox.vgrow="ALWAYS">
@@ -147,19 +176,22 @@
                                 <columns>
                                     <TableColumn fx:id="dateColumn"
                                                  text="Date"
-                                                 prefWidth="120.0"/>
+                                                 prefWidth="100.0"/>
                                     <TableColumn fx:id="memberColumn"
                                                  text="Member"
-                                                 prefWidth="150.0"/>
+                                                 prefWidth="140.0"/>
                                     <TableColumn fx:id="categoryColumn"
                                                  text="Category"
-                                                 prefWidth="140.0"/>
+                                                 prefWidth="120.0"/>
                                     <TableColumn fx:id="amountColumn"
                                                  text="Amount"
-                                                 prefWidth="120.0"/>
+                                                 prefWidth="100.0"/>
                                     <TableColumn fx:id="noteColumn"
                                                  text="Note"
-                                                 prefWidth="350.0"/>
+                                                 prefWidth="200.0"/>
+                                    <TableColumn fx:id="actionsColumn"
+                                                 text="Actions"
+                                                 prefWidth="200.0"/>
                                 </columns>
                                 <placeholder>
                                     <VBox alignment="CENTER" spacing="15.0">

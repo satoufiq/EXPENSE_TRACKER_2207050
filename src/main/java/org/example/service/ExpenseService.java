@@ -303,5 +303,82 @@ public class ExpenseService {
     public static void refreshGroupExpenses(String groupId) {
         getGroupExpensesObservable(groupId);
     }
-}
 
+    /**
+     * Get all expenses for a specific user within a group.
+     */
+    public static List<Expense> getGroupExpensesByUser(String groupId, String userId) {
+        List<Expense> expenses = new ArrayList<>();
+        try (Connection conn = DatabaseHelper.getConnection()) {
+            String query = "SELECT * FROM EXPENSES WHERE group_id = ? AND user_id = ? ORDER BY date DESC";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, groupId);
+            stmt.setString(2, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                expenses.add(createExpenseFromResultSet(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return expenses;
+    }
+
+    // ==================== JSON EXPORT/IMPORT OPERATIONS ====================
+
+    /**
+     * Export personal expenses to JSON file
+     */
+    public static boolean exportPersonalExpensesToJson(String userId, String filePath) {
+        ObservableList<Expense> expenses = getPersonalExpensesObservable(userId);
+        return JsonService.exportExpensesToJson(expenses, filePath);
+    }
+
+    /**
+     * Export group expenses to JSON file
+     */
+    public static boolean exportGroupExpensesToJson(String groupId, String filePath) {
+        ObservableList<Expense> expenses = getGroupExpensesObservable(groupId);
+        return JsonService.exportExpensesToJson(expenses, filePath);
+    }
+
+    /**
+     * Export all expenses to JSON file
+     */
+    public static boolean exportAllExpensesToJson(String filePath) {
+        ObservableList<Expense> expenses = getAllExpensesObservable();
+        return JsonService.exportExpensesToJson(expenses, filePath);
+    }
+
+    /**
+     * Import expenses from JSON and add to database
+     */
+    public static int importExpensesFromJson(String filePath, String defaultUserId) {
+        List<Expense> expenses = JsonService.importExpensesFromJson(filePath);
+        if (expenses == null) return 0;
+
+        int count = 0;
+        for (Expense expense : expenses) {
+            String userId = expense.getUserId() != null ? expense.getUserId() : defaultUserId;
+            boolean added = addExpense(
+                userId,
+                expense.getGroupId(),
+                expense.getCategory(),
+                expense.getAmount(),
+                expense.getDate(),
+                expense.getNote()
+            );
+            if (added) count++;
+        }
+        return count;
+    }
+
+    /**
+     * Get expense as JSON string
+     */
+    public static String getExpenseAsJson(String expenseId) {
+        Expense expense = getExpenseById(expenseId);
+        if (expense == null) return null;
+        return JsonService.expenseToJson(expense);
+    }
+}
