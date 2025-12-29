@@ -1,5 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.controller.ChildAnalyticsController">
-</VBox>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.ChildAnalyticsController"
+            prefHeight="800.0" prefWidth="1200.0"
+            styleClass="root-pane">
+    <center>
+                <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                    <VBox spacing="25.0">
+                        <padding>
+                            <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                        </padding>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="visual-header">
+                            <padding>
+                                <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                            </padding>
+                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                <Label fx:id="childNameLabel" text="Child Analytics" styleClass="visual-title"/>
+                                <Label text="View-Only Analytics (Parent View)" styleClass="visual-subtitle"/>
+                            </VBox>
+                            <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                                <Button fx:id="backButton" text="← Back to Dashboard" styleClass="secondary-button" prefHeight="40.0" prefWidth="180.0"/>
+                            </HBox>
+                        </HBox>
+                        <HBox spacing="20.0" alignment="CENTER">
+                            <VBox spacing="10.0" styleClass="stat-card" prefWidth="280.0" prefHeight="120.0" alignment="CENTER">
+                                <padding>
+                                    <Insets top="20.0" bottom="20.0"/>
+                                </padding>
+                                <Label text="💰" style="-fx-font-size: 36px;"/>
+                                <Label text="Total Expenses" styleClass="stat-label"/>
+                                <Label fx:id="totalExpensesLabel" text="৳0.00" styleClass="stat-value"/>
+                            </VBox>
+                            <VBox spacing="10.0" styleClass="stat-card" prefWidth="280.0" prefHeight="120.0" alignment="CENTER">
+                                <padding>
+                                    <Insets top="20.0" bottom="20.0"/>
+                                </padding>
+                                <Label text="📅" style="-fx-font-size: 36px;"/>
+                                <Label text="This Month" styleClass="stat-label"/>
+                                <Label fx:id="monthExpensesLabel" text="৳0.00" styleClass="stat-value"/>
+                            </VBox>
+                            <VBox spacing="10.0" styleClass="stat-card" prefWidth="280.0" prefHeight="120.0" alignment="CENTER">
+                                <padding>
+                                    <Insets top="20.0" bottom="20.0"/>
+                                </padding>
+                                <Label text="📊" style="-fx-font-size: 36px;"/>
+                                <Label text="Categories Used" styleClass="stat-label"/>
+                                <Label fx:id="categoryCountLabel" text="0" styleClass="stat-value"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                            <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+                                <VBox spacing="15.0" styleClass="glass-container-elevated" prefHeight="350.0">
+                                    <padding>
+                                        <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                                    </padding>
+                                    <Label text="Category Distribution (This Month)" styleClass="section-title"/>
+                                    <PieChart fx:id="categoryPieChart" legendVisible="true" VBox.vgrow="ALWAYS"/>
+                                </VBox>
+                                <VBox spacing="15.0" styleClass="glass-container-elevated" VBox.vgrow="ALWAYS">
+                                    <padding>
+                                        <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                                    </padding>
+                                    <Label text="Recent Expenses (Last 10)" styleClass="section-title"/>
+                                    <ListView fx:id="recentExpensesList" VBox.vgrow="ALWAYS" styleClass="modern-list">
+                                        <placeholder>
+                                            <VBox alignment="CENTER" spacing="10.0">
+                                                <padding>
+                                                    <Insets top="40.0" bottom="40.0"/>
+                                                </padding>
+                                                <Label text="📝" style="-fx-font-size: 48px; opacity: 0.4;"/>
+                                                <Label text="No expenses yet" styleClass="placeholder-text"/>
+                                            </VBox>
+                                        </placeholder>
+                                    </ListView>
+                                </VBox>
+                            </VBox>
+                            <VBox spacing="15.0" prefWidth="380.0" styleClass="glass-container-elevated">
+                                <padding>
+                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                                </padding>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <Label text="💡" style="-fx-font-size: 24px;"/>
+                                    <Label text="Send Suggestion to Child" styleClass="section-title"/>
+                                </HBox>
+                                <Label text="Help guide your child's spending habits"
+                                       style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12px;"/>
+                                <TextArea fx:id="suggestionTextArea"
+                                          promptText="Write a helpful suggestion about budgeting, saving, or spending wisely..."
+                                          prefHeight="350.0"
+                                          wrapText="true"
+                                          styleClass="modern-text-area"/>
+                                <Button fx:id="sendSuggestionButton"
+                                        text="📤 Send Suggestion"
+                                        styleClass="primary-button"
+                                        prefHeight="45.0"
+                                        maxWidth="Infinity"/>
+                                <VBox spacing="8.0" style="-fx-background-color: rgba(76, 175, 80, 0.1); -fx-padding: 15; -fx-background-radius: 10;">
+                                    <Label text="💬 Tips for Good Suggestions:" style="-fx-text-fill: #4CAF50; -fx-font-weight: bold;"/>
+                                    <Label text="• Be specific and constructive" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;"/>
+                                    <Label text="• Focus on learning, not scolding" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;"/>
+                                    <Label text="• Offer alternatives and solutions" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;"/>
+                                    <Label text="• Encourage good habits" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;"/>
+                                </VBox>
+                            </VBox>
+                        </HBox>
+                        <VBox spacing="10.0" style="-fx-background-color: rgba(33, 150, 243, 0.1); -fx-padding: 15; -fx-background-radius: 10;">
+                            <Label text="ℹ️ Parent View - Read-Only Mode"
+                                   style="-fx-text-fill: #2196F3; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Label text="This is a view-only analytics dashboard. You cannot edit or delete your child's expenses. Use suggestions to guide their spending behavior."
+                                   wrapText="true"
+                                   style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 12px;"/>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </center>
+</BorderPane>

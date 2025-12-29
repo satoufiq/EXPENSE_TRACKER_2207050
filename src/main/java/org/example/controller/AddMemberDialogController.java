@@ -8,10 +8,6 @@ import org.example.model.User;
 import org.example.service.GroupService;
 import org.example.service.UserService;
 
-/**
- * Add Member Dialog Controller
- * Handles adding members to a group by email or user ID
- */
 public class AddMemberDialogController {
 
     @FXML
@@ -46,16 +42,16 @@ public class AddMemberDialogController {
 
     @FXML
     public void initialize() {
-        // Setup radio button listeners for email/ID switching
+
         byEmailRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
-                // Email is selected
+
                 emailSection.setVisible(true);
                 emailSection.setManaged(true);
                 userIdSection.setVisible(false);
                 userIdSection.setManaged(false);
             } else {
-                // User ID is selected
+
                 emailSection.setVisible(false);
                 emailSection.setManaged(false);
                 userIdSection.setVisible(true);
@@ -65,13 +61,13 @@ public class AddMemberDialogController {
 
         byUserIdRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
-                // User ID is selected
+
                 emailSection.setVisible(false);
                 emailSection.setManaged(false);
                 userIdSection.setVisible(true);
                 userIdSection.setManaged(true);
             } else {
-                // Email is selected
+
                 emailSection.setVisible(true);
                 emailSection.setManaged(true);
                 userIdSection.setVisible(false);
@@ -79,31 +75,23 @@ public class AddMemberDialogController {
             }
         });
 
-        // Initial setup - email is selected by default
         emailSection.setVisible(true);
         emailSection.setManaged(true);
         userIdSection.setVisible(false);
         userIdSection.setManaged(false);
     }
 
-    /**
-     * Set group context for this dialog
-     */
     public void setGroupContext(String groupId, String groupName) {
         this.currentGroupId = groupId;
         this.currentGroupName = groupName;
         System.out.println("AddMemberDialog initialized for group: " + groupName + " (ID: " + groupId + ")");
     }
 
-    /**
-     * Handle Add Member button
-     */
     @FXML
     private void handleAddMember() {
         System.out.println("=== ADD MEMBER REQUEST ===");
         clearMessages();
 
-        // Validate group ID
         if (currentGroupId == null || currentGroupId.isEmpty()) {
             showError("Error: No group selected!");
             System.err.println("CRITICAL: groupId is null or empty!");
@@ -115,7 +103,7 @@ public class AddMemberDialogController {
         User userToAdd = null;
 
         if (byEmailRadio.isSelected()) {
-            // Add by email
+
             String email = emailField.getText().trim().toLowerCase();
 
             if (email.isEmpty()) {
@@ -135,7 +123,7 @@ public class AddMemberDialogController {
             System.out.println("Found user: " + userToAdd.getName() + " (ID: " + userToAdd.getUserId() + ")");
 
         } else {
-            // Add by user ID
+
             String userId = userIdField.getText().trim();
 
             if (userId.isEmpty()) {
@@ -155,74 +143,49 @@ public class AddMemberDialogController {
             System.out.println("Found user: " + userToAdd.getName() + " (ID: " + userToAdd.getUserId() + ")");
         }
 
-        // Check if already a member and send invite - all async
         final User finalUserToAdd = userToAdd;
 
-        org.example.util.ThreadPoolManager.getInstance().executeDatabaseWithCallback(
-            () -> {
-                // Check if already a member
-                if (GroupService.isMemberOfGroup(currentGroupId, finalUserToAdd.getUserId())) {
-                    throw new IllegalStateException(finalUserToAdd.getName() + " is already a member of this group");
-                }
+        if (GroupService.isMemberOfGroup(currentGroupId, finalUserToAdd.getUserId())) {
+            showError(finalUserToAdd.getName() + " is already a member of this group");
+            return;
+        }
 
-                // Get inviter
-                String inviterId = org.example.util.SessionManager.getInstance().getCurrentUser() != null
-                        ? org.example.util.SessionManager.getInstance().getCurrentUser().getUserId() : null;
+        String inviterId = org.example.util.SessionManager.getInstance().getCurrentUser() != null
+                ? org.example.util.SessionManager.getInstance().getCurrentUser().getUserId() : null;
 
-                if (inviterId == null) {
-                    throw new IllegalStateException("You must be logged in to send invites.");
-                }
+        if (inviterId == null) {
+            showError("You must be logged in to send invites.");
+            return;
+        }
 
-                // Send invite
-                System.out.println("Sending group invite...");
-                String inviteId = org.example.service.InviteService.sendGroupInvite(currentGroupId, inviterId, finalUserToAdd.getUserId());
+        System.out.println("Sending group invite...");
+        String inviteId = org.example.service.InviteService.sendGroupInvite(currentGroupId, inviterId, finalUserToAdd.getUserId());
 
-                if (inviteId == null) {
-                    throw new IllegalStateException("Failed to create invite in database");
-                }
+        if (inviteId == null) {
+            showError("Failed to create invite in database");
+            return;
+        }
 
-                return inviteId;
-            },
-            inviteId -> {
-                // Success
-                showSuccess("Invite sent to " + finalUserToAdd.getName() + "!\nThey must accept it from Alerts to join the group.");
-                System.out.println("✓ Group invite sent successfully! Invite ID: " + inviteId);
-                clearInputs();
+        showSuccess("Invite sent to " + finalUserToAdd.getName() + "!\nThey must accept it from Alerts to join the group.");
+        System.out.println("✓ Group invite sent successfully! Invite ID: " + inviteId);
+        clearInputs();
 
-                // Close dialog after short delay
-                org.example.util.ThreadPoolManager.getInstance().executeBackground(() -> {
-                    Thread.sleep(2000);
-                    return null;
-                }).thenRun(() -> {
-                    org.example.util.ThreadPoolManager.runOnUIThread(() -> {
-                        Stage stage = (Stage) emailField.getScene().getWindow();
-                        stage.close();
-                    });
-                });
-            },
-            error -> {
-                // Error
-                showError(error.getMessage());
-                System.err.println("Error: " + error.getMessage());
-                error.printStackTrace();
-            }
-        );
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(2));
+        pause.setOnFinished(event -> {
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.close();
+        });
+        pause.play();
 
         System.out.println("========================");
     }
 
-    /**
-     * Handle Cancel button
-     */
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) emailField.getScene().getWindow();
         stage.close();
     }
 
-    /**
-     * Show error message
-     */
     private void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
@@ -231,9 +194,6 @@ public class AddMemberDialogController {
         successLabel.setManaged(false);
     }
 
-    /**
-     * Show success message
-     */
     private void showSuccess(String message) {
         successLabel.setText(message);
         successLabel.setVisible(true);
@@ -242,9 +202,6 @@ public class AddMemberDialogController {
         errorLabel.setManaged(false);
     }
 
-    /**
-     * Clear all messages
-     */
     private void clearMessages() {
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
@@ -252,12 +209,8 @@ public class AddMemberDialogController {
         successLabel.setManaged(false);
     }
 
-    /**
-     * Clear input fields
-     */
     private void clearInputs() {
         emailField.clear();
         userIdField.clear();
     }
 }
-

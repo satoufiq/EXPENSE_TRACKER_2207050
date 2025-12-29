@@ -15,10 +15,6 @@ import org.example.util.SessionManager;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Group Selection Controller
- * Handles group selection and creation
- */
 public class GroupSelectionController {
 
     @FXML
@@ -50,13 +46,9 @@ public class GroupSelectionController {
         loadGroups();
     }
 
-    /**
-     * Setup ListView
-     */
     private void setupListView() {
         groupsListView.setItems(groupsList);
 
-        // Custom cell factory to display group names nicely
         groupsListView.setCellFactory(param -> new ListCell<Group>() {
             @Override
             protected void updateItem(Group group, boolean empty) {
@@ -75,7 +67,6 @@ public class GroupSelectionController {
             }
         });
 
-        // Enable/disable buttons based on selection
         groupsListView.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 boolean hasSelection = newValue != null;
@@ -85,7 +76,6 @@ public class GroupSelectionController {
             }
         );
 
-        // Double-click to select group
         groupsListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Group selected = groupsListView.getSelectionModel().getSelectedItem();
@@ -96,9 +86,6 @@ public class GroupSelectionController {
         });
     }
 
-    /**
-     * Load groups from database
-     */
     private void loadGroups() {
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -110,21 +97,16 @@ public class GroupSelectionController {
         }
     }
 
-    /**
-     * Handle create group button
-     */
     @FXML
     private void handleCreateGroup() {
-        // Create custom dialog for group creation
+
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Create New Group");
         dialog.setHeaderText("Enter group name");
 
-        // Set the button types
         ButtonType createButtonType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
 
-        // Create the group name input field
         VBox content = new VBox(10);
         content.setPadding(new Insets(20));
         TextField groupNameField = new TextField();
@@ -138,10 +120,8 @@ public class GroupSelectionController {
         content.getChildren().addAll(instructionLabel, groupNameField);
         dialog.getDialogPane().setContent(content);
 
-        // Request focus on the group name field by default
         javafx.application.Platform.runLater(() -> groupNameField.requestFocus());
 
-        // Convert the result to a group name when the create button is clicked
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == createButtonType) {
                 return groupNameField.getText();
@@ -170,9 +150,6 @@ public class GroupSelectionController {
         });
     }
 
-    /**
-     * Handle select group button
-     */
     @FXML
     private void handleSelectGroup() {
         Group selectedGroup = groupsListView.getSelectionModel().getSelectedItem();
@@ -182,9 +159,6 @@ public class GroupSelectionController {
         }
     }
 
-    /**
-     * Handle view members button
-     */
     @FXML
     private void handleViewMembers() {
         Group selectedGroup = groupsListView.getSelectionModel().getSelectedItem();
@@ -194,9 +168,6 @@ public class GroupSelectionController {
         }
     }
 
-    /**
-     * Handle leave group button
-     */
     @FXML
     private void handleLeaveGroup() {
         Group selectedGroup = groupsListView.getSelectionModel().getSelectedItem();
@@ -226,25 +197,16 @@ public class GroupSelectionController {
         });
     }
 
-    /**
-     * Handle refresh button
-     */
     @FXML
     private void handleRefresh() {
         loadGroups();
     }
 
-    /**
-     * Handle back button
-     */
     @FXML
     private void handleBack() {
         MainApp.loadModeSelection();
     }
 
-    /**
-     * Load Group Dashboard
-     */
     private void loadGroupDashboard() {
         try {
             System.out.println("Loading Group Dashboard...");
@@ -271,7 +233,6 @@ public class GroupSelectionController {
 
             javafx.scene.Parent root = loader.load();
 
-            // Initialize controller using reflection to avoid cast issues
             Object controllerObj = loader.getController();
             if (controllerObj != null) {
                 try {
@@ -301,9 +262,6 @@ public class GroupSelectionController {
         }
     }
 
-    /**
-     * Load Group Member List
-     */
     private void loadGroupMemberList() {
         try {
             Group selectedGroup = groupsListView.getSelectionModel().getSelectedItem();
@@ -321,7 +279,6 @@ public class GroupSelectionController {
 
             javafx.scene.Parent root = loader.load();
 
-            // Initialize the controller with group context using reflection to avoid IDE issues
             Object controllerObj = loader.getController();
             if (controllerObj != null) {
                 try {
@@ -347,9 +304,6 @@ public class GroupSelectionController {
         }
     }
 
-    /**
-     * Show success alert
-     */
     private void showSuccessAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -358,9 +312,6 @@ public class GroupSelectionController {
         alert.showAndWait();
     }
 
-    /**
-     * Show error alert
-     */
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -369,4 +320,3 @@ public class GroupSelectionController {
         alert.showAndWait();
     }
 }
-

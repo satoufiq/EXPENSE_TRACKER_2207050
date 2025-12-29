@@ -3,12 +3,13 @@ package org.example.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.model.Expense;
 import org.example.service.ExpenseService;
-import org.example.util.SessionManager;
 
 import java.time.LocalDate;
 
-public class AddExpenseController {
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
+public class EditExpenseController {
 
     @FXML
     private ComboBox<String> categoryComboBox;
@@ -28,9 +29,10 @@ public class AddExpenseController {
     @FXML
     private Button cancelButton;
 
-    private String userId;
-    private String groupId;
-    private boolean isPersonalMode = true;
+    @FXML
+    private Label titleLabel;
+
+    private Expense expenseToEdit;
 
     @FXML
     public void initialize() {
@@ -53,22 +55,41 @@ public class AddExpenseController {
             "📝 Other"
         );
 
-        datePicker.setValue(LocalDate.now());
-
-        SessionManager session = SessionManager.getInstance();
-        if (session.getCurrentUser() != null) {
-            userId = session.getCurrentUser().getUserId();
-        }
-
-        groupId = session.getCurrentGroupId();
-        isPersonalMode = (groupId == null || groupId.isEmpty());
-
         setupValidation();
+    }
+
+    public void setExpense(Expense expense) {
+        this.expenseToEdit = expense;
+
+        if (expense != null) {
+
+            String categoryToFind = expense.getCategory();
+            for (String item : categoryComboBox.getItems()) {
+                if (item.contains(categoryToFind)) {
+                    categoryComboBox.setValue(item);
+                    break;
+                }
+            }
+
+            if (categoryComboBox.getValue() == null) {
+                categoryComboBox.setValue("📝 Other");
+            }
+
+            amountField.setText(String.valueOf(expense.getAmount()));
+
+            try {
+                datePicker.setValue(LocalDate.parse(expense.getDate()));
+            } catch (Exception e) {
+                datePicker.setValue(LocalDate.now());
+            }
+
+            noteArea.setText(expense.getNote() != null && !expense.getNote().equals("No note") ? expense.getNote() : "");
+        }
     }
 
     private void setupValidation() {
 
-        amountField.textProperty().addListener((observable, oldValue, newValue) -> {
+        amountField.textProperty().addListener((_, oldValue, newValue) -> {
             if (!newValue.matches("\\d*\\.?\\d{0,2}")) {
                 amountField.setText(oldValue);
             }
@@ -90,9 +111,8 @@ public class AddExpenseController {
                 note = "No note";
             }
 
-            boolean success = ExpenseService.addExpense(
-                userId,
-                isPersonalMode ? null : groupId,
+            boolean success = ExpenseService.updateExpense(
+                expenseToEdit.getExpenseId(),
                 category,
                 amount,
                 date,
@@ -101,13 +121,13 @@ public class AddExpenseController {
 
             if (success) {
                 showAlert(Alert.AlertType.INFORMATION, "Success",
-                    "✅ Expense added successfully!\n\nAmount: ৳" + String.format("%.2f", amount) +
+                    "✅ Expense updated successfully!\n\nAmount: ৳" + String.format("%.2f", amount) +
                     "\nCategory: " + category +
                     "\nDate: " + date);
                 closeDialog();
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error",
-                    "❌ Failed to add expense!\n\nPlease try again.");
+                    "❌ Failed to update expense!\n\nPlease try again.");
             }
         }
     }
@@ -115,8 +135,26 @@ public class AddExpenseController {
     @FXML
     private void handleCancel() {
 
-        if (!amountField.getText().isEmpty() || categoryComboBox.getValue() != null ||
-            !noteArea.getText().isEmpty()) {
+        boolean hasChanges = false;
+
+        if (expenseToEdit != null) {
+            String currentCategory = categoryComboBox.getValue();
+            if (currentCategory != null) {
+                currentCategory = currentCategory.substring(currentCategory.indexOf(" ") + 1);
+                hasChanges = !currentCategory.equals(expenseToEdit.getCategory());
+            }
+
+            try {
+                double currentAmount = Double.parseDouble(amountField.getText());
+                hasChanges = hasChanges || currentAmount != expenseToEdit.getAmount();
+            } catch (NumberFormatException ignored) {}
+
+            String currentNote = noteArea.getText().trim();
+            String originalNote = expenseToEdit.getNote() != null && !expenseToEdit.getNote().equals("No note") ? expenseToEdit.getNote() : "";
+            hasChanges = hasChanges || !currentNote.equals(originalNote);
+        }
+
+        if (hasChanges) {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmAlert.setTitle("Confirm Cancel");
             confirmAlert.setHeaderText("Discard Changes?");

@@ -19,9 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Personal Analytics Controller with Charts and Enhanced Features
- */
 public class PersonalAnalyticsController {
 
     @FXML private Label monthlyTotalLabel;
@@ -41,9 +38,6 @@ public class PersonalAnalyticsController {
     private String overrideUserId; // optional override when viewing other member
     private String currentGroupId; // when invoked from group mode
 
-    /**
-     * Allow external controllers to set which user's analytics to display.
-     */
     public void setUserIdForAnalytics(String userId) {
         this.overrideUserId = userId;
     }
@@ -64,7 +58,6 @@ public class PersonalAnalyticsController {
     private void refresh() {
         AnalyticsService.PersonalAnalyticsSummary s = AnalyticsService.buildPersonalSummary(userId);
 
-        // Update labels
         if (monthlyTotalLabel != null) {
             monthlyTotalLabel.setText(String.format("৳%.2f", s.monthlyTotal));
         }
@@ -80,18 +73,15 @@ public class PersonalAnalyticsController {
             highestDayLabel.setText(txt);
         }
 
-        // Update budget info
         double budget = BudgetService.getMonthlyBudget(userId);
         if (budgetLabel != null) {
             budgetLabel.setText(String.format("৳%.2f", budget));
         }
 
-        // Update budget status
         if (budgetStatusLabel != null) {
             updateBudgetStatus(s.monthlyTotal, budget);
         }
 
-        // Update category list
         if (categoryList != null) {
             categoryList.getItems().clear();
             s.categoryTotals.forEach((k, v) ->
@@ -99,12 +89,10 @@ public class PersonalAnalyticsController {
                     k, v, (v / s.monthlyTotal * 100))));
         }
 
-        // Update suggestions list
         if (suggestionsList != null) {
             suggestionsList.getItems().setAll(s.suggestions);
         }
 
-        // Update charts
         updatePieChart(s.categoryTotals);
         updateTrendChart();
     }
@@ -138,7 +126,6 @@ public class PersonalAnalyticsController {
 
         categoryPieChart.getData().clear();
 
-        // Add data to pie chart
         categoryTotals.entrySet().stream()
             .sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue()))
             .limit(8) // Top 8 categories
@@ -150,7 +137,6 @@ public class PersonalAnalyticsController {
                 categoryPieChart.getData().add(slice);
             });
 
-        // Style the pie chart
         categoryPieChart.setLabelsVisible(true);
         categoryPieChart.setLegendVisible(true);
     }
@@ -160,7 +146,6 @@ public class PersonalAnalyticsController {
 
         trendLineChart.getData().clear();
 
-        // Get expenses for last 30 days, group-scoped when in group mode
         List<org.example.model.Expense> expenses;
         if (currentGroupId != null && !currentGroupId.isEmpty()) {
             expenses = ExpenseService.getGroupExpensesByUser(currentGroupId, userId);
@@ -172,12 +157,10 @@ public class PersonalAnalyticsController {
 
         Map<LocalDate, Double> dailyTotals = new TreeMap<>();
 
-        // Initialize all days with 0
         for (int i = 0; i < 30; i++) {
             dailyTotals.put(thirtyDaysAgo.plusDays(i), 0.0);
         }
 
-        // Sum expenses by date
         for (Expense e : expenses) {
             try {
                 LocalDate date = LocalDate.parse(e.getDate());
@@ -185,17 +168,15 @@ public class PersonalAnalyticsController {
                     dailyTotals.merge(date, e.getAmount(), Double::sum);
                 }
             } catch (Exception ex) {
-                // Skip invalid dates
+
             }
         }
 
-        // Create series
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Daily Spending");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
 
-        // Add data points (show every 5th day for readability)
         int i = 0;
         for (Map.Entry<LocalDate, Double> entry : dailyTotals.entrySet()) {
             if (i % 5 == 0 || i == dailyTotals.size() - 1) {
@@ -217,7 +198,6 @@ public class PersonalAnalyticsController {
         dialog.setHeaderText("Set Your Monthly Budget");
         dialog.setContentText("Enter budget amount in ৳ (BDT):");
 
-        // Get current budget
         double currentBudget = BudgetService.getMonthlyBudget(userId);
         if (currentBudget > 0) {
             dialog.getEditor().setText(String.format("%.2f", currentBudget));
@@ -247,6 +227,21 @@ public class PersonalAnalyticsController {
     }
 
     @FXML
+    private void handleVisualAnalytics() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/personal_visual_analytics.fxml"));
+            javafx.scene.Parent rootNode = loader.load();
+            javafx.stage.Stage stage = (javafx.stage.Stage) backButton.getScene().getWindow();
+            javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleBack() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
@@ -261,20 +256,6 @@ public class PersonalAnalyticsController {
         }
     }
 
-    @FXML
-    private void handleVisualAnalytics() {
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                getClass().getResource("/fxml/personal_visual_analytics.fxml"));
-            javafx.scene.Parent rootNode = loader.load();
-            javafx.stage.Stage stage = (javafx.stage.Stage) backButton.getScene().getWindow();
-            javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
-            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showAlert(javafx.scene.control.Alert.AlertType type, String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(type);

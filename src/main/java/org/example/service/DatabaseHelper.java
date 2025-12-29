@@ -48,17 +48,28 @@ public class DatabaseHelper {
             """;
             stmt.execute(createGroupsTable);
 
-            // Create GROUP_MEMBERS table
+            // Create GROUP_MEMBERS table with member role
             String createGroupMembersTable = """
                 CREATE TABLE IF NOT EXISTS GROUP_MEMBERS (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     group_id TEXT NOT NULL,
                     user_id TEXT NOT NULL,
+                    member_role TEXT NOT NULL DEFAULT 'member',
+                    joined_at TEXT,
                     FOREIGN KEY (group_id) REFERENCES GROUPS(group_id),
                     FOREIGN KEY (user_id) REFERENCES USERS(user_id)
                 )
             """;
             stmt.execute(createGroupMembersTable);
+
+            // Add member_role column if not exists (for migration)
+            try {
+                stmt.execute("ALTER TABLE GROUP_MEMBERS ADD COLUMN member_role TEXT NOT NULL DEFAULT 'member'");
+            } catch (Exception ignored) {} // Column may already exist
+
+            try {
+                stmt.execute("ALTER TABLE GROUP_MEMBERS ADD COLUMN joined_at TEXT");
+            } catch (Exception ignored) {} // Column may already exist
 
             // Create EXPENSES table
             String createExpensesTable = """
@@ -141,6 +152,22 @@ public class DatabaseHelper {
                 )
             """;
             stmt.execute(createGroupBudgetsTable);
+
+            // Create PARENT_CHILD_ALERTS table (for alerts from child to parent and suggestions from parent to child)
+            String createAlertsTable = """
+                CREATE TABLE IF NOT EXISTS PARENT_CHILD_ALERTS (
+                    alert_id TEXT PRIMARY KEY,
+                    from_user_id TEXT NOT NULL,
+                    to_user_id TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    message TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    read_status TEXT NOT NULL DEFAULT 'unread',
+                    FOREIGN KEY (from_user_id) REFERENCES USERS(user_id),
+                    FOREIGN KEY (to_user_id) REFERENCES USERS(user_id)
+                )
+            """;
+            stmt.execute(createAlertsTable);
 
             System.out.println("Database initialized successfully");
 

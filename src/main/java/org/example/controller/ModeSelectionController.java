@@ -8,10 +8,6 @@ import org.example.MainApp;
 import org.example.model.User;
 import org.example.util.SessionManager;
 
-/**
- * Mode Selection Controller
- * Allows users to choose between Personal, Group, or Parent mode
- */
 public class ModeSelectionController {
 
     @FXML
@@ -40,29 +36,22 @@ public class ModeSelectionController {
         loadUserInfo();
     }
 
-    /**
-     * Load user information and configure UI based on role
-     */
     private void loadUserInfo() {
         User currentUser = SessionManager.getInstance().getCurrentUser();
 
         if (currentUser != null) {
             welcomeLabel.setText("Welcome, " + currentUser.getName() + "!");
 
-            // Show parent mode card only for parent users
             if ("parent".equalsIgnoreCase(currentUser.getRole())) {
                 parentModeCard.setVisible(true);
                 parentModeCard.setManaged(true);
             }
         } else {
-            // If no user session, redirect to login
+
             MainApp.loadLogin();
         }
     }
 
-    /**
-     * Handle Personal Mode selection
-     */
     @FXML
     private void handlePersonalMode() {
         SessionManager.getInstance().setCurrentMode("personal");
@@ -70,18 +59,12 @@ public class ModeSelectionController {
         loadPersonalDashboard();
     }
 
-    /**
-     * Handle Group Mode selection
-     */
     @FXML
     private void handleGroupMode() {
         SessionManager.getInstance().setCurrentMode("group");
         loadGroupSelection();
     }
 
-    /**
-     * Handle Parent Mode selection
-     */
     @FXML
     private void handleParentMode() {
         User currentUser = SessionManager.getInstance().getCurrentUser();
@@ -94,22 +77,15 @@ public class ModeSelectionController {
         }
     }
 
-    /**
-     * Handle logout
-     */
     @FXML
     private void handleLogout() {
         SessionManager.clearSession();
         MainApp.loadHome();
     }
 
-    /**
-     * Load Personal Dashboard
-     */
     private void loadPersonalDashboard() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                getClass().getResource("/fxml/personal_dashboard.fxml"));
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/personal_dashboard.fxml"));
             javafx.scene.Parent root = loader.load();
             javafx.scene.Scene scene = new javafx.scene.Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
@@ -119,9 +95,6 @@ public class ModeSelectionController {
         }
     }
 
-    /**
-     * Load Group Selection screen
-     */
     private void loadGroupSelection() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
@@ -135,9 +108,6 @@ public class ModeSelectionController {
         }
     }
 
-    /**
-     * Load Parent Dashboard
-     */
     private void loadParentDashboard() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
@@ -147,13 +117,12 @@ public class ModeSelectionController {
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
             MainApp.getPrimaryStage().setScene(scene);
         } catch (Exception e) {
+            System.err.println("Failed to load parent dashboard: " + e.getMessage());
             e.printStackTrace();
+            showError("Failed to load Parent Dashboard: " + e.getMessage());
         }
     }
 
-    /**
-     * Handle Alerts navigation
-     */
     @FXML
     private void handleAlerts() {
         try {
@@ -164,7 +133,17 @@ public class ModeSelectionController {
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
             MainApp.getPrimaryStage().setScene(scene);
         } catch (Exception e) {
+            System.err.println("Failed to load alerts: " + e.getMessage());
             e.printStackTrace();
+            showError("Failed to load Alerts: " + e.getMessage());
         }
+    }
+
+    private void showError(String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

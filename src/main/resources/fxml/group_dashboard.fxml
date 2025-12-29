@@ -3,214 +3,92 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700.0" prefWidth="1200.0"
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.GroupDashboardController"
+            prefHeight="700.0" prefWidth="1200.0"
             styleClass="root-pane"
-            stylesheets="@../css/styles.css"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.controller.GroupDashboardController">
-
+            stylesheets="@../css/styles.css">
     <center>
-        <StackPane>
-            <children>
-                <StackPane styleClass="background-container">
-                    <children>
-                        <StackPane styleClass="background-shape shape-1"/>
-                        <StackPane styleClass="background-shape shape-2"/>
-                        <StackPane styleClass="background-overlay"/>
-                    </children>
-                </StackPane>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
+            <VBox spacing="20.0" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                </padding>
 
-                <VBox spacing="20.0" alignment="TOP_CENTER">
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                     <padding>
-                        <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                        <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
                     </padding>
-
-                    <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
-                        <padding>
-                            <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
-                        </padding>
-
-                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                            <Label fx:id="groupNameLabel"
-                                   styleClass="dashboard-title"
-                                   text="Group Dashboard"/>
-                            <Label fx:id="memberCountLabel"
-                                   styleClass="dashboard-subtitle"
-                                   text="Members: 0"/>
-                        </VBox>
-
-                        <HBox spacing="12.0" alignment="CENTER_RIGHT">
-                            <!-- Analytics navigation -->
-                            <Button text="📊 Group Analytics"
-                                    onAction="#handleOpenGroupAnalytics"
-                                    styleClass="glass-button"
-                                    prefHeight="40.0"
-                                    prefWidth="160.0"/>
-                            <!-- Group budget actions -->
-                            <Button text="💵 Set Group Budget"
-                                    onAction="#handleSetGroupBudget"
-                                    styleClass="glass-button"
-                                    prefHeight="40.0"
-                                    prefWidth="170.0"/>
-                            <!-- Main actions -->
-                            <Button text="💰 Add Expense"
-                                    onAction="#handleAddExpense"
-                                    styleClass="primary-button"
-                                    prefHeight="40.0"
-                                    prefWidth="150.0"/>
-                            <Button text="➕ Add Member"
-                                    onAction="#handleAddMember"
-                                    styleClass="glass-button"
-                                    prefHeight="40.0"
-                                    prefWidth="150.0"/>
-                            <Button text="👥 View Members"
-                                    onAction="#handleViewMembers"
-                                    styleClass="glass-button"
-                                    prefHeight="40.0"
-                                    prefWidth="150.0"/>
-                            <Button text="← Back"
-                                    onAction="#handleBack"
-                                    styleClass="secondary-button"
-                                    prefHeight="40.0"
-                                    prefWidth="100.0"/>
+                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="groupNameLabel" styleClass="dashboard-title" text="Group Dashboard"/>
+                        <Label fx:id="memberCountLabel" styleClass="dashboard-subtitle" text="Members: 0"/>
+                    </VBox>
+                    <HBox spacing="10.0" alignment="CENTER_RIGHT">
+                        <Button text="📊 Analytics" onAction="#handleOpenGroupAnalytics" styleClass="glass-button" prefHeight="40.0"/>
+                        <Button text="💵 Budget" onAction="#handleSetGroupBudget" styleClass="glass-button" prefHeight="40.0"/>
+                        <Button text="💰 Add" onAction="#handleAddExpense" styleClass="primary-button" prefHeight="40.0"/>
+                        <Button text="➕ Member" onAction="#handleAddMember" styleClass="glass-button" prefHeight="40.0"/>
+                        <Button text="👥 View" onAction="#handleViewMembers" styleClass="glass-button" prefHeight="40.0"/>
+                        <HBox fx:id="alertButtonContainer" alignment="CENTER" styleClass="alert-button-container">
+                            <Button fx:id="alertButton" styleClass="alert-button" text="🔔" prefHeight="40.0" prefWidth="50.0" onAction="#handleViewAlerts"/>
+                            <Label fx:id="alertBadge" styleClass="alert-badge" text="0" visible="false" managed="false" translateX="-18" translateY="-15"/>
                         </HBox>
+                        <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0"/>
                     </HBox>
+                </HBox>
 
-                    <HBox spacing="20.0" alignment="CENTER" prefHeight="140.0">
-                        <padding>
-                            <Insets top="10.0"/>
-                        </padding>
+                <!-- Stats Row -->
+                <HBox spacing="20.0" alignment="CENTER">
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="250.0" prefHeight="110.0">
+                        <Label text="💰" style="-fx-font-size: 30px;"/>
+                        <Label text="Total Expenses" styleClass="stat-label"/>
+                        <Label fx:id="totalExpensesLabel" text="৳0.00" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="250.0" prefHeight="110.0">
+                        <Label text="📅" style="-fx-font-size: 30px;"/>
+                        <Label text="This Month" styleClass="stat-label"/>
+                        <Label fx:id="monthExpensesLabel" text="৳0.00" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="250.0" prefHeight="110.0">
+                        <Label text="👥" style="-fx-font-size: 30px;"/>
+                        <Label text="Members" styleClass="stat-label"/>
+                        <Label fx:id="memberCountStatLabel" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="250.0" prefHeight="110.0">
+                        <Label text="🏦" style="-fx-font-size: 30px;"/>
+                        <Label text="Budget" styleClass="stat-label"/>
+                        <Label fx:id="groupBudgetLabel" text="৳0.00" styleClass="stat-value"/>
+                    </VBox>
+                </HBox>
 
-                        <VBox alignment="CENTER" spacing="10.0"
-                              styleClass="stat-card"
-                              prefWidth="350.0"
-                              prefHeight="120.0">
-                            <padding>
-                                <Insets top="20.0" bottom="20.0"/>
-                            </padding>
-                            <Label text="💰"
-                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="Total Group Expenses"
-                                   styleClass="stat-label"/>
-                            <Label fx:id="totalExpensesLabel"
-                                   text="৳0.00"
-                                   styleClass="stat-value"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="10.0"
-                              styleClass="stat-card"
-                              prefWidth="350.0"
-                              prefHeight="120.0">
-                            <padding>
-                                <Insets top="20.0" bottom="20.0"/>
-                            </padding>
-                            <Label text="📅"
-                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(123,136,255,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="This Month"
-                                   styleClass="stat-label"/>
-                            <Label fx:id="monthExpensesLabel"
-                                   text="৳0.00"
-                                   styleClass="stat-value"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="10.0"
-                              styleClass="stat-card"
-                              prefWidth="350.0"
-                              prefHeight="120.0">
-                            <padding>
-                                <Insets top="20.0" bottom="20.0"/>
-                            </padding>
-                            <Label text="👥"
-                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(0,255,200,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="Group Members"
-                                   styleClass="stat-label"/>
-                            <Label fx:id="memberCountStatLabel"
-                                   text="0"
-                                   styleClass="stat-value"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="10.0"
-                              styleClass="stat-card"
-                              prefWidth="350.0"
-                              prefHeight="120.0">
-                            <padding>
-                                <Insets top="20.0" bottom="20.0"/>
-                            </padding>
-                            <Label text="🏦"
-                                   style="-fx-font-size: 36px; -fx-effect: dropshadow(gaussian, rgba(0,200,255,0.4), 15, 0.6, 0, 0);"/>
-                            <Label text="Group Budget"
-                                   styleClass="stat-label"/>
-                            <Label fx:id="groupBudgetLabel"
-                                   text="৳0.00"
-                                   styleClass="stat-value"/>
-                        </VBox>
+                <!-- Expenses Section -->
+                <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <Label text="Group Expenses" styleClass="section-title"/>
+                        <Button text="➕ Add Expense" onAction="#handleAddExpense" styleClass="link-button"/>
                     </HBox>
-
-                    <VBox spacing="15.0" VBox.vgrow="ALWAYS">
-                        <padding>
-                            <Insets top="10.0"/>
-                        </padding>
-
-                        <HBox alignment="CENTER_LEFT" spacing="15.0">
-                            <Label text="Group Expenses"
-                                   styleClass="section-title"/>
-                            <Button text="➕ Add Expense"
-                                    onAction="#handleAddExpense"
-                                    styleClass="link-button"/>
-                        </HBox>
-
-                        <StackPane styleClass="glass-container-elevated" VBox.vgrow="ALWAYS">
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="300.0">
+                        <FlowPane fx:id="expenseCardsPane" styleClass="expense-flow-pane" hgap="15" vgap="15">
                             <padding>
-                                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                                <Insets top="10.0" left="10.0" right="10.0" bottom="10.0"/>
                             </padding>
-
-                            <TableView fx:id="expensesTable" styleClass="modern-table">
-                                <columns>
-                                    <TableColumn fx:id="dateColumn"
-                                                 text="Date"
-                                                 prefWidth="100.0"/>
-                                    <TableColumn fx:id="memberColumn"
-                                                 text="Member"
-                                                 prefWidth="140.0"/>
-                                    <TableColumn fx:id="categoryColumn"
-                                                 text="Category"
-                                                 prefWidth="120.0"/>
-                                    <TableColumn fx:id="amountColumn"
-                                                 text="Amount"
-                                                 prefWidth="100.0"/>
-                                    <TableColumn fx:id="noteColumn"
-                                                 text="Note"
-                                                 prefWidth="200.0"/>
-                                    <TableColumn fx:id="actionsColumn"
-                                                 text="Actions"
-                                                 prefWidth="200.0"/>
-                                </columns>
-                                <placeholder>
-                                    <VBox alignment="CENTER" spacing="15.0">
-                                        <padding>
-                                            <Insets top="60.0" bottom="60.0"/>
-                                        </padding>
-                                        <Label text="📊"
-                                               style="-fx-font-size: 48px; opacity: 0.4;"/>
-                                        <Label text="No expenses yet"
-                                               styleClass="placeholder-text"/>
-                                        <Label text="Add expenses to track group spending"
-                                               styleClass="placeholder-subtext"/>
-                                    </VBox>
-                                </placeholder>
-                            </TableView>
-                        </StackPane>
+                        </FlowPane>
+                    </ScrollPane>
+                    <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="15.0" styleClass="empty-state-card" visible="false" managed="false">
+                        <Label text="📊" style="-fx-font-size: 48px; opacity: 0.5;"/>
+                        <Label text="No expenses yet" styleClass="placeholder-text"/>
+                        <Label text="Add expenses to track group spending" styleClass="placeholder-subtext"/>
                     </VBox>
                 </VBox>
-            </children>
-        </StackPane>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>
+

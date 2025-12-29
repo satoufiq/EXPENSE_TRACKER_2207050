@@ -108,7 +108,8 @@ public class InviteService {
             if (rs.next()) {
                 String groupId = rs.getString(1);
                 String inviteeId = rs.getString(2);
-                String add = "INSERT INTO GROUP_MEMBERS (group_id, user_id) VALUES (?, ?)";
+                // Add as regular member (not admin)
+                String add = "INSERT INTO GROUP_MEMBERS (group_id, user_id, member_role, joined_at) VALUES (?, ?, 'member', datetime('now'))";
                 try (PreparedStatement ad = conn.prepareStatement(add)) {
                     ad.setString(1, groupId);
                     ad.setString(2, inviteeId);
@@ -137,6 +138,25 @@ public class InviteService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Check if there's a pending invite for a user to a group
+     */
+    public static boolean hasPendingGroupInvite(String groupId, String userId) {
+        String sql = "SELECT COUNT(*) FROM GROUP_INVITES WHERE group_id = ? AND invitee_id = ? AND status = 'pending'";
+        try (Connection conn = DatabaseHelper.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, groupId);
+            ps.setString(2, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            System.err.println("Error checking pending invite: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static List<String[]> getPendingGroupInvitesForUser(String userId) {

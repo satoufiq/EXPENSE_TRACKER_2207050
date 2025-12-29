@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.controller.AddExpenseController"
+            fx:controller="org.example.controller.EditExpenseController"
             styleClass="root-pane"
             stylesheets="@../css/styles.css"
             prefWidth="500"
@@ -16,9 +16,9 @@
                         <Insets top="30" right="40" bottom="30" left="40"/>
                     </padding>
                     <VBox spacing="5" alignment="CENTER">
-                        <Label text="💰" style="-fx-font-size: 48px;"/>
-                        <Label text="Add New Expense" styleClass="dashboard-title"/>
-                        <Label text="Track your spending" styleClass="dashboard-subtitle"/>
+                        <Label text="✏️" style="-fx-font-size: 48px;"/>
+                        <Label fx:id="titleLabel" text="Edit Expense" styleClass="dashboard-title"/>
+                        <Label text="Update expense details" styleClass="dashboard-subtitle"/>
                     </VBox>
                     <Separator/>
                     <VBox spacing="20" styleClass="form-container">
@@ -74,7 +74,7 @@
                                 <Insets top="20"/>
                             </padding>
                             <Button fx:id="saveButton"
-                                   text="💾 Save Expense"
+                                   text="💾 Update Expense"
                                    onAction="#handleSave"
                                    styleClass="primary-button"
                                    prefWidth="180"

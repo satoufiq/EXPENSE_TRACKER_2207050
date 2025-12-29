@@ -1,132 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<?import javafx.scene.chart.*?>
+<BorderPane prefHeight="850.0" prefWidth="1200.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.controller.GroupVisualAnalyticsController"
-            prefHeight="800.0" prefWidth="1400.0"
-            styleClass="root-pane">
-
+            fx:controller="org.example.controller.GroupVisualAnalyticsController">
     <center>
-        <StackPane>
-            <children>
-                <!-- Background -->
-                <StackPane styleClass="background-container">
-                    <children>
-                        <StackPane styleClass="background-shape shape-1"/>
-                        <StackPane styleClass="background-shape shape-2"/>
-                        <StackPane styleClass="background-overlay"/>
-                    </children>
-                </StackPane>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+            <VBox spacing="20.0" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                </padding>
 
-                <!-- Main Content -->
-                <ScrollPane fitToWidth="true" styleClass="scroll-pane" hbarPolicy="NEVER">
-                    <VBox spacing="30.0">
-                        <padding>
-                            <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
-                        </padding>
-
-                        <!-- Header -->
-                        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="visual-header">
-                            <padding>
-                                <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
-                            </padding>
-                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                <Label fx:id="titleLabel" text="📊 Group Visual Analytics" styleClass="visual-title"/>
-                                <Label fx:id="subtitleLabel" text="Interactive charts and comparisons" styleClass="visual-subtitle"/>
-                            </VBox>
-                            <Button fx:id="backButton" text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0" prefWidth="100.0"/>
-                        </HBox>
-
-                        <!-- Charts Grid -->
-                        <GridPane hgap="20.0" vgap="20.0">
-                            <columnConstraints>
-                                <ColumnConstraints percentWidth="50.0"/>
-                                <ColumnConstraints percentWidth="50.0"/>
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="350.0"/>
-                                <RowConstraints minHeight="350.0"/>
-                            </rowConstraints>
-
-                            <!-- Chart 1: Category by Member -->
-                            <VBox spacing="15.0" styleClass="glass-container-elevated" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                <padding>
-                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-                                </padding>
-                                <Label text="📊 Category Spending by Member" styleClass="section-title"/>
-                                <BarChart fx:id="categoryChart" legendVisible="true" VBox.vgrow="ALWAYS">
-                                    <xAxis>
-                                        <CategoryAxis label="Category"/>
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis label="Amount (৳)"/>
-                                    </yAxis>
-                                </BarChart>
-                            </VBox>
-
-                            <!-- Chart 2: Daily Trend -->
-                            <VBox spacing="15.0" styleClass="glass-container-elevated" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                <padding>
-                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-                                </padding>
-                                <Label text="📈 Daily Spending Trend" styleClass="section-title"/>
-                                <LineChart fx:id="trendChart" legendVisible="true" VBox.vgrow="ALWAYS">
-                                    <xAxis>
-                                        <CategoryAxis label="Date"/>
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis label="Amount (৳)"/>
-                                    </yAxis>
-                                </LineChart>
-                            </VBox>
-
-                            <!-- Chart 3: Top Members -->
-                            <VBox spacing="15.0" styleClass="glass-container-elevated" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                <padding>
-                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-                                </padding>
-                                <Label text="🏆 Top Spending Members" styleClass="section-title"/>
-                                <BarChart fx:id="topMembersChart" legendVisible="false" VBox.vgrow="ALWAYS">
-                                    <xAxis>
-                                        <NumberAxis label="Amount (৳)"/>
-                                    </xAxis>
-                                    <yAxis>
-                                        <CategoryAxis label="Member"/>
-                                    </yAxis>
-                                </BarChart>
-                            </VBox>
-
-                            <!-- Chart 4: Member Comparison -->
-                            <VBox spacing="15.0" styleClass="glass-container-elevated" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                <padding>
-                                    <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-                                </padding>
-                                <Label text="🤝 Compare Two Members" styleClass="section-title"/>
-                                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                                    <ComboBox fx:id="member1Combo" promptText="Member 1" prefWidth="200.0"/>
-                                    <Label text="vs"/>
-                                    <ComboBox fx:id="member2Combo" promptText="Member 2" prefWidth="200.0"/>
-                                    <Button text="Compare" onAction="#handleCompare" styleClass="primary-button"/>
-                                </HBox>
-                                <BarChart fx:id="compareChart" legendVisible="true" VBox.vgrow="ALWAYS">
-                                    <xAxis>
-                                        <CategoryAxis label="Category"/>
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis label="Amount (৳)"/>
-                                    </yAxis>
-                                </BarChart>
-                            </VBox>
-                        </GridPane>
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="visual-header">
+                    <padding>
+                        <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                    </padding>
+                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="titleLabel" text="📊 Group Visual Analytics" styleClass="visual-title"/>
+                        <Label fx:id="subtitleLabel" text="Comprehensive Charts &amp; Member Insights" styleClass="visual-subtitle"/>
                     </VBox>
-                </ScrollPane>
-            </children>
-        </StackPane>
+                    <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                        <ComboBox fx:id="timeRangeCombo" styleClass="modern-combo" prefWidth="150.0" promptText="Time Range"/>
+                        <Button text="⚖️ Compare" onAction="#handleCompareMembers" styleClass="primary-button" prefHeight="40.0" prefWidth="130.0"/>
+                        <Button fx:id="backButton" text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0" prefWidth="100.0"/>
+                    </HBox>
+                </HBox>
+
+                <!-- Summary Stats -->
+                <HBox spacing="15.0" alignment="CENTER">
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="180.0" prefHeight="100.0">
+                        <Label text="💰" style="-fx-font-size: 28px;"/>
+                        <Label text="Group Total" styleClass="stat-label"/>
+                        <Label fx:id="totalSpentLabel" text="৳0.00" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="180.0" prefHeight="100.0">
+                        <Label text="📅" style="-fx-font-size: 28px;"/>
+                        <Label text="This Month" styleClass="stat-label"/>
+                        <Label fx:id="monthTotalLabel" text="৳0.00" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="180.0" prefHeight="100.0">
+                        <Label text="👥" style="-fx-font-size: 28px;"/>
+                        <Label text="Members" styleClass="stat-label"/>
+                        <Label fx:id="memberCountLabel" text="0" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="180.0" prefHeight="100.0">
+                        <Label text="👤" style="-fx-font-size: 28px;"/>
+                        <Label text="Avg/Member" styleClass="stat-label"/>
+                        <Label fx:id="avgPerMemberLabel" text="৳0.00" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="180.0" prefHeight="100.0">
+                        <Label text="📊" style="-fx-font-size: 28px;"/>
+                        <Label text="Transactions" styleClass="stat-label"/>
+                        <Label fx:id="transactionCountLabel" text="0" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Charts Row 1: Pie + Member Bar -->
+                <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                    <VBox spacing="10.0" styleClass="glass-container-elevated" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                        </padding>
+                        <Label text="🥧 Category Distribution" styleClass="section-title"/>
+                        <PieChart fx:id="categoryPieChart" prefHeight="280.0" legendVisible="true" labelsVisible="true"/>
+                    </VBox>
+                    <VBox spacing="10.0" styleClass="glass-container-elevated" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                        </padding>
+                        <Label text="👥 Member Spending Comparison" styleClass="section-title"/>
+                        <BarChart fx:id="memberBarChart" prefHeight="280.0" legendVisible="false">
+                            <xAxis>
+                                <CategoryAxis label="Member" side="BOTTOM"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Amount (৳)" side="LEFT"/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                </HBox>
+
+                <!-- Charts Row 2: Line (Full Width) -->
+                <VBox spacing="10.0" styleClass="glass-container-elevated">
+                    <padding>
+                        <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                    </padding>
+                    <Label text="📈 Group Spending Trend" styleClass="section-title"/>
+                    <LineChart fx:id="trendLineChart" prefHeight="250.0" legendVisible="true">
+                        <xAxis>
+                            <CategoryAxis label="Date" side="BOTTOM"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Amount (৳)" side="LEFT"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- Charts Row 3: Category Bar + Member Pie -->
+                <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                    <VBox spacing="10.0" styleClass="glass-container-elevated" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                        </padding>
+                        <Label text="📊 Category Breakdown" styleClass="section-title"/>
+                        <BarChart fx:id="categoryBarChart" prefHeight="250.0" legendVisible="false">
+                            <xAxis>
+                                <CategoryAxis label="Category" side="BOTTOM"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Amount (৳)" side="LEFT"/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                    <VBox spacing="10.0" styleClass="glass-container-elevated" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                        </padding>
+                        <Label text="🥧 Member Contribution Share" styleClass="section-title"/>
+                        <PieChart fx:id="memberPieChart" prefHeight="250.0" legendVisible="true" labelsVisible="true"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Charts Row 4: Stacked Bar for Member Category Breakdown -->
+                <VBox spacing="10.0" styleClass="glass-container-elevated">
+                    <padding>
+                        <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                    </padding>
+                    <Label text="📊 Member Spending by Category" styleClass="section-title"/>
+                    <StackedBarChart fx:id="memberCategoryStackedChart" prefHeight="280.0" legendVisible="true">
+                        <xAxis>
+                            <CategoryAxis label="Member" side="BOTTOM"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Amount (৳)" side="LEFT"/>
+                        </yAxis>
+                    </StackedBarChart>
+                </VBox>
+
+                <!-- Day of Week Analysis -->
+                <VBox spacing="10.0" styleClass="glass-container-elevated">
+                    <padding>
+                        <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                    </padding>
+                    <Label text="📅 Day of Week Analysis" styleClass="section-title"/>
+                    <BarChart fx:id="dayOfWeekChart" prefHeight="200.0" legendVisible="false">
+                        <xAxis>
+                            <CategoryAxis label="Day" side="BOTTOM"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Amount (৳)" side="LEFT"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>
 

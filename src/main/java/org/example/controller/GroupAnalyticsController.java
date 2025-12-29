@@ -12,9 +12,6 @@ import org.example.service.UserService;
 import java.time.LocalDate;
 import java.util.*;
 
-/**
- * Group Analytics Controller
- */
 public class GroupAnalyticsController {
 
     @FXML private Label titleLabel;
@@ -30,7 +27,7 @@ public class GroupAnalyticsController {
 
     @FXML
     public void initialize() {
-        // waits for initWithGroup
+
     }
 
     public void initWithGroup(String groupId, String userId, String groupName) {
@@ -44,7 +41,7 @@ public class GroupAnalyticsController {
     private void loadData() {
         if (groupId == null) return;
         List<Expense> expenses = ExpenseService.getGroupExpensesObservable(groupId);
-        // totals
+
         double total = 0.0, monthTotal = 0.0;
         LocalDate now = LocalDate.now();
         Map<String, Double> categoryTotals = new HashMap<>();
@@ -68,7 +65,6 @@ public class GroupAnalyticsController {
         if (monthLabel != null) monthLabel.setText(String.format("৳%.2f", monthTotal));
         if (membersLabel != null) membersLabel.setText(String.valueOf(GroupService.getMemberCount(groupId)));
 
-        // pie chart
         if (categoryPieChart != null) {
             categoryPieChart.getData().clear();
             categoryTotals.entrySet().stream()
@@ -76,7 +72,6 @@ public class GroupAnalyticsController {
                 .forEach(en -> categoryPieChart.getData().add(new PieChart.Data(en.getKey(), en.getValue())));
         }
 
-        // member list
         if (memberSpendList != null) {
             List<String> items = new ArrayList<>();
             memberMonthTotals.entrySet().stream()
@@ -90,14 +85,15 @@ public class GroupAnalyticsController {
         }
     }
 
+
     @FXML
-    private void handleOpenVisualAnalytics() {
+    private void handleVisualAnalytics() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/group_visual_analytics.fxml"));
             javafx.scene.Parent root = loader.load();
-            Object controller = loader.getController();
+            GroupVisualAnalyticsController controller = loader.getController();
             if (controller != null) {
-                try { var m = controller.getClass().getMethod("initWithGroup", String.class, String.class, String.class); m.invoke(controller, groupId, userId, groupName);} catch (Exception ignored) {}
+                controller.initWithGroup(groupId, userId, groupName);
             }
             javafx.stage.Stage stage = (javafx.stage.Stage) titleLabel.getScene().getWindow();
             javafx.scene.Scene scene = new javafx.scene.Scene(root);
@@ -120,12 +116,6 @@ public class GroupAnalyticsController {
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) { e.printStackTrace(); }
-    }
-
-    @FXML
-    private void handlePrint() {
-        // Simple stub: could call PDFGeneratorService in future
-        org.example.util.AlertUtil.showInfo("Print", "Use Group Print Analysis to export detailed reports.");
     }
 
     @FXML

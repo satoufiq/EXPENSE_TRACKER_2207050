@@ -1,55 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<StackPane prefHeight="700.0" prefWidth="1200.0"
-           styleClass="root-pane"
-           stylesheets="@../css/styles.css"
-           xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.example.controller.AlertsController">
-    <children>
-        <StackPane styleClass="background-container">
-            <children>
-                <StackPane styleClass="background-shape shape-1"/>
-                <StackPane styleClass="background-shape shape-2"/>
-                <StackPane styleClass="background-overlay"/>
-            </children>
-        </StackPane>
-        <VBox alignment="TOP_LEFT" spacing="12.0"
-              prefHeight="700.0" prefWidth="1200.0">
-            <padding>
-                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-            </padding>
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Button fx:id="backButton" text="← Back" styleClass="secondary-button glass-button"/>
-                <Label text="Alerts &amp; Invitations" styleClass="app-title"/>
-            </HBox>
-            <Separator />
-            <HBox spacing="40.0" alignment="TOP_LEFT">
-                <VBox spacing="8.0" prefWidth="360.0">
-                    <Label text="Parent Invites" styleClass="section-title"/>
-                    <ListView fx:id="parentInvitesList" prefHeight="460.0"/>
-                    <HBox spacing="8.0">
-                        <Button fx:id="acceptParentInviteButton" text="Accept" disable="true" styleClass="primary-button glossy-button"/>
-                        <Button fx:id="declineParentInviteButton" text="Decline" disable="true" styleClass="secondary-button glass-button"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="8.0" prefWidth="360.0">
-                    <Label text="Group Invites" styleClass="section-title"/>
-                    <ListView fx:id="groupInvitesList" prefHeight="460.0"/>
-                    <HBox spacing="8.0">
-                        <Button fx:id="acceptGroupInviteButton" text="Accept" disable="true" styleClass="primary-button glossy-button"/>
-                        <Button fx:id="declineGroupInviteButton" text="Decline" disable="true" styleClass="secondary-button glass-button"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="8.0" prefWidth="360.0">
-                    <Label text="Financial Alerts" styleClass="section-title"/>
-                    <ListView fx:id="financialAlertsList" prefHeight="460.0"/>
-                    <HBox spacing="8.0">
-                        <Button fx:id="dismissAlertButton" text="Dismiss" disable="true" styleClass="secondary-button glass-button"/>
-                    </HBox>
-                </VBox>
-            </HBox>
-        </VBox>
-    </children>
-</StackPane>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.AlertsController"
+            prefHeight="700.0" prefWidth="1200.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css">
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
+            <VBox spacing="20.0">
+                <padding>
+                    <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                </padding>
+
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
+                    <padding>
+                        <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                    </padding>
+                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                        <Label text="🔔 Alerts and Invitations" styleClass="dashboard-title"/>
+                        <Label text="Manage your invites and notifications" styleClass="dashboard-subtitle"/>
+                    </VBox>
+                    <Button fx:id="backButton" text="← Back" styleClass="secondary-button" prefHeight="40.0" onAction="#handleBack"/>
+                </HBox>
+
+                <!-- Main Content - 3 Columns -->
+                <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                    <!-- Parent Invites Column -->
+                    <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="20.0" left="15.0" right="15.0" bottom="20.0"/>
+                        </padding>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <Label text="👨‍👧" style="-fx-font-size: 24px;"/>
+                            <Label text="Parent Invites" styleClass="section-title"/>
+                            <Label fx:id="parentInviteCountLabel" text="0" styleClass="alert-badge" visible="false" managed="false"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="350.0">
+                            <VBox fx:id="parentInvitesPane" spacing="10" styleClass="child-cards-container">
+                                <padding>
+                                    <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+                        <VBox fx:id="emptyParentPane" alignment="CENTER" spacing="10.0" visible="false" managed="false">
+                            <Label text="👨‍👧" style="-fx-font-size: 36px; opacity: 0.4;"/>
+                            <Label text="No parent invites" styleClass="placeholder-text" style="-fx-font-size: 13px;"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Group Invites Column -->
+                    <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="20.0" left="15.0" right="15.0" bottom="20.0"/>
+                        </padding>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <Label text="👥" style="-fx-font-size: 24px;"/>
+                            <Label text="Group Invites" styleClass="section-title"/>
+                            <Label fx:id="groupInviteCountLabel" text="0" styleClass="alert-badge" visible="false" managed="false"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="350.0">
+                            <VBox fx:id="groupInvitesPane" spacing="10" styleClass="child-cards-container">
+                                <padding>
+                                    <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+                        <VBox fx:id="emptyGroupPane" alignment="CENTER" spacing="10.0" visible="false" managed="false">
+                            <Label text="👥" style="-fx-font-size: 36px; opacity: 0.4;"/>
+                            <Label text="No group invites" styleClass="placeholder-text" style="-fx-font-size: 13px;"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Messages Column -->
+                    <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="20.0" left="15.0" right="15.0" bottom="20.0"/>
+                        </padding>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <Label text="💬" style="-fx-font-size: 24px;"/>
+                            <Label text="Messages" styleClass="section-title"/>
+                            <Label fx:id="alertCountLabel" text="0" styleClass="alert-badge" visible="false" managed="false"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="350.0">
+                            <VBox fx:id="financialAlertsPane" spacing="10" styleClass="child-cards-container">
+                                <padding>
+                                    <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+                        <VBox fx:id="emptyAlertsPane" alignment="CENTER" spacing="10.0" visible="false" managed="false">
+                            <Label text="💬" style="-fx-font-size: 36px; opacity: 0.4;"/>
+                            <Label text="No messages" styleClass="placeholder-text" style="-fx-font-size: 13px;"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
+

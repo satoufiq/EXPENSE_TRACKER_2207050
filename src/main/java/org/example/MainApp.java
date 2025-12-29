@@ -8,10 +8,6 @@ import javafx.stage.Stage;
 import org.example.service.DatabaseHelper;
 import org.example.util.SessionManager;
 
-/**
- * Main JavaFX Application Class
- * Initializes the database and launches the home screen
- */
 public class MainApp extends Application {
 
     private static Stage primaryStage;
@@ -24,18 +20,9 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
 
-        // Initialize thread pools
-        org.example.util.ThreadPoolManager.getInstance();
+        DatabaseHelper.initialize();
+        System.out.println("Database initialization complete");
 
-        // Initialize database asynchronously
-        org.example.util.ThreadPoolManager.getInstance().executeDatabase(() -> {
-            DatabaseHelper.initialize();
-            return null;
-        }).thenRun(() -> {
-            System.out.println("Database initialization complete");
-        });
-
-        // Load home screen
         loadHome();
 
         primaryStage.setTitle("Expense Tracker");
@@ -47,9 +34,6 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
-    /**
-     * Load the home screen
-     */
     public static void loadHome() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/home.fxml"));
@@ -62,9 +46,6 @@ public class MainApp extends Application {
         }
     }
 
-    /**
-     * Load login screen
-     */
     public static void loadLogin() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/login.fxml"));
@@ -77,9 +58,6 @@ public class MainApp extends Application {
         }
     }
 
-    /**
-     * Load register screen
-     */
     public static void loadRegister() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/register.fxml"));
@@ -92,9 +70,6 @@ public class MainApp extends Application {
         }
     }
 
-    /**
-     * Load mode selection screen (Personal/Group/Parent)
-     */
     public static void loadModeSelection() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/mode_selection.fxml"));
@@ -107,18 +82,13 @@ public class MainApp extends Application {
         }
     }
 
-    /**
-     * Get the primary stage
-     */
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
 
     @Override
     public void stop() {
-        // Cleanup when application closes
         SessionManager.clearSession();
-        org.example.util.ThreadPoolManager.getInstance().shutdown();
         System.out.println("Application closed");
     }
 }

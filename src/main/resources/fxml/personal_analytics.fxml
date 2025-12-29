@@ -1,49 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.chart.*?>
-
 <BorderPane prefHeight="700.0" prefWidth="1200.0"
             styleClass="root-pane"
             stylesheets="@../css/styles.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.controller.PersonalAnalyticsController">
-
     <center>
-        <StackPane>
-            <children>
-                <StackPane styleClass="background-container">
-                    <children>
-                        <StackPane styleClass="background-shape shape-1"/>
-                        <StackPane styleClass="background-shape shape-2"/>
-                        <StackPane styleClass="background-overlay"/>
-                    </children>
-                </StackPane>
-
-                <VBox spacing="20.0" alignment="TOP_CENTER">
+        <VBox spacing="20.0" alignment="TOP_CENTER">
                     <padding>
                         <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                     </padding>
-
-                    <!-- Header -->
                     <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                         <padding>
                             <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
                         </padding>
-
                         <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                             <Label text="📊 Personal Analytics"
                                    styleClass="dashboard-title"/>
                             <Label text="Insights &amp; Budget Management"
                                    styleClass="dashboard-subtitle"/>
                         </VBox>
-
                         <HBox spacing="15.0" alignment="CENTER_RIGHT">
-                            <Button fx:id="visualButton"
-                                    styleClass="glass-button"
+                            <Button styleClass="primary-button"
                                     text="📊 Visual Charts"
                                     prefHeight="40.0"
                                     prefWidth="150.0"
@@ -62,8 +44,6 @@
                                     onAction="#handleBack"/>
                         </HBox>
                     </HBox>
-
-                    <!-- Stats Cards Row -->
                     <HBox spacing="20.0" alignment="CENTER">
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
@@ -80,7 +60,6 @@
                                    text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
-
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
                               prefWidth="220.0"
@@ -96,7 +75,6 @@
                                    text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
-
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
                               prefWidth="220.0"
@@ -112,7 +90,6 @@
                                    text="৳0.00"
                                    styleClass="stat-value"/>
                         </VBox>
-
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
                               prefWidth="220.0"
@@ -129,7 +106,6 @@
                                    styleClass="stat-value"
                                    style="-fx-font-size: 18px;"/>
                         </VBox>
-
                         <VBox alignment="CENTER" spacing="10.0"
                               styleClass="stat-card"
                               prefWidth="220.0"
@@ -147,12 +123,8 @@
                                    style="-fx-font-size: 14px;"/>
                         </VBox>
                     </HBox>
-
-                    <!-- Main Content Area -->
                     <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-                        <!-- Left Column: Charts -->
                         <VBox spacing="15.0" HBox.hgrow="ALWAYS">
-                            <!-- Pie Chart -->
                             <VBox spacing="10.0" styleClass="chart-container">
                                 <padding>
                                     <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
@@ -165,8 +137,6 @@
                                          labelsVisible="true"
                                          styleClass="modern-chart"/>
                             </VBox>
-
-                            <!-- Line Chart -->
                             <VBox spacing="10.0" styleClass="chart-container" VBox.vgrow="ALWAYS">
                                 <padding>
                                     <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
@@ -186,10 +156,7 @@
                                 </LineChart>
                             </VBox>
                         </VBox>
-
-                        <!-- Right Column: Lists -->
                         <VBox spacing="15.0" prefWidth="350.0">
-                            <!-- Category Breakdown -->
                             <VBox spacing="10.0" styleClass="list-container">
                                 <padding>
                                     <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
@@ -200,8 +167,6 @@
                                          prefHeight="200.0"
                                          styleClass="modern-list"/>
                             </VBox>
-
-                            <!-- AI Suggestions -->
                             <VBox spacing="10.0" styleClass="list-container" VBox.vgrow="ALWAYS">
                                 <padding>
                                     <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
@@ -215,7 +180,5 @@
                         </VBox>
                     </HBox>
                 </VBox>
-            </children>
-        </StackPane>
     </center>
 </BorderPane>

@@ -1,52 +1,62 @@
 package org.example.controller;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.scene.chart.*;
+import javafx.scene.control.*;
 import org.example.model.Expense;
 import org.example.service.ExpenseService;
+import org.example.service.GroupService;
 import org.example.service.UserService;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
+/**
+ * Controller for Group Visual Analytics Dashboard
+ * Provides comprehensive charts and visualizations for group expense data
+ */
 public class GroupVisualAnalyticsController {
 
     @FXML private Label titleLabel;
     @FXML private Label subtitleLabel;
+    @FXML private ComboBox<String> timeRangeCombo;
     @FXML private Button backButton;
 
-    @FXML private BarChart<String, Number> categoryChart;
-    @FXML private LineChart<String, Number> trendChart;
-    @FXML private BarChart<Number, String> topMembersChart;
-    @FXML private BarChart<String, Number> compareChart;
+    // Summary Labels
+    @FXML private Label totalSpentLabel;
+    @FXML private Label monthTotalLabel;
+    @FXML private Label memberCountLabel;
+    @FXML private Label avgPerMemberLabel;
+    @FXML private Label transactionCountLabel;
 
-    @FXML private ComboBox<String> member1Combo;
-    @FXML private ComboBox<String> member2Combo;
+    // Charts
+    @FXML private PieChart categoryPieChart;
+    @FXML private BarChart<String, Number> memberBarChart;
+    @FXML private LineChart<String, Number> trendLineChart;
+    @FXML private BarChart<String, Number> categoryBarChart;
+    @FXML private PieChart memberPieChart;
+    @FXML private StackedBarChart<String, Number> memberCategoryStackedChart;
+    @FXML private BarChart<String, Number> dayOfWeekChart;
 
     private String groupId;
     private String userId;
     private String groupName;
+    private List<Expense> allExpenses;
+    private int selectedDays = 30;
+    private Map<String, String> userIdToName = new HashMap<>();
 
     @FXML
     public void initialize() {
-        // Initialize combo boxes and charts
-        if (member1Combo != null) {
-            member1Combo.setItems(FXCollections.observableArrayList());
-        }
-        if (member2Combo != null) {
-            member2Combo.setItems(FXCollections.observableArrayList());
-        }
+        // Setup time range combo
+        timeRangeCombo.setItems(FXCollections.observableArrayList(
+            "Last 7 Days", "Last 30 Days", "Last 90 Days", "This Year", "All Time"
+        ));
+        timeRangeCombo.setValue("Last 30 Days");
+        timeRangeCombo.setOnAction(e -> onTimeRangeChanged());
     }
 
     public void initWithGroup(String groupId, String userId, String groupName) {
@@ -54,268 +64,358 @@ public class GroupVisualAnalyticsController {
         this.userId = userId;
         this.groupName = groupName;
 
-        if (titleLabel != null && groupName != null) {
-            titleLabel.setText("📊 Visual Analytics — " + groupName);
+        if (titleLabel != null) {
+            titleLabel.setText("📊 Group Visual Analytics - " + groupName);
         }
 
+        // Load member names
+        loadMemberNames();
+        loadData();
+    }
+
+    private void loadMemberNames() {
+        var members = GroupService.getGroupMembersWithDetails(groupId);
+        for (var member : members) {
+            userIdToName.put(member.getUserId(), member.getName());
+        }
+    }
+
+    private String getMemberName(String memberId) {
+        if (userIdToName.containsKey(memberId)) {
+            return userIdToName.get(memberId);
+        }
+        var user = UserService.getUserById(memberId);
+        if (user != null) {
+            userIdToName.put(memberId, user.getName());
+            return user.getName();
+        }
+        return memberId;
+    }
+
+    private void onTimeRangeChanged() {
+        String selected = timeRangeCombo.getValue();
+        switch (selected) {
+            case "Last 7 Days": selectedDays = 7; break;
+            case "Last 30 Days": selectedDays = 30; break;
+            case "Last 90 Days": selectedDays = 90; break;
+            case "This Year": selectedDays = 365; break;
+            case "All Time": selectedDays = Integer.MAX_VALUE; break;
+            default: selectedDays = 30;
+        }
         loadData();
     }
 
     private void loadData() {
-        if (groupId == null || groupId.isEmpty()) {
-            return;
-        }
+        if (groupId == null) return;
 
-        try {
-            List<Expense> expenses = ExpenseService.getGroupExpensesObservable(groupId);
+        allExpenses = ExpenseService.getGroupExpensesObservable(groupId);
 
-            // Get member names for combo boxes
-            Set<String> memberIds = new HashSet<>();
-            for (Expense e : expenses) {
-                if (e.getUserId() != null && !e.getUserId().isEmpty()) {
-                    memberIds.add(e.getUserId());
+        // Filter by date range
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = selectedDays == Integer.MAX_VALUE ?
+            LocalDate.MIN : today.minusDays(selectedDays - 1);
+
+        List<Expense> filteredExpenses = allExpenses.stream()
+            .filter(e -> {
+                try {
+                    LocalDate date = LocalDate.parse(e.getDate());
+                    return !date.isBefore(startDate) && !date.isAfter(today);
+                } catch (Exception ex) {
+                    return false;
                 }
-            }
+            })
+            .collect(Collectors.toList());
 
-            List<String> memberNames = new ArrayList<>();
-            for (String memberId : memberIds) {
-                var user = UserService.getUserById(memberId);
-                if (user != null) {
-                    memberNames.add(user.getName() + " (" + memberId + ")");
-                }
-            }
-
-            if (member1Combo != null) {
-                member1Combo.setItems(FXCollections.observableArrayList(memberNames));
-            }
-            if (member2Combo != null) {
-                member2Combo.setItems(FXCollections.observableArrayList(memberNames));
-            }
-
-            // Load charts
-            loadCategoryChart(expenses);
-            loadTrendChart(expenses);
-            loadTopMembersChart(expenses);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        updateSummaryStats(filteredExpenses);
+        updateCategoryPieChart(filteredExpenses);
+        updateMemberBarChart(filteredExpenses);
+        updateTrendLineChart(filteredExpenses, startDate, today);
+        updateCategoryBarChart(filteredExpenses);
+        updateMemberPieChart(filteredExpenses);
+        updateMemberCategoryStackedChart(filteredExpenses);
+        updateDayOfWeekChart(filteredExpenses);
     }
 
-    private void loadCategoryChart(List<Expense> expenses) {
-        if (categoryChart == null) return;
+    private void updateSummaryStats(List<Expense> expenses) {
+        double total = expenses.stream().mapToDouble(Expense::getAmount).sum();
+        int transactionCount = expenses.size();
 
-        try {
-            categoryChart.getData().clear();
-
-            LocalDate now = LocalDate.now();
-            LocalDate monthStart = now.withDayOfMonth(1);
-
-            Map<String, Map<String, Double>> memberCategoryMap = new HashMap<>();
-
-            for (Expense expense : expenses) {
+        // This month total
+        LocalDate now = LocalDate.now();
+        double monthTotal = expenses.stream()
+            .filter(e -> {
                 try {
-                    LocalDate expenseDate = LocalDate.parse(expense.getDate());
-                    if (!expenseDate.isBefore(monthStart) && !expenseDate.isAfter(now)) {
-                        String memberId = expense.getUserId() != null ? expense.getUserId() : "Unknown";
-                        String category = expense.getCategory() != null ? expense.getCategory() : "Other";
-
-                        memberCategoryMap.putIfAbsent(memberId, new HashMap<>());
-                        memberCategoryMap.get(memberId).merge(category, expense.getAmount(), Double::sum);
-                    }
-                } catch (Exception ignored) {}
-            }
-
-            for (Map.Entry<String, Map<String, Double>> entry : memberCategoryMap.entrySet()) {
-                String memberId = entry.getKey();
-                var user = UserService.getUserById(memberId);
-                String memberName = user != null ? user.getName() : memberId;
-
-                XYChart.Series<String, Number> series = new XYChart.Series<>();
-                series.setName(memberName);
-
-                for (Map.Entry<String, Double> catEntry : entry.getValue().entrySet()) {
-                    series.getData().add(new XYChart.Data<>(catEntry.getKey(), catEntry.getValue()));
+                    LocalDate date = LocalDate.parse(e.getDate());
+                    return date.getYear() == now.getYear() && date.getMonth() == now.getMonth();
+                } catch (Exception ex) {
+                    return false;
                 }
+            })
+            .mapToDouble(Expense::getAmount)
+            .sum();
 
-                categoryChart.getData().add(series);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        int memberCount = GroupService.getMemberCount(groupId);
+        double avgPerMember = memberCount > 0 ? total / memberCount : 0;
+
+        totalSpentLabel.setText(String.format("৳%.2f", total));
+        monthTotalLabel.setText(String.format("৳%.2f", monthTotal));
+        memberCountLabel.setText(String.valueOf(memberCount));
+        avgPerMemberLabel.setText(String.format("৳%.2f", avgPerMember));
+        transactionCountLabel.setText(String.valueOf(transactionCount));
     }
 
-    private void loadTrendChart(List<Expense> expenses) {
-        if (trendChart == null) return;
+    private void updateCategoryPieChart(List<Expense> expenses) {
+        categoryPieChart.getData().clear();
 
-        try {
-            trendChart.getData().clear();
+        Map<String, Double> categoryTotals = expenses.stream()
+            .collect(Collectors.groupingBy(
+                e -> Optional.ofNullable(e.getCategory()).orElse("Other"),
+                Collectors.summingDouble(Expense::getAmount)
+            ));
 
-            LocalDate today = LocalDate.now();
-            LocalDate startDate = today.minusDays(29);
+        categoryTotals.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .limit(8)
+            .forEach(entry -> {
+                PieChart.Data slice = new PieChart.Data(
+                    entry.getKey() + " (৳" + String.format("%.0f", entry.getValue()) + ")",
+                    entry.getValue()
+                );
+                categoryPieChart.getData().add(slice);
+            });
+    }
 
-            Map<LocalDate, Double> dailyTotals = new TreeMap<>();
-            for (int i = 0; i < 30; i++) {
-                dailyTotals.put(startDate.plusDays(i), 0.0);
+    private void updateMemberBarChart(List<Expense> expenses) {
+        memberBarChart.getData().clear();
+
+        Map<String, Double> memberTotals = expenses.stream()
+            .filter(e -> e.getUserId() != null)
+            .collect(Collectors.groupingBy(
+                Expense::getUserId,
+                Collectors.summingDouble(Expense::getAmount)
+            ));
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Spending");
+
+        memberTotals.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .forEach(entry -> {
+                series.getData().add(new XYChart.Data<>(
+                    getMemberName(entry.getKey()),
+                    entry.getValue()
+                ));
+            });
+
+        memberBarChart.getData().add(series);
+    }
+
+    private void updateTrendLineChart(List<Expense> expenses, LocalDate startDate, LocalDate endDate) {
+        trendLineChart.getData().clear();
+
+        // Group expenses by member and date
+        Map<String, Map<LocalDate, Double>> memberDailyTotals = new HashMap<>();
+
+        for (Expense e : expenses) {
+            try {
+                LocalDate date = LocalDate.parse(e.getDate());
+                String memberId = e.getUserId();
+                if (memberId == null) continue;
+
+                memberDailyTotals
+                    .computeIfAbsent(memberId, k -> new TreeMap<>())
+                    .merge(date, e.getAmount(), Double::sum);
+            } catch (Exception ignored) {}
+        }
+
+        // Also create group total line
+        Map<LocalDate, Double> groupDailyTotals = new TreeMap<>();
+        LocalDate current = startDate.isAfter(LocalDate.now().minusDays(365)) ? startDate : LocalDate.now().minusDays(365);
+        while (!current.isAfter(endDate)) {
+            groupDailyTotals.put(current, 0.0);
+            current = current.plusDays(1);
+        }
+
+        for (Expense e : expenses) {
+            try {
+                LocalDate date = LocalDate.parse(e.getDate());
+                groupDailyTotals.merge(date, e.getAmount(), Double::sum);
+            } catch (Exception ignored) {}
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
+        int skipFactor = Math.max(1, groupDailyTotals.size() / 15);
+
+        // Group total line
+        XYChart.Series<String, Number> groupSeries = new XYChart.Series<>();
+        groupSeries.setName("Group Total");
+
+        int i = 0;
+        for (Map.Entry<LocalDate, Double> entry : groupDailyTotals.entrySet()) {
+            if (i % skipFactor == 0 || i == groupDailyTotals.size() - 1) {
+                groupSeries.getData().add(new XYChart.Data<>(
+                    entry.getKey().format(formatter),
+                    entry.getValue()
+                ));
             }
+            i++;
+        }
 
-            for (Expense expense : expenses) {
-                try {
-                    LocalDate expenseDate = LocalDate.parse(expense.getDate());
-                    if (!expenseDate.isBefore(startDate) && !expenseDate.isAfter(today)) {
-                        dailyTotals.merge(expenseDate, expense.getAmount(), Double::sum);
-                    }
-                } catch (Exception ignored) {}
-            }
+        trendLineChart.getData().add(groupSeries);
+    }
 
+    private void updateCategoryBarChart(List<Expense> expenses) {
+        categoryBarChart.getData().clear();
+
+        Map<String, Double> categoryTotals = expenses.stream()
+            .collect(Collectors.groupingBy(
+                e -> Optional.ofNullable(e.getCategory()).orElse("Other"),
+                Collectors.summingDouble(Expense::getAmount)
+            ));
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Amount");
+
+        categoryTotals.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .limit(8)
+            .forEach(entry -> {
+                series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            });
+
+        categoryBarChart.getData().add(series);
+    }
+
+    private void updateMemberPieChart(List<Expense> expenses) {
+        memberPieChart.getData().clear();
+
+        Map<String, Double> memberTotals = expenses.stream()
+            .filter(e -> e.getUserId() != null)
+            .collect(Collectors.groupingBy(
+                Expense::getUserId,
+                Collectors.summingDouble(Expense::getAmount)
+            ));
+
+        double total = memberTotals.values().stream().mapToDouble(Double::doubleValue).sum();
+
+        memberTotals.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .forEach(entry -> {
+                double percent = total > 0 ? (entry.getValue() / total * 100) : 0;
+                PieChart.Data slice = new PieChart.Data(
+                    getMemberName(entry.getKey()) + " (" + String.format("%.1f%%", percent) + ")",
+                    entry.getValue()
+                );
+                memberPieChart.getData().add(slice);
+            });
+    }
+
+    private void updateMemberCategoryStackedChart(List<Expense> expenses) {
+        memberCategoryStackedChart.getData().clear();
+
+        // Group by category and member
+        Map<String, Map<String, Double>> categoryMemberTotals = new HashMap<>();
+        Set<String> allMembers = new HashSet<>();
+
+        for (Expense e : expenses) {
+            if (e.getUserId() == null) continue;
+            String category = Optional.ofNullable(e.getCategory()).orElse("Other");
+            String memberId = e.getUserId();
+
+            allMembers.add(memberId);
+            categoryMemberTotals
+                .computeIfAbsent(category, k -> new HashMap<>())
+                .merge(memberId, e.getAmount(), Double::sum);
+        }
+
+        // Get top categories
+        List<String> topCategories = categoryMemberTotals.entrySet().stream()
+            .sorted((a, b) -> Double.compare(
+                b.getValue().values().stream().mapToDouble(Double::doubleValue).sum(),
+                a.getValue().values().stream().mapToDouble(Double::doubleValue).sum()
+            ))
+            .limit(6)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+
+        // Create series for each category
+        for (String category : topCategories) {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Daily Total");
+            series.setName(category);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
-            int count = 0;
-            for (Map.Entry<LocalDate, Double> entry : dailyTotals.entrySet()) {
-                if (count % 5 == 0 || count == dailyTotals.size() - 1) {
-                    series.getData().add(new XYChart.Data<>(entry.getKey().format(formatter), entry.getValue()));
-                }
-                count++;
+            Map<String, Double> memberTotals = categoryMemberTotals.get(category);
+            for (String memberId : allMembers) {
+                double amount = memberTotals.getOrDefault(memberId, 0.0);
+                series.getData().add(new XYChart.Data<>(getMemberName(memberId), amount));
             }
 
-            trendChart.getData().add(series);
-        } catch (Exception e) {
-            e.printStackTrace();
+            memberCategoryStackedChart.getData().add(series);
         }
     }
 
-    private void loadTopMembersChart(List<Expense> expenses) {
-        if (topMembersChart == null) return;
+    private void updateDayOfWeekChart(List<Expense> expenses) {
+        dayOfWeekChart.getData().clear();
 
-        try {
-            topMembersChart.getData().clear();
-
-            LocalDate now = LocalDate.now();
-            LocalDate monthStart = now.withDayOfMonth(1);
-
-            Map<String, Double> memberTotals = new HashMap<>();
-
-            for (Expense expense : expenses) {
-                try {
-                    LocalDate expenseDate = LocalDate.parse(expense.getDate());
-                    if (!expenseDate.isBefore(monthStart) && !expenseDate.isAfter(now)) {
-                        String memberId = expense.getUserId() != null ? expense.getUserId() : "Unknown";
-                        memberTotals.merge(memberId, expense.getAmount(), Double::sum);
-                    }
-                } catch (Exception ignored) {}
-            }
-
-            List<Map.Entry<String, Double>> sortedMembers = new ArrayList<>(memberTotals.entrySet());
-            sortedMembers.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
-
-            XYChart.Series<Number, String> series = new XYChart.Series<>();
-            series.setName("Spending");
-
-            int limit = Math.min(5, sortedMembers.size());
-            for (int i = 0; i < limit; i++) {
-                Map.Entry<String, Double> entry = sortedMembers.get(i);
-                var user = UserService.getUserById(entry.getKey());
-                String memberName = user != null ? user.getName() : entry.getKey();
-                series.getData().add(new XYChart.Data<>(entry.getValue(), memberName));
-            }
-
-            topMembersChart.getData().add(series);
-        } catch (Exception e) {
-            e.printStackTrace();
+        Map<DayOfWeek, Double> dayTotals = new EnumMap<>(DayOfWeek.class);
+        for (DayOfWeek day : DayOfWeek.values()) {
+            dayTotals.put(day, 0.0);
         }
+
+        for (Expense e : expenses) {
+            try {
+                LocalDate date = LocalDate.parse(e.getDate());
+                dayTotals.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
+            } catch (Exception ignored) {}
+        }
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("By Day");
+
+        String[] dayNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        DayOfWeek[] days = {DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+                           DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY};
+
+        for (int i = 0; i < days.length; i++) {
+            series.getData().add(new XYChart.Data<>(dayNames[i], dayTotals.get(days[i])));
+        }
+
+        dayOfWeekChart.getData().add(series);
     }
 
     @FXML
-    private void handleCompare() {
-        if (compareChart == null || member1Combo == null || member2Combo == null) return;
-
-        String member1 = member1Combo.getValue();
-        String member2 = member2Combo.getValue();
-
-        if (member1 == null || member2 == null) {
-            return;
-        }
-
+    private void handleCompareMembers() {
         try {
-            String memberId1 = extractMemberId(member1);
-            String memberId2 = extractMemberId(member2);
-
-            List<Expense> expenses = ExpenseService.getGroupExpensesObservable(groupId);
-
-            LocalDate now = LocalDate.now();
-            LocalDate monthStart = now.withDayOfMonth(1);
-
-            Map<String, Double> member1Categories = new HashMap<>();
-            Map<String, Double> member2Categories = new HashMap<>();
-
-            for (Expense expense : expenses) {
-                try {
-                    LocalDate expenseDate = LocalDate.parse(expense.getDate());
-                    if (!expenseDate.isBefore(monthStart) && !expenseDate.isAfter(now)) {
-                        String category = expense.getCategory() != null ? expense.getCategory() : "Other";
-
-                        if (memberId1.equals(expense.getUserId())) {
-                            member1Categories.merge(category, expense.getAmount(), Double::sum);
-                        }
-                        if (memberId2.equals(expense.getUserId())) {
-                            member2Categories.merge(category, expense.getAmount(), Double::sum);
-                        }
-                    }
-                } catch (Exception ignored) {}
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/group_compare_analytics.fxml"));
+            javafx.scene.Parent root = loader.load();
+            GroupCompareAnalyticsController controller = loader.getController();
+            if (controller != null) {
+                controller.initWithGroup(groupId, userId, groupName);
             }
-
-            compareChart.getData().clear();
-
-            XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-            var user1 = UserService.getUserById(memberId1);
-            series1.setName(user1 != null ? user1.getName() : memberId1);
-            for (Map.Entry<String, Double> entry : member1Categories.entrySet()) {
-                series1.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-            }
-
-            XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-            var user2 = UserService.getUserById(memberId2);
-            series2.setName(user2 != null ? user2.getName() : memberId2);
-            for (Map.Entry<String, Double> entry : member2Categories.entrySet()) {
-                series2.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-            }
-
-            compareChart.getData().add(series1);
-            compareChart.getData().add(series2);
-
+            javafx.stage.Stage stage = (javafx.stage.Stage) titleLabel.getScene().getWindow();
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private String extractMemberId(String comboValue) {
-        if (comboValue == null) return "";
-        int start = comboValue.lastIndexOf('(');
-        int end = comboValue.lastIndexOf(')');
-        if (start >= 0 && end > start) {
-            return comboValue.substring(start + 1, end);
-        }
-        return comboValue;
     }
 
     @FXML
     private void handleBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/group_dashboard.fxml"));
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/group_analytics.fxml"));
             javafx.scene.Parent root = loader.load();
-
             Object controller = loader.getController();
             if (controller != null) {
                 try {
-                    var method = controller.getClass().getMethod("initWithGroup", String.class, String.class, String.class);
-                    method.invoke(controller, groupId, userId, groupName);
+                    var m = controller.getClass().getMethod("initWithGroup", String.class, String.class, String.class);
+                    m.invoke(controller, groupId, userId, groupName);
                 } catch (Exception ignored) {}
             }
-
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            Scene scene = new Scene(root);
+            javafx.stage.Stage stage = (javafx.stage.Stage) titleLabel.getScene().getWindow();
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) {

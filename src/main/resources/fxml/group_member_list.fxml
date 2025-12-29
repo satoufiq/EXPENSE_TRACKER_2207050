@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,37 +6,22 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <BorderPane prefHeight="700.0" prefWidth="1200.0"
             styleClass="root-pane"
             stylesheets="@../css/styles.css"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.controller.GroupMemberListController">
-
     <center>
-        <StackPane>
-            <children>
-                <StackPane styleClass="background-container">
-                    <children>
-                        <StackPane styleClass="background-shape shape-1"/>
-                        <StackPane styleClass="background-shape shape-2"/>
-                        <StackPane styleClass="background-overlay"/>
-                    </children>
-                </StackPane>
-
-                <VBox spacing="20.0" alignment="TOP_CENTER">
+        <VBox spacing="20.0" alignment="TOP_CENTER">
                     <padding>
                         <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                     </padding>
-
                     <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                         <padding>
                             <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
                         </padding>
-
                         <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                             <Label fx:id="groupNameLabel"
                                    styleClass="dashboard-title"
@@ -46,7 +30,6 @@
                                    styleClass="dashboard-subtitle"
                                    text="0 members"/>
                         </VBox>
-
                         <HBox spacing="15.0" alignment="CENTER_RIGHT">
                             <Button fx:id="addMemberButton"
                                     styleClass="primary-button"
@@ -62,18 +45,15 @@
                                     onAction="#handleBack"/>
                         </HBox>
                     </HBox>
-
                     <VBox spacing="15.0" VBox.vgrow="ALWAYS">
                         <padding>
                             <Insets top="10.0"/>
                         </padding>
-
                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                             <Label text="All Members"
                                    styleClass="section-title"/>
                         </HBox>
-
-                        <StackPane styleClass="table-container" VBox.vgrow="ALWAYS">
+                        <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
                             <TableView fx:id="membersTable"
                                       styleClass="modern-table"
                                       prefHeight="500.0">
@@ -105,11 +85,8 @@
                                     </VBox>
                                 </placeholder>
                             </TableView>
-                        </StackPane>
+                        </VBox>
                     </VBox>
                 </VBox>
-            </children>
-        </StackPane>
     </center>
 </BorderPane>
-

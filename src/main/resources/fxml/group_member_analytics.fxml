@@ -1,100 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.controller.GroupMemberAnalyticsController"
-            prefHeight="800.0" prefWidth="1200.0"
-            styleClass="root-pane">
-
+            prefHeight="700.0" prefWidth="1200.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css">
     <center>
-        <StackPane>
-            <children>
-                <StackPane styleClass="background-container">
-                    <children>
-                        <StackPane styleClass="background-shape shape-1"/>
-                        <StackPane styleClass="background-shape shape-2"/>
-                        <StackPane styleClass="background-overlay"/>
-                    </children>
-                </StackPane>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
+            <VBox spacing="25.0">
+                <padding>
+                    <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                </padding>
 
-                <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
-                    <VBox spacing="25.0">
-                        <padding>
-                            <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
-                        </padding>
-
-                        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="visual-header">
-                            <padding>
-                                <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
-                            </padding>
-                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                <Label fx:id="titleLabel" text="👥 Member Analytics" styleClass="visual-title"/>
-                                <Label text="Member Spending Comparison" styleClass="visual-subtitle"/>
-                            </VBox>
-                            <HBox spacing="12.0" alignment="CENTER_RIGHT">
-                                <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0" prefWidth="100.0"/>
-                            </HBox>
-                        </HBox>
-
-                        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-                            <!-- Left: Ranking Table -->
-                            <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
-                                <padding>
-                                    <Insets top="25.0" left="25.0" right="25.0" bottom="25.0"/>
-                                </padding>
-                                <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                    <Label text="🏆" style="-fx-font-size: 28px;"/>
-                                    <Label text="Member Spending Ranking (This Month)" styleClass="section-title"/>
-                                </HBox>
-                                <TableView fx:id="rankingTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
-                                    <columns>
-                                        <TableColumn fx:id="nameColumn" text="Member" prefWidth="300.0"/>
-                                        <TableColumn fx:id="amountColumn" text="Amount (৳)" prefWidth="200.0"/>
-                                    </columns>
-                                    <placeholder>
-                                        <VBox alignment="CENTER" spacing="10.0">
-                                            <padding>
-                                                <Insets top="40.0" bottom="40.0"/>
-                                            </padding>
-                                            <Label text="📊" style="-fx-font-size: 48px; opacity: 0.4;"/>
-                                            <Label text="No member data yet" styleClass="placeholder-text"/>
-                                        </VBox>
-                                    </placeholder>
-                                </TableView>
-                            </VBox>
-
-                            <!-- Right: Tips and Suggestions -->
-                            <VBox spacing="20.0" prefWidth="400.0">
-                                <!-- Tips Section -->
-                                <VBox spacing="15.0" styleClass="glass-container-elevated">
-                                    <padding>
-                                        <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-                                    </padding>
-                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                        <Label text="💡" style="-fx-font-size: 24px;"/>
-                                        <Label text="Tips for Group Leaders" styleClass="section-title"/>
-                                    </HBox>
-                                    <ListView fx:id="tipsListView" prefHeight="200.0" styleClass="modern-list"/>
-                                </VBox>
-
-                                <!-- Suggestions Section -->
-                                <VBox spacing="15.0" styleClass="glass-container-elevated" VBox.vgrow="ALWAYS">
-                                    <padding>
-                                        <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-                                    </padding>
-                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                        <Label text="💰" style="-fx-font-size: 24px;"/>
-                                        <Label text="Group Spending Insights" styleClass="section-title"/>
-                                    </HBox>
-                                    <ListView fx:id="suggestionsListView" VBox.vgrow="ALWAYS" styleClass="modern-list"/>
-                                </VBox>
-                            </VBox>
-                        </HBox>
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
+                    <padding>
+                        <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                    </padding>
+                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="titleLabel" text="👥 Member Analytics" styleClass="dashboard-title"/>
+                        <Label text="Member Spending Rankings and Insights" styleClass="dashboard-subtitle"/>
                     </VBox>
-                </ScrollPane>
-            </children>
-        </StackPane>
+                    <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0"/>
+                </HBox>
+
+                <!-- Main Content -->
+                <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                    <!-- Member Ranking Cards -->
+                    <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                        </padding>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <Label text="🏆" style="-fx-font-size: 24px;"/>
+                            <Label text="Member Spending Ranking (This Month)" styleClass="section-title"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="400.0">
+                            <VBox fx:id="memberRankingPane" spacing="12" styleClass="child-cards-container">
+                                <padding>
+                                    <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+                        <VBox fx:id="emptyRankingPane" alignment="CENTER" spacing="10.0" visible="false" managed="false">
+                            <Label text="📊" style="-fx-font-size: 48px; opacity: 0.4;"/>
+                            <Label text="No expenses this month" styleClass="placeholder-text"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Right Column - Suggestions and Tips -->
+                    <VBox spacing="20.0" prefWidth="400.0">
+                        <!-- Smart Suggestions -->
+                        <VBox spacing="15.0" styleClass="glass-container-elevated" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                            </padding>
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <Label text="💡" style="-fx-font-size: 22px;"/>
+                                <Label text="Smart Suggestions" styleClass="section-title"/>
+                            </HBox>
+                            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="180.0">
+                                <VBox fx:id="suggestionsPane" spacing="10" styleClass="child-cards-container">
+                                    <padding>
+                                        <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                    </padding>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
+
+                        <!-- Group Management Tips -->
+                        <VBox spacing="15.0" styleClass="glass-container-elevated" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                            </padding>
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <Label text="📋" style="-fx-font-size: 22px;"/>
+                                <Label text="Group Management Tips" styleClass="section-title"/>
+                            </HBox>
+                            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="180.0">
+                                <VBox fx:id="tipsPane" spacing="10" styleClass="child-cards-container">
+                                    <padding>
+                                        <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                    </padding>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>
+

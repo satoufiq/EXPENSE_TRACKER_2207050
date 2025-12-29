@@ -1,46 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<StackPane prefHeight="700.0" prefWidth="1200.0"
-           styleClass="root-pane"
-           stylesheets="@../css/styles.css"
-           xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.example.controller.ParentDashboardController">
-    <children>
-        <StackPane styleClass="background-container">
-            <children>
-                <StackPane styleClass="background-shape shape-1"/>
-                <StackPane styleClass="background-shape shape-2"/>
-                <StackPane styleClass="background-overlay"/>
-            </children>
-        </StackPane>
-        <VBox alignment="TOP_LEFT" spacing="12.0"
-              prefHeight="700.0" prefWidth="1200.0">
-            <padding>
-                <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
-            </padding>
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Button fx:id="backButton" text="← Back" styleClass="secondary-button glass-button"/>
-                <Label fx:id="parentNameLabel" styleClass="app-title" text="Parent:"/>
-            </HBox>
-            <Separator />
-            <HBox spacing="20.0">
-                <VBox spacing="8.0" prefWidth="700.0">
-                    <Label text="Children" styleClass="section-title"/>
-                    <ListView fx:id="childrenListView" prefHeight="450.0"/>
-                    <HBox spacing="10.0">
-                        <Button fx:id="viewChildAnalyticsButton" text="View Child Analytics" disable="true" styleClass="primary-button glossy-button"/>
-                        <Button fx:id="viewChildExpensesButton" text="View Child Expenses" disable="true" styleClass="primary-button glossy-button"/>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.ParentDashboardController"
+            prefHeight="700.0" prefWidth="1200.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css">
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
+            <VBox spacing="20.0">
+                <padding>
+                    <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                </padding>
+
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
+                    <padding>
+                        <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                    </padding>
+                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="parentNameLabel" styleClass="dashboard-title" text="👨‍👧 Parent Dashboard"/>
+                        <Label text="Manage your children's expenses" styleClass="dashboard-subtitle"/>
+                    </VBox>
+                    <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                        <HBox fx:id="alertButtonContainer" alignment="CENTER" styleClass="alert-button-container">
+                            <Button fx:id="viewAlertsButton" text="🔔 Alerts" styleClass="alert-button" prefHeight="40.0" onAction="#handleViewAlerts"/>
+                            <Label fx:id="alertBadge" styleClass="alert-badge" text="0" visible="false" managed="false" translateX="-25" translateY="-15"/>
+                        </HBox>
+                        <Button fx:id="backButton" text="← Back" styleClass="secondary-button" prefHeight="40.0" onAction="#handleBack"/>
                     </HBox>
-                </VBox>
-                <VBox spacing="8.0" prefWidth="420.0">
-                    <Label text="Add Child" styleClass="section-title"/>
-                    <TextField fx:id="childEmailField" promptText="Enter child's email"/>
-                    <Button fx:id="sendChildInviteButton" text="Send Invite" styleClass="primary-button glossy-button"/>
-                    <Label wrapText="true" text="The child will receive an invite in Alerts and must accept to become your child."/>
-                </VBox>
-            </HBox>
-        </VBox>
-    </children>
-</StackPane>
+                </HBox>
+
+                <!-- Main Content -->
+                <HBox spacing="25.0" VBox.vgrow="ALWAYS">
+                    <!-- Children Section -->
+                    <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                        </padding>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <Label text="👶 My Children" styleClass="section-title"/>
+                            <Label fx:id="childCountLabel" text="0 children" styleClass="dashboard-subtitle"/>
+                        </HBox>
+
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="350.0">
+                            <VBox fx:id="childCardsPane" spacing="12" styleClass="child-cards-container">
+                                <padding>
+                                    <Insets top="5.0" left="5.0" right="5.0" bottom="5.0"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+
+                        <!-- Empty state -->
+                        <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="15.0" styleClass="empty-state-card" visible="false" managed="false">
+                            <Label text="👶" style="-fx-font-size: 48px;"/>
+                            <Label text="No children added yet" styleClass="placeholder-text"/>
+                            <Label text="Send an invite to add your child" styleClass="placeholder-subtext"/>
+                        </VBox>
+
+                        <!-- Action buttons -->
+                        <HBox spacing="15.0" alignment="CENTER_LEFT">
+                            <Button fx:id="viewChildAnalyticsButton" text="📊 View Analytics" disable="true" styleClass="primary-button" prefHeight="40.0" onAction="#handleViewChildAnalytics"/>
+                            <Button fx:id="viewChildExpensesButton" text="💰 View Expenses" disable="true" styleClass="glass-button" prefHeight="40.0" onAction="#handleViewChildExpenses"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Add Child Section -->
+                    <VBox spacing="20.0" prefWidth="350.0" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                        </padding>
+                        <Label text="➕ Add Child" styleClass="section-title"/>
+
+                        <VBox spacing="10.0">
+                            <Label text="Child's Email" styleClass="field-label"/>
+                            <TextField fx:id="childEmailField" promptText="Enter child's email" styleClass="modern-text-field" prefHeight="45.0"/>
+                        </VBox>
+
+                        <Button fx:id="sendChildInviteButton" text="📧 Send Invite" styleClass="primary-button" prefHeight="45.0" maxWidth="Infinity" onAction="#handleSendInvite"/>
+
+                        <Label wrapText="true" text="The child will receive an invite in their Alerts." styleClass="placeholder-subtext"/>
+
+                        <!-- Stats -->
+                        <VBox spacing="15.0" styleClass="stat-card">
+                            <padding>
+                                <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
+                            </padding>
+                            <HBox alignment="CENTER" spacing="10.0">
+                                <Label text="📊" style="-fx-font-size: 24px;"/>
+                                <VBox>
+                                    <Label text="Total Children" styleClass="stat-mini-label"/>
+                                    <Label fx:id="totalChildrenLabel" text="0" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
+
