@@ -181,8 +181,8 @@ public class GroupDashboardController {
         card.setMinWidth(340);
         card.setMaxWidth(340);
 
-        // Top row: Category badge, member, and date
-        HBox topRow = new HBox(8);
+        // Top row: Category badge and member name
+        HBox topRow = new HBox(10);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
         Label categoryBadge = new Label(getCategoryEmoji(expense.getCategory()) + " " + expense.getCategory());
@@ -193,22 +193,24 @@ public class GroupDashboardController {
         Label memberLabel = new Label("👤 " + memberName);
         memberLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 11px;");
 
+        topRow.getChildren().addAll(categoryBadge, memberLabel);
+
+        // Amount and date row
+        HBox amountRow = new HBox(15);
+        amountRow.setAlignment(Pos.CENTER_LEFT);
+
+        Label amountLabel = new Label(String.format("৳%.2f", expense.getAmount()));
+        amountLabel.getStyleClass().add("expense-amount");
+
         Label dateLabel = new Label("📅 " + expense.getDate());
         dateLabel.getStyleClass().add("expense-date");
 
-        topRow.getChildren().addAll(categoryBadge, memberLabel);
-
-        // Amount row
-        HBox amountRow = new HBox(10);
-        amountRow.setAlignment(Pos.CENTER_LEFT);
-        Label amountLabel = new Label(String.format("৳%.2f", expense.getAmount()));
-        amountLabel.getStyleClass().add("expense-amount");
         amountRow.getChildren().addAll(amountLabel, dateLabel);
 
         // Note
         String noteText = expense.getNote() != null && !expense.getNote().isEmpty()
             ? expense.getNote()
-            : "No description";
+            : "No note";
         Label noteLabel = new Label(noteText);
         noteLabel.getStyleClass().add("expense-note");
         noteLabel.setWrapText(true);
@@ -216,7 +218,7 @@ public class GroupDashboardController {
 
         // Action buttons
         HBox actionsRow = new HBox(10);
-        actionsRow.setAlignment(Pos.CENTER_RIGHT);
+        actionsRow.setAlignment(Pos.CENTER_LEFT);
 
         Button editBtn = new Button("✏️ Edit");
         editBtn.getStyleClass().addAll("card-action-button", "card-edit-button");

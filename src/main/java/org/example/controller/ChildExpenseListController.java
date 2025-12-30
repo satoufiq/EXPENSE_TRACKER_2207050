@@ -85,26 +85,31 @@ public class ChildExpenseListController {
         card.setMinWidth(320);
         card.setMaxWidth(320);
 
-        // Top row: Category badge and date
+        // Top row: Category badge
         HBox topRow = new HBox(10);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
         Label categoryBadge = new Label(getCategoryEmoji(expense.getCategory()) + " " + expense.getCategory());
         categoryBadge.getStyleClass().add("expense-category-badge");
 
+        topRow.getChildren().add(categoryBadge);
+
+        // Amount and date row
+        HBox amountRow = new HBox(15);
+        amountRow.setAlignment(Pos.CENTER_LEFT);
+
+        Label amountLabel = new Label(String.format("৳%.2f", expense.getAmount()));
+        amountLabel.getStyleClass().add("expense-amount");
+
         Label dateLabel = new Label("📅 " + expense.getDate());
         dateLabel.getStyleClass().add("expense-date");
 
-        topRow.getChildren().addAll(categoryBadge, dateLabel);
-
-        // Amount
-        Label amountLabel = new Label(String.format("৳%.2f", expense.getAmount()));
-        amountLabel.getStyleClass().add("expense-amount");
+        amountRow.getChildren().addAll(amountLabel, dateLabel);
 
         // Note
         String noteText = expense.getNote() != null && !expense.getNote().isEmpty()
             ? expense.getNote()
-            : "No description";
+            : "No note";
         Label noteLabel = new Label(noteText);
         noteLabel.getStyleClass().add("expense-note");
         noteLabel.setWrapText(true);
@@ -114,7 +119,7 @@ public class ChildExpenseListController {
         Label readOnlyLabel = new Label("👁️ Read-only");
         readOnlyLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 10px;");
 
-        card.getChildren().addAll(topRow, amountLabel, noteLabel, readOnlyLabel);
+        card.getChildren().addAll(topRow, amountRow, noteLabel, readOnlyLabel);
 
         return card;
     }

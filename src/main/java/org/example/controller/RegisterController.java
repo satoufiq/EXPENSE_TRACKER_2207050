@@ -56,12 +56,16 @@ public class RegisterController {
     private void updatePasswordStrength(String password) {
         int strength = calculatePasswordStrength(password);
 
-        // Reset all bars to default
+        // Reset all bars to default - using purple shades with MORE contrast
         String defaultStyle = "-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 2;";
-        String weakStyle = "-fx-background-color: #f44336; -fx-background-radius: 2;";
-        String fairStyle = "-fx-background-color: #ff9800; -fx-background-radius: 2;";
-        String goodStyle = "-fx-background-color: #ffeb3b; -fx-background-radius: 2;";
-        String strongStyle = "-fx-background-color: #4caf50; -fx-background-radius: 2;";
+        // Very light/pale purple for weak (almost transparent)
+        String weakStyle = "-fx-background-color: rgba(180, 160, 220, 0.5); -fx-background-radius: 2;";
+        // Light purple for fair
+        String fairStyle = "-fx-background-color: rgba(150, 120, 200, 0.7); -fx-background-radius: 2;";
+        // Medium-bold purple for good
+        String goodStyle = "-fx-background-color: rgba(120, 80, 180, 0.9); -fx-background-radius: 2;";
+        // Strong vibrant purple for strong
+        String strongStyle = "-fx-background-color: rgba(90, 40, 160, 1.0); -fx-background-radius: 2;";
 
         if (strengthBar1 != null) strengthBar1.setStyle(defaultStyle);
         if (strengthBar2 != null) strengthBar2.setStyle(defaultStyle);
@@ -77,20 +81,20 @@ public class RegisterController {
             case 1:
                 if (strengthBar1 != null) strengthBar1.setStyle(weakStyle);
                 passwordStrength.set("Weak");
-                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #f44336; -fx-font-size: 11px; -fx-font-weight: bold;");
+                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #b4a0dc; -fx-font-size: 11px; -fx-font-weight: bold;");
                 break;
             case 2:
                 if (strengthBar1 != null) strengthBar1.setStyle(fairStyle);
                 if (strengthBar2 != null) strengthBar2.setStyle(fairStyle);
                 passwordStrength.set("Fair");
-                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #ff9800; -fx-font-size: 11px; -fx-font-weight: bold;");
+                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #9678c8; -fx-font-size: 11px; -fx-font-weight: bold;");
                 break;
             case 3:
                 if (strengthBar1 != null) strengthBar1.setStyle(goodStyle);
                 if (strengthBar2 != null) strengthBar2.setStyle(goodStyle);
                 if (strengthBar3 != null) strengthBar3.setStyle(goodStyle);
                 passwordStrength.set("Good");
-                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #ffeb3b; -fx-font-size: 11px; -fx-font-weight: bold;");
+                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #7850b4; -fx-font-size: 11px; -fx-font-weight: bold;");
                 break;
             case 4:
                 if (strengthBar1 != null) strengthBar1.setStyle(strongStyle);
@@ -98,7 +102,7 @@ public class RegisterController {
                 if (strengthBar3 != null) strengthBar3.setStyle(strongStyle);
                 if (strengthBar4 != null) strengthBar4.setStyle(strongStyle);
                 passwordStrength.set("Strong 💪");
-                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #4caf50; -fx-font-size: 11px; -fx-font-weight: bold;");
+                if (strengthLabel != null) strengthLabel.setStyle("-fx-text-fill: #5a28a0; -fx-font-size: 11px; -fx-font-weight: bold;");
                 break;
             default:
                 passwordStrength.set("");

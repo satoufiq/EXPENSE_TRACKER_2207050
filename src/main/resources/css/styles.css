@@ -1304,24 +1304,29 @@
     -fx-background-color: rgba(255, 255, 255, 0.28);
     -fx-border-color: rgba(255, 255, 255, 0.5);
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 15, 0, 0, 3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
-// Alert button with active notifications - pulsing glow effect
+// Alert button with active notifications - bright orange/red glow effect
 .alert-button-active {
-    -fx-background-color: rgba(255, 87, 34, 0.3);
-    -fx-border-color: rgba(255, 87, 34, 0.7);
-    -fx-effect: dropshadow(gaussian, rgba(255, 87, 34, 0.6), 15, 0, 0, 3);
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 100, 50, 0.5), rgba(255, 60, 30, 0.4));
+    -fx-border-color: rgba(255, 87, 34, 0.9);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(255, 87, 34, 0.8), 20, 0.3, 0, 0);
 }
 
 .alert-button-active:hover {
-    -fx-background-color: rgba(255, 87, 34, 0.45);
-    -fx-border-color: rgba(255, 87, 34, 0.9);
-    -fx-effect: dropshadow(gaussian, rgba(255, 87, 34, 0.8), 20, 0, 0, 5);
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 100, 50, 0.7), rgba(255, 60, 30, 0.6));
+    -fx-border-color: rgba(255, 100, 50, 1.0);
+    -fx-effect: dropshadow(gaussian, rgba(255, 87, 34, 1.0), 25, 0.4, 0, 0);
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
 }
 
-// Notification badge on alert button
+// Notification badge on alert button - red dot with count
 .alert-badge {
-    -fx-background-color: linear-gradient(to bottom, #ff5252, #f44336);
+    -fx-background-color: linear-gradient(to bottom, #ff5252, #e53935);
     -fx-background-radius: 12;
     -fx-min-width: 22;
     -fx-min-height: 22;
@@ -1330,13 +1335,24 @@
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-padding: 2 6;
-    -fx-effect: dropshadow(gaussian, rgba(244, 67, 54, 0.6), 8, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(244, 67, 54, 0.8), 10, 0.3, 0, 2);
     -fx-alignment: center;
 }
 
 // Alert button container (for positioning badge)
 .alert-button-container {
     -fx-alignment: center;
+}
+
+// Red dot indicator for notifications (alternative simple style)
+.notification-dot {
+    -fx-background-color: #ff4444;
+    -fx-background-radius: 6;
+    -fx-min-width: 12;
+    -fx-min-height: 12;
+    -fx-max-width: 12;
+    -fx-max-height: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.8), 8, 0.4, 0, 0);
 }
 
 // Transparent scroll pane - used for main dashboard scrolling
@@ -1367,3 +1383,95 @@
 .transparent-scroll .scroll-bar .thumb:hover {
     -fx-background-color: rgba(123, 138, 228, 0.6);
 }
+
+// ============================================
+// MODE BUTTON STYLES - Buttons in mode selection
+// ============================================
+
+// Mode button - buttons in mode selection cards
+.mode-button {
+    -fx-min-width: 260;
+    -fx-pref-width: 280;
+    -fx-max-width: 300;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}
+
+.mode-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+// ============================================
+// SCROLL PANE RESPONSIVE STYLES
+// ============================================
+
+// Root scroll pane - allows entire scene to scroll when window is small
+.root-scroll {
+    -fx-background-color: #1a1d2e;
+    -fx-background: #1a1d2e;
+    -fx-border-color: transparent;
+}
+
+.root-scroll > .viewport {
+    -fx-background-color: #1a1d2e;
+}
+
+.root-scroll .scroll-bar:vertical,
+.root-scroll .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.root-scroll .scroll-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 8;
+}
+
+.root-scroll .scroll-bar .thumb {
+    -fx-background-color: rgba(123, 138, 228, 0.35);
+    -fx-background-radius: 8;
+}
+
+.root-scroll .scroll-bar .thumb:hover {
+    -fx-background-color: rgba(123, 138, 228, 0.55);
+}
+
+// ============================================
+// PASSWORD STRENGTH INDICATOR STYLES
+// ============================================
+
+// Password strength bar container
+.password-strength-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 2;
+    -fx-pref-height: 4;
+    -fx-min-height: 4;
+}
+
+// Weak strength - lightest purple shade
+.strength-weak {
+    -fx-background-color: rgba(147, 128, 191, 0.6);
+    -fx-background-radius: 2;
+}
+
+// Fair strength - light purple shade
+.strength-fair {
+    -fx-background-color: rgba(128, 107, 186, 0.75);
+    -fx-background-radius: 2;
+}
+
+// Good strength - medium purple shade
+.strength-good {
+    -fx-background-color: rgba(107, 90, 171, 0.9);
+    -fx-background-radius: 2;
+}
+
+// Strong strength - bold/vibrant purple shade
+.strength-strong {
+    -fx-background-color: rgba(92, 72, 160, 1.0);
+    -fx-background-radius: 2;
+}
+

@@ -30,17 +30,17 @@
                         <Label fx:id="groupNameLabel" styleClass="dashboard-title" text="Group Dashboard"/>
                         <Label fx:id="memberCountLabel" styleClass="dashboard-subtitle" text="Members: 0"/>
                     </VBox>
-                    <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                        <Button text="📊 Analytics" onAction="#handleOpenGroupAnalytics" styleClass="glass-button" prefHeight="40.0"/>
-                        <Button text="💵 Budget" onAction="#handleSetGroupBudget" styleClass="glass-button" prefHeight="40.0"/>
-                        <Button text="💰 Add" onAction="#handleAddExpense" styleClass="primary-button" prefHeight="40.0"/>
-                        <Button text="➕ Member" onAction="#handleAddMember" styleClass="glass-button" prefHeight="40.0"/>
-                        <Button text="👥 View" onAction="#handleViewMembers" styleClass="glass-button" prefHeight="40.0"/>
+                    <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                        <Button text="📊 Analytics" onAction="#handleOpenGroupAnalytics" styleClass="glass-button" prefHeight="40.0" prefWidth="120.0"/>
+                        <Button text="💵 Budget" onAction="#handleSetGroupBudget" styleClass="glass-button" prefHeight="40.0" prefWidth="110.0"/>
+                        <Button text="💰 Add" onAction="#handleAddExpense" styleClass="primary-button" prefHeight="40.0" prefWidth="90.0"/>
+                        <Button text="➕ Member" onAction="#handleAddMember" styleClass="glass-button" prefHeight="40.0" prefWidth="110.0"/>
+                        <Button text="👥 View" onAction="#handleViewMembers" styleClass="glass-button" prefHeight="40.0" prefWidth="90.0"/>
                         <HBox fx:id="alertButtonContainer" alignment="CENTER" styleClass="alert-button-container">
                             <Button fx:id="alertButton" styleClass="alert-button" text="🔔" prefHeight="40.0" prefWidth="50.0" onAction="#handleViewAlerts"/>
                             <Label fx:id="alertBadge" styleClass="alert-badge" text="0" visible="false" managed="false" translateX="-18" translateY="-15"/>
                         </HBox>
-                        <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0"/>
+                        <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" prefHeight="40.0" prefWidth="90.0"/>
                     </HBox>
                 </HBox>
 

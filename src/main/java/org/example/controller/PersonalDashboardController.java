@@ -3,7 +3,6 @@ package org.example.controller;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -135,27 +134,31 @@ public class PersonalDashboardController {
         card.setMinWidth(340);
         card.setMaxWidth(340);
 
-        // Top row: Category badge and date
+        // Top row: Category badge
         HBox topRow = new HBox(10);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
         Label categoryBadge = new Label(getCategoryEmoji(expense.getCategory()) + " " + expense.getCategory());
         categoryBadge.getStyleClass().add("expense-category-badge");
 
+        topRow.getChildren().add(categoryBadge);
+
+        // Amount and date row
+        HBox amountRow = new HBox(15);
+        amountRow.setAlignment(Pos.CENTER_LEFT);
+
+        Label amountLabel = new Label(String.format("৳%.2f", expense.getAmount()));
+        amountLabel.getStyleClass().add("expense-amount");
+
         Label dateLabel = new Label("📅 " + expense.getDate());
         dateLabel.getStyleClass().add("expense-date");
 
-        topRow.getChildren().addAll(categoryBadge, dateLabel);
-        HBox.setMargin(dateLabel, new Insets(0, 0, 0, 10));
-
-        // Amount
-        Label amountLabel = new Label(String.format("৳%.2f", expense.getAmount()));
-        amountLabel.getStyleClass().add("expense-amount");
+        amountRow.getChildren().addAll(amountLabel, dateLabel);
 
         // Note
         String noteText = expense.getNote() != null && !expense.getNote().isEmpty()
             ? expense.getNote()
-            : "No description";
+            : "No note";
         Label noteLabel = new Label(noteText);
         noteLabel.getStyleClass().add("expense-note");
         noteLabel.setWrapText(true);
@@ -163,7 +166,7 @@ public class PersonalDashboardController {
 
         // Action buttons
         HBox actionsRow = new HBox(10);
-        actionsRow.setAlignment(Pos.CENTER_RIGHT);
+        actionsRow.setAlignment(Pos.CENTER_LEFT);
 
         Button editBtn = new Button("✏️ Edit");
         editBtn.getStyleClass().addAll("card-action-button", "card-edit-button");
@@ -175,7 +178,7 @@ public class PersonalDashboardController {
 
         actionsRow.getChildren().addAll(editBtn, deleteBtn);
 
-        card.getChildren().addAll(topRow, amountLabel, noteLabel, actionsRow);
+        card.getChildren().addAll(topRow, amountRow, noteLabel, actionsRow);
 
         return card;
     }

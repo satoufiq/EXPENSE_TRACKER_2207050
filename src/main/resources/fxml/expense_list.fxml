@@ -1,5 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.controller.ExpenseListController">
-</VBox>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.ExpenseListController"
+            prefHeight="700.0" prefWidth="1200.0"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css">
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
+            <VBox spacing="20.0" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
+                </padding>
+
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
+                    <padding>
+                        <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
+                    </padding>
+                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                        <Label text="📋 All Expenses" styleClass="dashboard-title"/>
+                        <Label fx:id="expenseCountLabel" text="0 expenses" styleClass="dashboard-subtitle"/>
+                    </VBox>
+                    <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                        <Button fx:id="addExpenseButton" styleClass="primary-button" text="➕ Add Expense" prefHeight="40.0" onAction="#handleAddExpense"/>
+                        <Button fx:id="backButton" styleClass="secondary-button" text="← Back" prefHeight="40.0" onAction="#handleBack"/>
+                    </HBox>
+                </HBox>
+
+                <!-- Stats Row -->
+                <HBox spacing="20.0" alignment="CENTER">
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="280.0" prefHeight="100.0">
+                        <Label text="💰" style="-fx-font-size: 32px;"/>
+                        <Label text="Total Expenses" styleClass="stat-label"/>
+                        <Label fx:id="totalExpensesLabel" text="৳0.00" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="280.0" prefHeight="100.0">
+                        <Label text="📅" style="-fx-font-size: 32px;"/>
+                        <Label text="This Month" styleClass="stat-label"/>
+                        <Label fx:id="monthExpensesLabel" text="৳0.00" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="280.0" prefHeight="100.0">
+                        <Label text="🧾" style="-fx-font-size: 32px;"/>
+                        <Label text="Transactions" styleClass="stat-label"/>
+                        <Label fx:id="transactionCountLabel" text="0" styleClass="stat-value"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Expenses Grid Section -->
+                <VBox spacing="15.0" VBox.vgrow="ALWAYS" styleClass="glass-container-elevated">
+                    <padding>
+                        <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
+                    </padding>
+                    <Label text="All Expenses" styleClass="section-title"/>
+
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="400.0">
+                        <FlowPane fx:id="expenseCardsPane" styleClass="expense-flow-pane" hgap="15" vgap="15">
+                            <padding>
+                                <Insets top="10.0" left="10.0" right="10.0" bottom="10.0"/>
+                            </padding>
+                        </FlowPane>
+                    </ScrollPane>
+
+                    <!-- Empty state -->
+                    <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="15.0" styleClass="empty-state-card" visible="false" managed="false">
+                        <Label text="📝" style="-fx-font-size: 48px; opacity: 0.5;"/>
+                        <Label text="No expenses yet" styleClass="placeholder-text"/>
+                        <Label text="Click 'Add Expense' to create your first entry" styleClass="placeholder-subtext"/>
+                        <Button onAction="#handleAddExpense" styleClass="primary-button" text="Add First Expense" prefHeight="40.0"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

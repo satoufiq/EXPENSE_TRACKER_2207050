@@ -3,6 +3,7 @@ package org.example.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.MainApp;
 import org.example.model.User;
@@ -32,8 +33,45 @@ public class ModeSelectionController {
     private Button alertsButton;
 
     @FXML
+    private Label alertBadge;
+
+    @FXML
+    private HBox alertButtonContainer;
+
+    @FXML
     public void initialize() {
         loadUserInfo();
+        updateAlertCount();
+    }
+
+    private void updateAlertCount() {
+        User currentUser = SessionManager.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        String userId = currentUser.getUserId();
+        int count = 0;
+
+        // Count parent-child alerts
+        count += org.example.service.ParentChildAlertService.getUnreadAlertCount(userId);
+
+        // Count pending parent invites (for children)
+        count += org.example.service.InviteService.getPendingParentInvitesForChild(userId).size();
+
+        // Count pending group invites
+        count += org.example.service.InviteService.getPendingGroupInvitesForUser(userId).size();
+
+        if (alertBadge != null && alertsButton != null) {
+            if (count > 0) {
+                alertBadge.setText(String.valueOf(count));
+                alertBadge.setVisible(true);
+                alertBadge.setManaged(true);
+                alertsButton.getStyleClass().add("alert-button-active");
+            } else {
+                alertBadge.setVisible(false);
+                alertBadge.setManaged(false);
+                alertsButton.getStyleClass().remove("alert-button-active");
+            }
+        }
     }
 
     private void loadUserInfo() {

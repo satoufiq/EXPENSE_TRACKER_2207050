@@ -2,39 +2,47 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="CENTER" prefHeight="700.0" prefWidth="1200.0" spacing="0.0" styleClass="root-pane" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.HomeController">
-    <VBox fx:id="homeCard" alignment="CENTER" maxWidth="500.0" minWidth="460.0" spacing="28.0" styleClass="frosted-card home-card">
-        <padding>
-            <Insets bottom="55.0" left="50.0" right="50.0" top="55.0" />
-        </padding>
-        <HBox fx:id="appIconContainer" alignment="CENTER" styleClass="app-icon-container">
-            <Label style="-fx-font-size: 72px; -fx-text-fill: #FFFFFF;" text="💰" />
-        </HBox>
-            <VBox alignment="CENTER" spacing="8.0" styleClass="title-block">
-                <Label fx:id="appTitleLabel" styleClass="app-title home-title" text="Expense Tracker" textFill="#f7f7f7" />
-                <Label styleClass="app-subtitle home-subtitle" text="Professional Finance Management" textFill="WHITE" />
-                <Label style="-fx-font-size: 12px; -fx-text-fill: #FFFFFF; -fx-font-weight: 500;" text="Track  •  Analyze  •  Optimize">
+<ScrollPane fitToWidth="true" fitToHeight="true"
+            styleClass="root-pane"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.HomeController">
+    <VBox alignment="CENTER" minHeight="700.0" prefWidth="1200.0" spacing="0.0" styleClass="root-pane">
+        <VBox fx:id="homeCard" alignment="CENTER" maxWidth="500.0" minWidth="460.0" spacing="28.0" styleClass="frosted-card home-card">
+            <padding>
+                <Insets bottom="55.0" left="50.0" right="50.0" top="55.0" />
+            </padding>
+            <HBox fx:id="appIconContainer" alignment="CENTER" styleClass="app-icon-container">
+                <Label style="-fx-font-size: 72px; -fx-text-fill: #FFFFFF;" text="💰" />
+            </HBox>
+                <VBox alignment="CENTER" spacing="8.0" styleClass="title-block">
+                    <Label fx:id="appTitleLabel" styleClass="app-title home-title" text="Expense Tracker" textFill="#f7f7f7" />
+                    <Label styleClass="app-subtitle home-subtitle" text="Professional Finance Management" textFill="WHITE" />
+                    <Label style="-fx-font-size: 12px; -fx-text-fill: #FFFFFF; -fx-font-weight: 500;" text="Track  •  Analyze  •  Optimize">
+                        <VBox.margin>
+                            <Insets top="4.0" />
+                        </VBox.margin>
+                    </Label>
+                </VBox>
+                <VBox alignment="CENTER" spacing="12.0">
                     <VBox.margin>
-                        <Insets top="4.0" />
+                        <Insets top="20.0" />
                     </VBox.margin>
-                </Label>
+                    <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="52.0" prefWidth="340.0" styleClass="primary-button glossy-button" text="Login to Your Account" />
+                    <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="52.0" prefWidth="340.0" styleClass="secondary-button glass-button" text="Create New Account" />
+                    <Button fx:id="exitButton" onAction="#handleExit" prefHeight="46.0" prefWidth="340.0" styleClass="exit-button glass-button" text="Exit Application" />
+                </VBox>
+                <VBox alignment="CENTER" spacing="8.0">
+                    <VBox.margin>
+                        <Insets top="18.0" />
+                    </VBox.margin>
+                    <Label style="-fx-font-size: 12px; -fx-text-fill: #FFFFFF; -fx-font-weight: 500;" text="Secure  •  Professional  •  Reliable" />
+                    <Label style="-fx-font-size: 11px; -fx-text-fill: #E0E5FF; -fx-font-weight: 400;" text="Your trusted partner in financial management" />
+                </VBox>
             </VBox>
-            <VBox alignment="CENTER" spacing="12.0">
-                <VBox.margin>
-                    <Insets top="20.0" />
-                </VBox.margin>
-                <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="52.0" prefWidth="340.0" styleClass="primary-button glossy-button" text="Login to Your Account" />
-                <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="52.0" prefWidth="340.0" styleClass="secondary-button glass-button" text="Create New Account" />
-                <Button fx:id="exitButton" onAction="#handleExit" prefHeight="46.0" prefWidth="340.0" styleClass="exit-button glass-button" text="Exit Application" />
-            </VBox>
-            <VBox alignment="CENTER" spacing="8.0">
-                <VBox.margin>
-                    <Insets top="18.0" />
-                </VBox.margin>
-                <Label style="-fx-font-size: 12px; -fx-text-fill: #FFFFFF; -fx-font-weight: 500;" text="Secure  •  Professional  •  Reliable" />
-                <Label style="-fx-font-size: 11px; -fx-text-fill: #E0E5FF; -fx-font-weight: 400;" text="Your trusted partner in financial management" />
-            </VBox>
-        </VBox>
-</VBox>
+    </VBox>
+</ScrollPane>

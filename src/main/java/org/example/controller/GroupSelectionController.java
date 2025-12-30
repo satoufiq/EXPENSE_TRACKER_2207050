@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import org.example.MainApp;
@@ -38,12 +39,60 @@ public class GroupSelectionController {
     @FXML
     private Button backButton;
 
+    @FXML
+    private Button alertButton;
+
+    @FXML
+    private Label alertBadge;
+
+    @FXML
+    private HBox alertButtonContainer;
+
     private ObservableList<Group> groupsList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         setupListView();
         loadGroups();
+        updateAlertCount();
+    }
+
+    private void updateAlertCount() {
+        User currentUser = SessionManager.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        String userId = currentUser.getUserId();
+        int count = 0;
+
+        count += org.example.service.ParentChildAlertService.getUnreadAlertCount(userId);
+        count += org.example.service.InviteService.getPendingParentInvitesForChild(userId).size();
+        count += org.example.service.InviteService.getPendingGroupInvitesForUser(userId).size();
+
+        if (alertBadge != null && alertButton != null) {
+            if (count > 0) {
+                alertBadge.setText(String.valueOf(count));
+                alertBadge.setVisible(true);
+                alertBadge.setManaged(true);
+                alertButton.getStyleClass().add("alert-button-active");
+            } else {
+                alertBadge.setVisible(false);
+                alertBadge.setManaged(false);
+                alertButton.getStyleClass().remove("alert-button-active");
+            }
+        }
+    }
+
+    @FXML
+    private void handleViewAlerts() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/alerts.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+            MainApp.getPrimaryStage().setScene(scene);
+        } catch (Exception e) {
+            System.err.println("Failed to load alerts: " + e.getMessage());
+        }
     }
 
     private void setupListView() {
