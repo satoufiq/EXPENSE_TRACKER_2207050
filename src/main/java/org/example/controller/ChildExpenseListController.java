@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -14,6 +15,11 @@ import org.example.service.ExpenseService;
 import org.example.service.UserService;
 import org.example.util.SessionManager;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class ChildExpenseListController {
 
@@ -26,9 +32,17 @@ public class ChildExpenseListController {
     @FXML private TextArea suggestionTextArea;
     @FXML private Button sendSuggestionButton;
 
+    // Filter controls
+    @FXML private TextField searchField;
+    @FXML private ComboBox<String> categoryFilter;
+    @FXML private DatePicker fromDatePicker;
+    @FXML private DatePicker toDatePicker;
+    @FXML private Button clearFiltersButton;
+
     private String childUserId;
     private String parentUserId;
     private ObservableList<Expense> expensesList;
+    private ObservableList<Expense> filteredExpenses;
 
     @FXML
     public void initialize() {
@@ -42,6 +56,99 @@ public class ChildExpenseListController {
         }
 
         loadChildExpenses();
+        setupFilters();
+    }
+
+    private void setupFilters() {
+        // Initialize category filter
+        if (categoryFilter != null) {
+            List<String> categories = Arrays.asList(
+                "All Categories", "Food", "Transport", "Shopping", "Entertainment",
+                "Bills", "Health", "Education", "Groceries", "Utilities", "Rent", "Other"
+            );
+            categoryFilter.setItems(FXCollections.observableArrayList(categories));
+            categoryFilter.setValue("All Categories");
+            categoryFilter.setOnAction(e -> applyFilters());
+        }
+
+        // Setup search field listener
+        if (searchField != null) {
+            searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+        }
+
+        // Setup date pickers listeners
+        if (fromDatePicker != null) {
+            fromDatePicker.setOnAction(e -> applyFilters());
+        }
+        if (toDatePicker != null) {
+            toDatePicker.setOnAction(e -> applyFilters());
+        }
+    }
+
+    @FXML
+    private void handleClearFilters() {
+        if (searchField != null) searchField.clear();
+        if (categoryFilter != null) categoryFilter.setValue("All Categories");
+        if (fromDatePicker != null) fromDatePicker.setValue(null);
+        if (toDatePicker != null) toDatePicker.setValue(null);
+        applyFilters();
+    }
+
+    private void applyFilters() {
+        if (expensesList == null) return;
+
+        List<Expense> filtered = expensesList.stream()
+            .filter(this::matchesSearchFilter)
+            .filter(this::matchesCategoryFilter)
+            .filter(this::matchesDateFilter)
+            .collect(Collectors.toList());
+
+        filteredExpenses = FXCollections.observableArrayList(filtered);
+        refreshExpenseCards();
+        updateStatistics();
+    }
+
+    private boolean matchesSearchFilter(Expense expense) {
+        if (searchField == null || searchField.getText() == null || searchField.getText().trim().isEmpty()) {
+            return true;
+        }
+
+        String search = searchField.getText().toLowerCase();
+        String note = expense.getNote() != null ? expense.getNote().toLowerCase() : "";
+        String amount = String.valueOf(expense.getAmount());
+        String category = expense.getCategory() != null ? expense.getCategory().toLowerCase() : "";
+
+        return note.contains(search) || amount.contains(search) || category.contains(search);
+    }
+
+    private boolean matchesCategoryFilter(Expense expense) {
+        if (categoryFilter == null || categoryFilter.getValue() == null ||
+            categoryFilter.getValue().equals("All Categories")) {
+            return true;
+        }
+
+        return expense.getCategory() != null &&
+               expense.getCategory().equalsIgnoreCase(categoryFilter.getValue());
+    }
+
+    private boolean matchesDateFilter(Expense expense) {
+        try {
+            LocalDate expenseDate = LocalDate.parse(expense.getDate());
+            LocalDate fromDate = fromDatePicker != null ? fromDatePicker.getValue() : null;
+            LocalDate toDate = toDatePicker != null ? toDatePicker.getValue() : null;
+
+            if (fromDate != null && expenseDate.isBefore(fromDate)) {
+                return false;
+            }
+
+            if (toDate != null && expenseDate.isAfter(toDate)) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     private void loadChildExpenses() {
@@ -51,6 +158,7 @@ public class ChildExpenseListController {
         }
 
         expensesList = ExpenseService.getPersonalExpensesObservable(childUserId);
+        filteredExpenses = FXCollections.observableArrayList(expensesList);
         refreshExpenseCards();
         updateStatistics();
     }
@@ -60,7 +168,9 @@ public class ChildExpenseListController {
 
         expenseCardsPane.getChildren().clear();
 
-        if (expensesList == null || expensesList.isEmpty()) {
+        ObservableList<Expense> displayList = filteredExpenses != null ? filteredExpenses : expensesList;
+
+        if (displayList == null || displayList.isEmpty()) {
             if (emptyStatePane != null) {
                 emptyStatePane.setVisible(true);
                 emptyStatePane.setManaged(true);
@@ -73,7 +183,7 @@ public class ChildExpenseListController {
             emptyStatePane.setManaged(false);
         }
 
-        for (Expense expense : expensesList) {
+        for (Expense expense : displayList) {
             expenseCardsPane.getChildren().add(createExpenseCard(expense));
         }
     }
@@ -142,15 +252,17 @@ public class ChildExpenseListController {
     }
 
     private void updateStatistics() {
-        double total = expensesList.stream()
+        ObservableList<Expense> displayList = filteredExpenses != null ? filteredExpenses : expensesList;
+
+        double total = displayList != null ? displayList.stream()
             .mapToDouble(Expense::getAmount)
-            .sum();
+            .sum() : 0.0;
 
         if (totalExpensesLabel != null) {
             totalExpensesLabel.setText(String.format("৳%.2f", total));
         }
         if (transactionCountLabel != null) {
-            transactionCountLabel.setText(String.valueOf(expensesList.size()));
+            transactionCountLabel.setText(String.valueOf(displayList != null ? displayList.size() : 0));
         }
     }
 

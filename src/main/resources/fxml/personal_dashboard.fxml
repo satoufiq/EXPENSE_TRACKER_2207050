@@ -2,8 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -72,6 +75,23 @@
                         <Label text="Recent Expenses" styleClass="section-title"/>
                         <Button fx:id="viewAllButton" styleClass="link-button" text="View All →" onAction="#handleViewAll"/>
                     </HBox>
+
+                    <!-- Search and Filter Controls -->
+                    <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="glass-container-elevated">
+                        <padding>
+                            <Insets top="12.0" bottom="12.0" left="15.0" right="15.0"/>
+                        </padding>
+                        <Label text="🔍" style="-fx-font-size: 18px;"/>
+                        <TextField fx:id="searchField" promptText="Search by note or amount..." styleClass="modern-text-field" prefHeight="38.0" prefWidth="200.0"/>
+                        <Label text="Category:" styleClass="field-label"/>
+                        <ComboBox fx:id="categoryFilter" promptText="All Categories" styleClass="modern-combo" prefHeight="38.0" prefWidth="150.0"/>
+                        <Label text="From:" styleClass="field-label"/>
+                        <DatePicker fx:id="fromDatePicker" promptText="Start Date" styleClass="modern-date-picker" prefHeight="38.0" prefWidth="130.0"/>
+                        <Label text="To:" styleClass="field-label"/>
+                        <DatePicker fx:id="toDatePicker" promptText="End Date" styleClass="modern-date-picker" prefHeight="38.0" prefWidth="130.0"/>
+                        <Button fx:id="clearFiltersButton" text="✖ Clear" styleClass="secondary-button" prefHeight="38.0" onAction="#handleClearFilters"/>
+                    </HBox>
+
                     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll-pane" prefHeight="300.0">
                         <FlowPane fx:id="expenseCardsPane" styleClass="expense-flow-pane" hgap="15" vgap="15">
                             <padding>
