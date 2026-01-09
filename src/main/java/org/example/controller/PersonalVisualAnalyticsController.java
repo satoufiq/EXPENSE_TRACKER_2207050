@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
@@ -8,10 +9,8 @@ import org.example.model.Expense;
 import org.example.service.ExpenseService;
 import org.example.util.SessionManager;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,11 +32,7 @@ public class PersonalVisualAnalyticsController {
 
     // Charts
     @FXML private PieChart categoryPieChart;
-    @FXML private BarChart<String, Number> categoryBarChart;
     @FXML private LineChart<String, Number> trendLineChart;
-    @FXML private AreaChart<String, Number> cumulativeAreaChart;
-    @FXML private BarChart<String, Number> weeklyBarChart;
-    @FXML private BarChart<String, Number> dayOfWeekChart;
 
     private String userId;
     private List<Expense> allExpenses;
@@ -91,13 +86,11 @@ public class PersonalVisualAnalyticsController {
             })
             .collect(Collectors.toList());
 
-        updateSummaryStats(filteredExpenses);
-        updateCategoryPieChart(filteredExpenses);
-        updateCategoryBarChart(filteredExpenses);
-        updateTrendLineChart(filteredExpenses, startDate, today);
-        updateCumulativeAreaChart(filteredExpenses, startDate, today);
-        updateWeeklyBarChart(filteredExpenses);
-        updateDayOfWeekChart(filteredExpenses);
+        Platform.runLater(() -> {
+            updateSummaryStats(filteredExpenses);
+            updateCategoryPieChart(filteredExpenses);
+            updateTrendLineChart(filteredExpenses, startDate, today);
+        });
     }
 
     private void updateSummaryStats(List<Expense> expenses) {
@@ -142,7 +135,10 @@ public class PersonalVisualAnalyticsController {
     }
 
     private void updateCategoryPieChart(List<Expense> expenses) {
+        if (categoryPieChart == null) return;
         categoryPieChart.getData().clear();
+
+        if (expenses == null || expenses.isEmpty()) return;
 
         Map<String, Double> categoryTotals = expenses.stream()
             .collect(Collectors.groupingBy(
@@ -162,30 +158,12 @@ public class PersonalVisualAnalyticsController {
             });
     }
 
-    private void updateCategoryBarChart(List<Expense> expenses) {
-        categoryBarChart.getData().clear();
-
-        Map<String, Double> categoryTotals = expenses.stream()
-            .collect(Collectors.groupingBy(
-                e -> Optional.ofNullable(e.getCategory()).orElse("Other"),
-                Collectors.summingDouble(Expense::getAmount)
-            ));
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Amount");
-
-        categoryTotals.entrySet().stream()
-            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
-            .limit(8)
-            .forEach(entry -> {
-                series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-            });
-
-        categoryBarChart.getData().add(series);
-    }
 
     private void updateTrendLineChart(List<Expense> expenses, LocalDate startDate, LocalDate endDate) {
+        if (trendLineChart == null) return;
         trendLineChart.getData().clear();
+
+        if (expenses == null || expenses.isEmpty()) return;
 
         Map<LocalDate, Double> dailyTotals = new TreeMap<>();
 
@@ -224,101 +202,6 @@ public class PersonalVisualAnalyticsController {
         trendLineChart.getData().add(series);
     }
 
-    private void updateCumulativeAreaChart(List<Expense> expenses, LocalDate startDate, LocalDate endDate) {
-        cumulativeAreaChart.getData().clear();
-
-        Map<LocalDate, Double> dailyTotals = new TreeMap<>();
-
-        LocalDate current = startDate.isAfter(LocalDate.now().minusDays(365)) ? startDate : LocalDate.now().minusDays(365);
-        while (!current.isAfter(endDate)) {
-            dailyTotals.put(current, 0.0);
-            current = current.plusDays(1);
-        }
-
-        for (Expense e : expenses) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                dailyTotals.merge(date, e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Cumulative");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
-        double cumulative = 0;
-        int skipFactor = Math.max(1, dailyTotals.size() / 15);
-        int i = 0;
-
-        for (Map.Entry<LocalDate, Double> entry : dailyTotals.entrySet()) {
-            cumulative += entry.getValue();
-            if (i % skipFactor == 0 || i == dailyTotals.size() - 1) {
-                series.getData().add(new XYChart.Data<>(
-                    entry.getKey().format(formatter),
-                    cumulative
-                ));
-            }
-            i++;
-        }
-
-        cumulativeAreaChart.getData().add(series);
-    }
-
-    private void updateWeeklyBarChart(List<Expense> expenses) {
-        weeklyBarChart.getData().clear();
-
-        Map<Integer, Double> weeklyTotals = new TreeMap<>();
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-
-        for (Expense e : expenses) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                int weekNum = date.get(weekFields.weekOfWeekBasedYear());
-                weeklyTotals.merge(weekNum, e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Weekly Total");
-
-        weeklyTotals.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .limit(12)
-            .forEach(entry -> {
-                series.getData().add(new XYChart.Data<>("W" + entry.getKey(), entry.getValue()));
-            });
-
-        weeklyBarChart.getData().add(series);
-    }
-
-    private void updateDayOfWeekChart(List<Expense> expenses) {
-        dayOfWeekChart.getData().clear();
-
-        Map<DayOfWeek, Double> dayTotals = new EnumMap<>(DayOfWeek.class);
-        for (DayOfWeek day : DayOfWeek.values()) {
-            dayTotals.put(day, 0.0);
-        }
-
-        for (Expense e : expenses) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                dayTotals.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("By Day");
-
-        String[] dayNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-        DayOfWeek[] days = {DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
-                           DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY};
-
-        for (int i = 0; i < days.length; i++) {
-            series.getData().add(new XYChart.Data<>(dayNames[i], dayTotals.get(days[i])));
-        }
-
-        dayOfWeekChart.getData().add(series);
-    }
 
     @FXML
     private void handleBack() {

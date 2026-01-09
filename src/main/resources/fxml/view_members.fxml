@@ -20,7 +20,6 @@
                     <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                 </padding>
 
-                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                     <padding>
                         <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
@@ -35,7 +34,6 @@
                     </HBox>
                 </HBox>
 
-                <!-- Stats Row -->
                 <HBox spacing="20.0" alignment="CENTER">
                     <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="200.0" prefHeight="100.0">
                         <Label text="👥" style="-fx-font-size: 28px;"/>
@@ -49,7 +47,6 @@
                     </VBox>
                 </HBox>
 
-                <!-- Members List -->
                 <VBox spacing="15.0" VBox.vgrow="ALWAYS" styleClass="glass-container-elevated">
                     <padding>
                         <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -64,7 +61,6 @@
                         </VBox>
                     </ScrollPane>
 
-                    <!-- Empty state placeholder -->
                     <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="15.0" styleClass="empty-state-card" visible="false" managed="false">
                         <Label text="👥" style="-fx-font-size: 50px; opacity: 0.5;"/>
                         <Label text="No members yet" styleClass="placeholder-text"/>

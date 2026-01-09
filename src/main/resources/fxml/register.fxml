@@ -60,7 +60,7 @@
                                           promptText="Create a password"
                                           styleClass="modern-textfield"
                                           prefHeight="45.0"/>
-                            <!-- Password Strength Indicator -->
+
                             <HBox spacing="5.0" alignment="CENTER_LEFT">
                                 <HBox fx:id="strengthBar1" prefWidth="60.0" prefHeight="4.0" style="-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 2;"/>
                                 <HBox fx:id="strengthBar2" prefWidth="60.0" prefHeight="4.0" style="-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 2;"/>

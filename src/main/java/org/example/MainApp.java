@@ -4,9 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.service.DatabaseHelper;
 import org.example.util.SessionManager;
+
+import java.io.InputStream;
 
 public class MainApp extends Application {
 
@@ -23,15 +26,35 @@ public class MainApp extends Application {
         DatabaseHelper.initialize();
         System.out.println("Database initialization complete");
 
-        loadHome();
-
         primaryStage.setTitle("Expense Tracker");
         primaryStage.setWidth(1200);
         primaryStage.setHeight(700);
         primaryStage.setMinWidth(1200);
         primaryStage.setMinHeight(700);
         primaryStage.setResizable(true);
+
+        loadAppIcon();
+
+        loadHome();
+
         primaryStage.show();
+    }
+
+    private static void loadAppIcon() {
+        try {
+            InputStream iconStream = MainApp.class.getResourceAsStream("/icons/app-icon.png");
+            if (iconStream != null) {
+                Image icon = new Image(iconStream);
+                primaryStage.getIcons().add(icon);
+                System.out.println("✓ Application icon loaded successfully");
+            } else {
+                System.out.println("✗ Icon file not found: /icons/app-icon.png");
+            }
+
+        } catch (Exception e) {
+            System.err.println("✗ Error loading application icon: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public static void loadHome() {

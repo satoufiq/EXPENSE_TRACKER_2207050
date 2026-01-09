@@ -21,7 +21,6 @@
                     <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                 </padding>
 
-                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                     <padding>
                         <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
@@ -39,9 +38,8 @@
                     </HBox>
                 </HBox>
 
-                <!-- Main Content -->
                 <HBox spacing="25.0" VBox.vgrow="ALWAYS">
-                    <!-- Children Section -->
+
                     <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -59,21 +57,18 @@
                             </VBox>
                         </ScrollPane>
 
-                        <!-- Empty state -->
                         <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="15.0" styleClass="empty-state-card" visible="false" managed="false">
                             <Label text="👶" style="-fx-font-size: 48px;"/>
                             <Label text="No children added yet" styleClass="placeholder-text"/>
                             <Label text="Send an invite to add your child" styleClass="placeholder-subtext"/>
                         </VBox>
 
-                        <!-- Action buttons -->
                         <HBox spacing="15.0" alignment="CENTER_LEFT">
                             <Button fx:id="viewChildAnalyticsButton" text="📊 View Analytics" disable="true" styleClass="primary-button" prefHeight="40.0" onAction="#handleViewChildAnalytics"/>
                             <Button fx:id="viewChildExpensesButton" text="💰 View Expenses" disable="true" styleClass="glass-button" prefHeight="40.0" onAction="#handleViewChildExpenses"/>
                         </HBox>
                     </VBox>
 
-                    <!-- Add Child Section -->
                     <VBox spacing="20.0" prefWidth="350.0" styleClass="glass-container-elevated">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -89,7 +84,6 @@
 
                         <Label wrapText="true" text="The child will receive an invite in their Alerts." styleClass="placeholder-subtext"/>
 
-                        <!-- Stats -->
                         <VBox spacing="15.0" styleClass="stat-card">
                             <padding>
                                 <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>

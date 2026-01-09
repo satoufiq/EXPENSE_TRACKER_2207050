@@ -18,7 +18,7 @@
             <padding>
                 <Insets top="30.0" left="100.0" right="100.0" bottom="50.0"/>
             </padding>
-            <!-- Header with back button and alerts -->
+
             <HBox alignment="CENTER_LEFT" spacing="20.0">
                 <Button fx:id="backButton"
                         onAction="#handleBack"

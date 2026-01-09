@@ -79,13 +79,15 @@ public class ChildAnalyticsController {
         monthExpensesLabel.setText(String.format("৳%.2f", monthTotal));
         categoryCountLabel.setText(String.valueOf(categoryMap.size()));
 
-        categoryPieChart.getData().clear();
-        for (Map.Entry<String, Double> entry : categoryMap.entrySet()) {
-            PieChart.Data slice = new PieChart.Data(
-                entry.getKey() + " (৳" + String.format("%.0f", entry.getValue()) + ")",
-                entry.getValue()
-            );
-            categoryPieChart.getData().add(slice);
+        if (categoryPieChart != null) {
+            categoryPieChart.getData().clear();
+            for (Map.Entry<String, Double> entry : categoryMap.entrySet()) {
+                PieChart.Data slice = new PieChart.Data(
+                    entry.getKey() + " (৳" + String.format("%.0f", entry.getValue()) + ")",
+                    entry.getValue()
+                );
+                categoryPieChart.getData().add(slice);
+            }
         }
 
         javafx.collections.ObservableList<String> expenseStrings = javafx.collections.FXCollections.observableArrayList();

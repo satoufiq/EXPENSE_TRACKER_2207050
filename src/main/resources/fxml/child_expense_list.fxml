@@ -25,7 +25,6 @@
                     <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                 </padding>
 
-                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                     <padding>
                         <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
@@ -37,7 +36,6 @@
                     <Button fx:id="backButton" styleClass="secondary-button" text="← Back" prefHeight="40.0" onAction="#handleBack"/>
                 </HBox>
 
-                <!-- Stats Row -->
                 <HBox spacing="20.0" alignment="CENTER">
                     <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="280.0" prefHeight="100.0">
                         <Label text="💰" style="-fx-font-size: 32px;"/>
@@ -51,13 +49,13 @@
                     </VBox>
                 </HBox>
 
-                <!-- Main Content -->
+
                 <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-                    <!-- Expenses Section -->
+
                     <VBox spacing="15.0" HBox.hgrow="ALWAYS">
                         <Label text="📋 All Expenses (Read-Only)" styleClass="section-title"/>
 
-                        <!-- Search and Filter Controls -->
+
                         <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="glass-container-elevated">
                             <padding>
                                 <Insets top="12.0" bottom="12.0" left="15.0" right="15.0"/>
@@ -81,21 +79,18 @@
                             </FlowPane>
                         </ScrollPane>
 
-                        <!-- Empty state -->
                         <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="15.0" styleClass="empty-state-card" visible="false" managed="false">
                             <Label text="📝" style="-fx-font-size: 48px; opacity: 0.4;"/>
                             <Label text="No expenses found" styleClass="placeholder-text"/>
                             <Label text="Your child hasn't recorded any expenses yet" styleClass="placeholder-subtext"/>
                         </VBox>
 
-                        <!-- Info Banner -->
                         <VBox spacing="8.0" style="-fx-background-color: rgba(33, 150, 243, 0.15); -fx-padding: 15; -fx-background-radius: 10;">
                             <Label text="ℹ️ Parent View - Read-Only Mode" style="-fx-text-fill: #2196F3; -fx-font-weight: bold; -fx-font-size: 13px;"/>
                             <Label text="You cannot add, edit, or delete your child's expenses." wrapText="true" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;"/>
                         </VBox>
                     </VBox>
 
-                    <!-- Suggestion Section -->
                     <VBox spacing="15.0" prefWidth="320.0" styleClass="glass-container-elevated">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>

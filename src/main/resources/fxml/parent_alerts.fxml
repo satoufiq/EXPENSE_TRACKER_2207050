@@ -20,7 +20,6 @@
                     <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                 </padding>
 
-                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                     <padding>
                         <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
@@ -32,9 +31,8 @@
                     <Button fx:id="backButton" text="← Back" styleClass="secondary-button" prefHeight="40.0" onAction="#handleBack"/>
                 </HBox>
 
-                <!-- Main Content -->
                 <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-                    <!-- Alerts List -->
+
                     <VBox spacing="15.0" HBox.hgrow="ALWAYS" styleClass="glass-container-elevated">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -58,7 +56,6 @@
                         </VBox>
                     </VBox>
 
-                    <!-- Info Panel -->
                     <VBox spacing="15.0" prefWidth="380.0" styleClass="glass-container-elevated">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>

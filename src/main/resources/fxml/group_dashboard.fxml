@@ -24,7 +24,6 @@
                     <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                 </padding>
 
-                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-header">
                     <padding>
                         <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
@@ -47,7 +46,6 @@
                     </HBox>
                 </HBox>
 
-                <!-- Stats Row -->
                 <HBox spacing="20.0" alignment="CENTER">
                     <VBox alignment="CENTER" spacing="8.0" styleClass="stat-card" prefWidth="250.0" prefHeight="110.0">
                         <Label text="💰" style="-fx-font-size: 30px;"/>
@@ -71,14 +69,12 @@
                     </VBox>
                 </HBox>
 
-                <!-- Expenses Section -->
                 <VBox spacing="15.0" VBox.vgrow="ALWAYS">
                     <HBox alignment="CENTER_LEFT" spacing="15.0">
                         <Label text="Group Expenses" styleClass="section-title"/>
                         <Button text="➕ Add Expense" onAction="#handleAddExpense" styleClass="link-button"/>
                     </HBox>
 
-                    <!-- Search and Filter Controls -->
                     <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="glass-container-elevated">
                         <padding>
                             <Insets top="12.0" bottom="12.0" left="15.0" right="15.0"/>

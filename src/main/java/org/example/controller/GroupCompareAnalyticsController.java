@@ -9,7 +9,6 @@ import org.example.model.GroupMember;
 import org.example.service.ExpenseService;
 import org.example.service.GroupService;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -49,8 +48,7 @@ public class GroupCompareAnalyticsController {
     @FXML private PieChart member2PieChart;
     @FXML private BarChart<String, Number> categoryCompareChart;
     @FXML private LineChart<String, Number> trendCompareChart;
-    @FXML private BarChart<String, Number> dayOfWeekCompareChart;
-    
+
     @FXML private ListView<String> insightsList;
     
     private String groupId;
@@ -174,7 +172,6 @@ public class GroupCompareAnalyticsController {
         updatePieCharts(member1, member1Expenses, member2, member2Expenses);
         updateCategoryCompareChart(member1, member1Expenses, member2, member2Expenses);
         updateTrendCompareChart(member1, member1Expenses, member2, member2Expenses);
-        updateDayOfWeekCompareChart(member1, member1Expenses, member2, member2Expenses);
         generateInsights(member1, member1Expenses, member2, member2Expenses);
     }
     
@@ -352,49 +349,6 @@ public class GroupCompareAnalyticsController {
         trendCompareChart.getData().addAll(series1, series2);
     }
     
-    private void updateDayOfWeekCompareChart(MemberItem m1, List<Expense> exp1, MemberItem m2, List<Expense> exp2) {
-        dayOfWeekCompareChart.getData().clear();
-        
-        Map<DayOfWeek, Double> day1 = new EnumMap<>(DayOfWeek.class);
-        Map<DayOfWeek, Double> day2 = new EnumMap<>(DayOfWeek.class);
-        
-        for (DayOfWeek day : DayOfWeek.values()) {
-            day1.put(day, 0.0);
-            day2.put(day, 0.0);
-        }
-        
-        for (Expense e : exp1) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                day1.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-        
-        for (Expense e : exp2) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                day2.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-        
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.setName(m1.getName());
-        
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        series2.setName(m2.getName());
-        
-        String[] dayNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-        DayOfWeek[] days = {DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, 
-                           DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY};
-        
-        for (int i = 0; i < days.length; i++) {
-            series1.getData().add(new XYChart.Data<>(dayNames[i], day1.get(days[i])));
-            series2.getData().add(new XYChart.Data<>(dayNames[i], day2.get(days[i])));
-        }
-        
-        dayOfWeekCompareChart.getData().addAll(series1, series2);
-    }
-    
     private void generateInsights(MemberItem m1, List<Expense> exp1, MemberItem m2, List<Expense> exp2) {
         List<String> insights = new ArrayList<>();
         
@@ -483,42 +437,7 @@ public class GroupCompareAnalyticsController {
             }
         }
         
-        // Day of week patterns
-        Map<DayOfWeek, Double> dayTotals1 = new EnumMap<>(DayOfWeek.class);
-        Map<DayOfWeek, Double> dayTotals2 = new EnumMap<>(DayOfWeek.class);
-        
-        for (Expense e : exp1) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                dayTotals1.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-        
-        for (Expense e : exp2) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                dayTotals2.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-        
-        Optional<DayOfWeek> peak1 = dayTotals1.entrySet().stream()
-            .max(Map.Entry.comparingByValue())
-            .map(Map.Entry::getKey);
-        
-        Optional<DayOfWeek> peak2 = dayTotals2.entrySet().stream()
-            .max(Map.Entry.comparingByValue())
-            .map(Map.Entry::getKey);
-        
-        if (peak1.isPresent() && peak2.isPresent()) {
-            if (peak1.get() == peak2.get()) {
-                insights.add(String.format("📅 Both members spend most on %ss", peak1.get().toString().toLowerCase()));
-            } else {
-                insights.add(String.format("📅 %s spends most on %ss, %s on %ss", 
-                    m1.getName(), peak1.get().toString().toLowerCase(),
-                    m2.getName(), peak2.get().toString().toLowerCase()));
-            }
-        }
-        
+
         if (insights.isEmpty()) {
             insights.add("📊 Add more expenses to see detailed comparison insights");
         }

@@ -16,7 +16,6 @@
                     <Insets top="30.0" left="40.0" right="40.0" bottom="30.0"/>
                 </padding>
 
-                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="visual-header">
                     <padding>
                         <Insets top="15.0" bottom="15.0" left="25.0" right="25.0"/>
@@ -30,7 +29,6 @@
                     </HBox>
                 </HBox>
 
-                <!-- Member Selection -->
                 <HBox spacing="30.0" alignment="CENTER" styleClass="glass-container-elevated">
                     <padding>
                         <Insets top="20.0" left="30.0" right="30.0" bottom="20.0"/>
@@ -54,9 +52,9 @@
                     <Button text="🔄 Compare" onAction="#handleCompare" styleClass="primary-button" prefHeight="45.0" prefWidth="130.0"/>
                 </HBox>
 
-                <!-- Comparison Summary Cards -->
+
                 <HBox spacing="20.0" alignment="CENTER">
-                    <!-- Member 1 Stats -->
+
                     <VBox spacing="15.0" styleClass="stat-card" prefWidth="350.0" alignment="CENTER">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -78,7 +76,6 @@
                         </HBox>
                     </VBox>
 
-                    <!-- Difference Card -->
                     <VBox spacing="10.0" styleClass="stat-card" prefWidth="200.0" alignment="CENTER">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -88,7 +85,6 @@
                         <Label fx:id="differenceDescLabel" text="" style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.8);"/>
                     </VBox>
 
-                    <!-- Member 2 Stats -->
                     <VBox spacing="15.0" styleClass="stat-card" prefWidth="350.0" alignment="CENTER">
                         <padding>
                             <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -111,7 +107,7 @@
                     </VBox>
                 </HBox>
 
-                <!-- Charts Row 1: Side-by-side Category Comparison -->
+
                 <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                     <VBox spacing="10.0" styleClass="glass-container-elevated" HBox.hgrow="ALWAYS">
                         <padding>
@@ -129,7 +125,7 @@
                     </VBox>
                 </HBox>
 
-                <!-- Bar Chart: Category Comparison -->
+
                 <VBox spacing="10.0" styleClass="glass-container-elevated">
                     <padding>
                         <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
@@ -145,7 +141,7 @@
                     </BarChart>
                 </VBox>
 
-                <!-- Line Chart: Spending Trend Comparison -->
+
                 <VBox spacing="10.0" styleClass="glass-container-elevated">
                     <padding>
                         <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
@@ -161,23 +157,6 @@
                     </LineChart>
                 </VBox>
 
-                <!-- Day of Week Comparison -->
-                <VBox spacing="10.0" styleClass="glass-container-elevated">
-                    <padding>
-                        <Insets top="15.0" left="15.0" right="15.0" bottom="15.0"/>
-                    </padding>
-                    <Label text="📅 Day of Week Comparison" styleClass="section-title"/>
-                    <BarChart fx:id="dayOfWeekCompareChart" prefHeight="250.0" legendVisible="true">
-                        <xAxis>
-                            <CategoryAxis label="Day" side="BOTTOM"/>
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis label="Amount (৳)" side="LEFT"/>
-                        </yAxis>
-                    </BarChart>
-                </VBox>
-
-                <!-- Insights Panel -->
                 <VBox spacing="15.0" styleClass="glass-container-elevated">
                     <padding>
                         <Insets top="20.0" left="20.0" right="20.0" bottom="20.0"/>
@@ -196,4 +175,3 @@
         </ScrollPane>
     </center>
 </BorderPane>
-

@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
@@ -9,7 +10,6 @@ import org.example.service.ExpenseService;
 import org.example.service.GroupService;
 import org.example.service.UserService;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -35,12 +35,7 @@ public class GroupVisualAnalyticsController {
 
     // Charts
     @FXML private PieChart categoryPieChart;
-    @FXML private BarChart<String, Number> memberBarChart;
     @FXML private LineChart<String, Number> trendLineChart;
-    @FXML private BarChart<String, Number> categoryBarChart;
-    @FXML private PieChart memberPieChart;
-    @FXML private StackedBarChart<String, Number> memberCategoryStackedChart;
-    @FXML private BarChart<String, Number> dayOfWeekChart;
 
     private String groupId;
     private String userId;
@@ -126,14 +121,11 @@ public class GroupVisualAnalyticsController {
             })
             .collect(Collectors.toList());
 
-        updateSummaryStats(filteredExpenses);
-        updateCategoryPieChart(filteredExpenses);
-        updateMemberBarChart(filteredExpenses);
-        updateTrendLineChart(filteredExpenses, startDate, today);
-        updateCategoryBarChart(filteredExpenses);
-        updateMemberPieChart(filteredExpenses);
-        updateMemberCategoryStackedChart(filteredExpenses);
-        updateDayOfWeekChart(filteredExpenses);
+        Platform.runLater(() -> {
+            updateSummaryStats(filteredExpenses);
+            updateCategoryPieChart(filteredExpenses);
+            updateTrendLineChart(filteredExpenses, startDate, today);
+        });
     }
 
     private void updateSummaryStats(List<Expense> expenses) {
@@ -165,7 +157,10 @@ public class GroupVisualAnalyticsController {
     }
 
     private void updateCategoryPieChart(List<Expense> expenses) {
+        if (categoryPieChart == null) return;
         categoryPieChart.getData().clear();
+
+        if (expenses == null || expenses.isEmpty()) return;
 
         Map<String, Double> categoryTotals = expenses.stream()
             .collect(Collectors.groupingBy(
@@ -185,33 +180,12 @@ public class GroupVisualAnalyticsController {
             });
     }
 
-    private void updateMemberBarChart(List<Expense> expenses) {
-        memberBarChart.getData().clear();
-
-        Map<String, Double> memberTotals = expenses.stream()
-            .filter(e -> e.getUserId() != null)
-            .collect(Collectors.groupingBy(
-                Expense::getUserId,
-                Collectors.summingDouble(Expense::getAmount)
-            ));
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Spending");
-
-        memberTotals.entrySet().stream()
-            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
-            .forEach(entry -> {
-                series.getData().add(new XYChart.Data<>(
-                    getMemberName(entry.getKey()),
-                    entry.getValue()
-                ));
-            });
-
-        memberBarChart.getData().add(series);
-    }
 
     private void updateTrendLineChart(List<Expense> expenses, LocalDate startDate, LocalDate endDate) {
+        if (trendLineChart == null) return;
         trendLineChart.getData().clear();
+
+        if (expenses == null || expenses.isEmpty()) return;
 
         // Group expenses by member and date
         Map<String, Map<LocalDate, Double>> memberDailyTotals = new HashMap<>();
@@ -264,123 +238,6 @@ public class GroupVisualAnalyticsController {
         trendLineChart.getData().add(groupSeries);
     }
 
-    private void updateCategoryBarChart(List<Expense> expenses) {
-        categoryBarChart.getData().clear();
-
-        Map<String, Double> categoryTotals = expenses.stream()
-            .collect(Collectors.groupingBy(
-                e -> Optional.ofNullable(e.getCategory()).orElse("Other"),
-                Collectors.summingDouble(Expense::getAmount)
-            ));
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Amount");
-
-        categoryTotals.entrySet().stream()
-            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
-            .limit(8)
-            .forEach(entry -> {
-                series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-            });
-
-        categoryBarChart.getData().add(series);
-    }
-
-    private void updateMemberPieChart(List<Expense> expenses) {
-        memberPieChart.getData().clear();
-
-        Map<String, Double> memberTotals = expenses.stream()
-            .filter(e -> e.getUserId() != null)
-            .collect(Collectors.groupingBy(
-                Expense::getUserId,
-                Collectors.summingDouble(Expense::getAmount)
-            ));
-
-        double total = memberTotals.values().stream().mapToDouble(Double::doubleValue).sum();
-
-        memberTotals.entrySet().stream()
-            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
-            .forEach(entry -> {
-                double percent = total > 0 ? (entry.getValue() / total * 100) : 0;
-                PieChart.Data slice = new PieChart.Data(
-                    getMemberName(entry.getKey()) + " (" + String.format("%.1f%%", percent) + ")",
-                    entry.getValue()
-                );
-                memberPieChart.getData().add(slice);
-            });
-    }
-
-    private void updateMemberCategoryStackedChart(List<Expense> expenses) {
-        memberCategoryStackedChart.getData().clear();
-
-        // Group by category and member
-        Map<String, Map<String, Double>> categoryMemberTotals = new HashMap<>();
-        Set<String> allMembers = new HashSet<>();
-
-        for (Expense e : expenses) {
-            if (e.getUserId() == null) continue;
-            String category = Optional.ofNullable(e.getCategory()).orElse("Other");
-            String memberId = e.getUserId();
-
-            allMembers.add(memberId);
-            categoryMemberTotals
-                .computeIfAbsent(category, k -> new HashMap<>())
-                .merge(memberId, e.getAmount(), Double::sum);
-        }
-
-        // Get top categories
-        List<String> topCategories = categoryMemberTotals.entrySet().stream()
-            .sorted((a, b) -> Double.compare(
-                b.getValue().values().stream().mapToDouble(Double::doubleValue).sum(),
-                a.getValue().values().stream().mapToDouble(Double::doubleValue).sum()
-            ))
-            .limit(6)
-            .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
-
-        // Create series for each category
-        for (String category : topCategories) {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName(category);
-
-            Map<String, Double> memberTotals = categoryMemberTotals.get(category);
-            for (String memberId : allMembers) {
-                double amount = memberTotals.getOrDefault(memberId, 0.0);
-                series.getData().add(new XYChart.Data<>(getMemberName(memberId), amount));
-            }
-
-            memberCategoryStackedChart.getData().add(series);
-        }
-    }
-
-    private void updateDayOfWeekChart(List<Expense> expenses) {
-        dayOfWeekChart.getData().clear();
-
-        Map<DayOfWeek, Double> dayTotals = new EnumMap<>(DayOfWeek.class);
-        for (DayOfWeek day : DayOfWeek.values()) {
-            dayTotals.put(day, 0.0);
-        }
-
-        for (Expense e : expenses) {
-            try {
-                LocalDate date = LocalDate.parse(e.getDate());
-                dayTotals.merge(date.getDayOfWeek(), e.getAmount(), Double::sum);
-            } catch (Exception ignored) {}
-        }
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("By Day");
-
-        String[] dayNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-        DayOfWeek[] days = {DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
-                           DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY};
-
-        for (int i = 0; i < days.length; i++) {
-            series.getData().add(new XYChart.Data<>(dayNames[i], dayTotals.get(days[i])));
-        }
-
-        dayOfWeekChart.getData().add(series);
-    }
 
     @FXML
     private void handleCompareMembers() {

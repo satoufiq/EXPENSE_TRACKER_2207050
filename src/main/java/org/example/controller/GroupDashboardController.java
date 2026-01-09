@@ -328,19 +328,29 @@ public class GroupDashboardController {
         noteLabel.setWrapText(true);
         noteLabel.setMaxWidth(300);
 
-        // Action buttons
+        // Action buttons - Only show if the expense belongs to the current user
         HBox actionsRow = new HBox(10);
         actionsRow.setAlignment(Pos.CENTER_LEFT);
 
-        Button editBtn = new Button("✏️ Edit");
-        editBtn.getStyleClass().addAll("card-action-button", "card-edit-button");
-        editBtn.setOnAction(e -> handleEditExpense(expense));
+        // Check if current user owns this expense
+        boolean isOwner = expense.getUserId() != null && expense.getUserId().equals(currentUserId);
 
-        Button deleteBtn = new Button("🗑️ Delete");
-        deleteBtn.getStyleClass().addAll("card-action-button", "card-delete-button");
-        deleteBtn.setOnAction(e -> handleDeleteExpense(expense));
+        if (isOwner) {
+            Button editBtn = new Button("✏️ Edit");
+            editBtn.getStyleClass().addAll("card-action-button", "card-edit-button");
+            editBtn.setOnAction(e -> handleEditExpense(expense));
 
-        actionsRow.getChildren().addAll(editBtn, deleteBtn);
+            Button deleteBtn = new Button("🗑️ Delete");
+            deleteBtn.getStyleClass().addAll("card-action-button", "card-delete-button");
+            deleteBtn.setOnAction(e -> handleDeleteExpense(expense));
+
+            actionsRow.getChildren().addAll(editBtn, deleteBtn);
+        } else {
+            // Show a label indicating view-only for other members' expenses
+            Label viewOnlyLabel = new Label("👁️ View Only");
+            viewOnlyLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 11px; -fx-font-style: italic;");
+            actionsRow.getChildren().add(viewOnlyLabel);
+        }
 
         card.getChildren().addAll(topRow, amountRow, noteLabel, actionsRow);
 
@@ -551,6 +561,12 @@ public class GroupDashboardController {
     }
 
     private void handleEditExpense(Expense expense) {
+        // Check if current user owns this expense
+        if (expense.getUserId() == null || !expense.getUserId().equals(currentUserId)) {
+            showError("You can only edit your own expenses.");
+            return;
+        }
+
         try {
             Dialog<javafx.util.Pair<String, javafx.util.Pair<String, javafx.util.Pair<Double, String>>>> dialog = new Dialog<>();
             dialog.setTitle("Edit Expense");
@@ -617,6 +633,12 @@ public class GroupDashboardController {
     }
 
     private void handleDeleteExpense(Expense expense) {
+        // Check if current user owns this expense
+        if (expense.getUserId() == null || !expense.getUserId().equals(currentUserId)) {
+            showError("You can only delete your own expenses.");
+            return;
+        }
+
         try {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmAlert.setTitle("Confirm Delete");
